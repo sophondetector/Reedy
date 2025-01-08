@@ -1,6 +1,4 @@
-import * as pdfjsTypes from "pdfjs-dist"
-import * as pdfjsLib from "./pdfjs-dist/build/pdf.mjs"
-import "./pdfjs-dist/build/pdf.worker.mjs"
+import * as pdfjsLib from "pdfjs-dist"
 
 const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"
 const CANVAS_ID = "the-canvas"
@@ -13,7 +11,7 @@ const CANVAS = document.getElementById(CANVAS_ID) as HTMLElement
 //@ts-ignore
 const CTX = CANVAS.getContext('2d');
 
-let PDF_DOC: null | pdfjsTypes.PDFDocumentProxy = null
+let PDF_DOC: null | pdfjsLib.PDFDocumentProxy = null
 let PAGE_NUM = 1
 let PAGE_RENDERING = false
 let PAGE_NUM_PENDING: null | number = null
@@ -25,7 +23,7 @@ let PAGE_NUM_PENDING: null | number = null
 function renderPage(num: Number) {
 	PAGE_RENDERING = true;
 	// Using promise to fetch the page
-	(PDF_DOC as pdfjsTypes.PDFDocumentProxy).getPage(num as number).then(function(page) {
+	(PDF_DOC as pdfjsLib.PDFDocumentProxy).getPage(num as number).then(function(page) {
 		var viewport = page.getViewport({ scale: SCALE });
 		//@ts-ignore
 		CANVAS.height = viewport.height;

@@ -23,7 +23,7 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 			}
 			chrome.storage.local.set({ legisText: resp.selectionText }).then(() => {
 				console.log("opening app from context menu...")
-				chrome.tabs.create({ url: '../dist/pages/index.html' })
+				chrome.tabs.create({ url: '../public/pages/index.html' })
 			})
 		})
 	}
@@ -35,7 +35,7 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 // 		console.log(`storing text: ${item.selectionText}`)
 // 		chrome.storage.local.set({ legisText: item.selectionText })
 // 		console.log("opening app from context menu...")
-// 		chrome.tabs.create({ url: '../dist/pages/index.html' })
+// 		chrome.tabs.create({ url: '../public/pages/index.html' })
 // 	}
 // })
 

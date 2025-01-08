@@ -7,6 +7,7 @@
 export async function getFileLegacy(): Promise<File | Error> {
 	const filePicker = document.querySelector('#filePicker') as HTMLInputElement
 	return new Promise((resolve, reject) => {
+		//@ts-ignore
 		filePicker.onchange = (e) => {
 			const file = filePicker.files![0];
 			if (file) {

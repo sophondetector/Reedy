@@ -6,6 +6,7 @@ const ABBREV_FIX_ROUNDS: number = 4
 const SUFFIX_FIX_ROUNDS: number = 4
 
 const SUFFIX_REGEX = /([Jj]r\.|[Ss]r\.|[pP][hH]\.?[Dd]\.|[mMjJ]\.?[dD]\.)\s+$/g
+//@ts-ignore
 const STARTS_WITH_CAPITAL_REGEX = /^[A-Z]/
 const STARTS_WITH_LOWERCASE_REGEX = /^[a-z]/
 const HONOR_ABBR_REGEX = /(Dr\.|Mr\.|Mrs\.|Fr\.)\s+$/g

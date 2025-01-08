@@ -1,4 +1,5 @@
 // get selection text and send it back
+// @ts-ignore
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 	try {
 		const selectionText = document.getSelection()!.toString()
