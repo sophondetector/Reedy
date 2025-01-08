@@ -1,0 +1,39 @@
+{
+	"manifest_version": 3,
+	"name": "Legis",
+	"description": "An app that helps you read and take notes.",
+	"version": "0.5",
+	"action": {
+		"default_icon": "public/images/icon-16.png",
+		"default_popup": "public/pages/options.html"
+	},
+	"icons": {
+		"16": "public/images/icon-16.png",
+		"32": "public/images/icon-32.png",
+		"48": "public/images/icon-48.png",
+		"128": "public/images/icon-128.png"
+	},
+	"permissions": [
+		"tabs",
+		"scripting",
+		"activeTab",
+		"contextMenus",
+		"storage",
+		"downloads"
+	],
+	"background": {
+		"service_worker": "public/js/background.js",
+		"type": "module"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"public/js/content.js"
+			]
+		}
+	]
+}

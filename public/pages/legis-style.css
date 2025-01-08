@@ -1,0 +1,109 @@
+* {
+	font-family: monospace;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	margin: 0px;
+}
+
+header {
+	color: black;
+	display: flex;
+	flex-direction: row;
+	position: fixed;
+	height: 50px;
+	width: 100%;
+	background: white;
+	justify-content: center;
+	border-bottom-color: grey;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	align-items: center;
+}
+
+#title {
+	font-family: serif;
+	font-weight: lighter;
+	margin-left: 2rem;
+	margin-right: 5rem;
+	margin-bottom: .5rem;
+	margin-top: .5rem;
+	width: 20%
+}
+
+#header-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	margin-right: 2rem;
+	width: 80%;
+}
+
+header button {
+	appearance: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-color: grey;
+	border-radius: 3px;
+}
+
+#header-container>button,
+#header-container>select {
+	margin: .5rem;
+}
+
+header button {
+	font-size: smaller;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	max-width: 100ch;
+	margin: 60px auto auto auto
+}
+
+#reeding-room-content * {
+	font-family: serif;
+}
+
+.lexor-on {
+	background-color: grey;
+	color: darkgray
+}
+
+.lexor-off {
+	background-color: white;
+	color: black
+}
+
+.lexor-on .target {
+	background-color: white;
+	color: black;
+	padding-top: .5px
+}
+
+.darkTheme * {
+	background: #26292d;
+	color: #f0f0f0
+}
+
+.darkTheme header,
+.darkTheme header * {
+	background-color: #3f3f3f;
+}
+
+span {
+	margin: 0;
+}
+
+p {
+	margin: 0 0 1ch 0;
+}
+
+#filePicker {
+	display: none;
+}
