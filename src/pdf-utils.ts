@@ -1,4 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist'
+import "pdfjs-dist/build/pdf.worker.mjs"
 
 const GET_PDF_TEXT_OPTS = { includeMarkedContent: false, disableNormalization: false }
 const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"

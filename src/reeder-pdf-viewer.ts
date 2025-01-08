@@ -1,4 +1,5 @@
 import * as pdfjsLib from "pdfjs-dist"
+import "pdfjs-dist/build/pdf.worker.mjs"
 
 const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"
 const CANVAS_ID = "the-canvas"
