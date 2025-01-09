@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function(): void {
 	const selectEle = document.querySelector(LECS.main.testContentList) as HTMLSelectElement;
 	TEST_CONTENT_PATHS.forEach((path) => {
 		const opt = document.createElement('option')
-		const fnRegex = /[\w\.]+$/g
+		const fnRegex = /[\w\.\-]+$/g
 		const filename = path.match(fnRegex)!.toString() as string
 		opt.setAttribute("value", path)
 		opt.innerText = filename
