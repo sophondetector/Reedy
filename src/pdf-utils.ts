@@ -5,8 +5,8 @@ const GET_PDF_TEXT_OPTS = { includeMarkedContent: false, disableNormalization: f
 const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"
 
 export async function loadTestPdfText(): Promise<string> {
-	const docProxy: pdfjsLib.PDFDocumentProxy = await pdfjsLib.getDocument(TEST_PDF_FILENAME).promise
-	return pdfProxy2Str(docProxy)
+	return pdfjsLib.getDocument(TEST_PDF_FILENAME).promise
+		.then(proxy => pdfProxy2Str(proxy))
 }
 
 export async function pdfProxy2Str(pdfProxy: pdfjsLib.PDFDocumentProxy): Promise<string> {
