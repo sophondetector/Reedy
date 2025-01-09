@@ -1,7 +1,7 @@
 import * as pdfjsLib from "pdfjs-dist"
 import "pdfjs-dist/build/pdf.worker.mjs"
 
-const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"
+const TEST_PDF_FILENAME = "../test-content/pdfs/assemblywomen.pdf"
 const CANVAS_ID = "the-canvas"
 const PAGE_COUNT_ID = "page-count"
 const PAGE_NUM_ID = "page-num"

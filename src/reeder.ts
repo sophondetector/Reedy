@@ -59,7 +59,7 @@ document.querySelector(LECS.resesBut)!.addEventListener("click", () => {
 document.querySelector(LECS.testContentList)!.addEventListener("input", async () => {
 	const selectEle = document.querySelector(LECS.testContentList) as HTMLOptionElement
 	const contentPath = selectEle.value
-	if (contentPath === "Test Texts") {
+	if (contentPath === "Test Files") {
 		return;
 	}
 	console.log(`initting textual reeding-room with ${contentPath}`)
