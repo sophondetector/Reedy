@@ -2,10 +2,9 @@ import * as pdfjsLib from 'pdfjs-dist'
 import "pdfjs-dist/build/pdf.worker.mjs"
 
 const GET_PDF_TEXT_OPTS = { includeMarkedContent: false, disableNormalization: false }
-const TEST_PDF_FILENAME = "../test-content/assemblywomen.pdf"
 
-export async function loadTestPdfText(): Promise<string> {
-	return pdfjsLib.getDocument(TEST_PDF_FILENAME).promise
+export async function pdfUrl2Str(url: string): Promise<string> {
+	return pdfjsLib.getDocument(url).promise
 		.then(proxy => pdfProxy2Str(proxy))
 }
 
