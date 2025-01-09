@@ -1,16 +1,12 @@
+import { RenderParameters } from "pdfjs-dist/types/src/display/api"
 import * as pdfjsLib from "pdfjs-dist"
 import "pdfjs-dist/build/pdf.worker.mjs"
+import { LECS } from "./consts.js"
 
 const TEST_PDF_FILENAME = "../test-content/pdfs/assemblywomen.pdf"
-const CANVAS_ID = "the-canvas"
-const PAGE_COUNT_ID = "page-count"
-const PAGE_NUM_ID = "page-num"
-const PREVIOUS_BUTTON_ID = "prev"
-const NEXT_BUTTON_ID = "next"
 const SCALE = 3
-const CANVAS = document.getElementById(CANVAS_ID) as HTMLElement
-//@ts-ignore
-const CTX = CANVAS.getContext('2d');
+const CANVAS = document.querySelector(LECS.pdfReader.canvas) as HTMLCanvasElement
+const CTX = CANVAS.getContext('2d') as CanvasRenderingContext2D;
 
 let PDF_DOC: null | pdfjsLib.PDFDocumentProxy = null
 let PAGE_NUM = 1
@@ -21,10 +17,10 @@ let PAGE_NUM_PENDING: null | number = null
  * Get page info from document, resize canvas accordingly, and render page.
  * @param num Page number.
  */
-function renderPage(num: Number) {
+function renderPage(num: number) {
 	PAGE_RENDERING = true;
 	// Using promise to fetch the page
-	(PDF_DOC as pdfjsLib.PDFDocumentProxy).getPage(num as number).then(function(page) {
+	(PDF_DOC as pdfjsLib.PDFDocumentProxy).getPage(num).then(function(page) {
 		var viewport = page.getViewport({ scale: SCALE });
 		//@ts-ignore
 		CANVAS.height = viewport.height;
@@ -32,7 +28,7 @@ function renderPage(num: Number) {
 		CANVAS.width = viewport.width;
 
 		// Render PDF page into CANVAS context
-		var renderContext = {
+		var renderContext: RenderParameters = {
 			canvasContext: CTX,
 			viewport: viewport
 		};
@@ -52,8 +48,7 @@ function renderPage(num: Number) {
 	});
 
 	// Update page counters
-	//@ts-ignore
-	document.getElementById(PAGE_NUM_ID).textContent = num;
+	document.querySelector(LECS.pdfReader.pageNum)!.textContent = num.toString();
 }
 
 /**
@@ -78,8 +73,7 @@ function onPrevPage() {
 	PAGE_NUM--;
 	queueRenderPage(PAGE_NUM);
 }
-//@ts-ignore
-document.getElementById(PREVIOUS_BUTTON_ID).addEventListener('click', onPrevPage);
+document.querySelector(LECS.pdfReader.prevBut)!.addEventListener('click', onPrevPage);
 
 /**
  * Displays next page.
@@ -92,8 +86,8 @@ function onNextPage() {
 	PAGE_NUM++;
 	queueRenderPage(PAGE_NUM);
 }
-//@ts-ignore
-document.getElementById(NEXT_BUTTON_ID).addEventListener('click', onNextPage);
+
+document.querySelector(LECS.pdfReader.nextBut)!.addEventListener('click', onNextPage);
 
 /**
  * Asynchronously downloads PDF.
@@ -101,8 +95,7 @@ document.getElementById(NEXT_BUTTON_ID).addEventListener('click', onNextPage);
 //@ts-ignore
 pdfjsLib.getDocument(TEST_PDF_FILENAME).promise.then(function(pdfDoc_) {
 	PDF_DOC = pdfDoc_;
-	//@ts-ignore
-	document.getElementById(PAGE_COUNT_ID).textContent = PDF_DOC.numPages;
+	document.querySelector(LECS.pdfReader.pageCount)!.textContent = PDF_DOC.numPages.toString();
 
 	// Initial/first page rendering
 	renderPage(PAGE_NUM);
