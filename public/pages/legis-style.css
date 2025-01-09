@@ -51,6 +51,7 @@ header button {
 }
 
 #header-container>button,
+#header-container>span,
 #header-container>select {
 	margin: .5rem;
 }
@@ -104,6 +105,6 @@ p {
 	margin: 0 0 1ch 0;
 }
 
-#filePicker {
+#file-picker {
 	display: none;
 }

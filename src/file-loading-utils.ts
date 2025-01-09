@@ -1,3 +1,5 @@
+import { LECS } from "./consts.ts"
+
 /**
  * uses hidden <input> to access/open system file dialogue
  *
@@ -5,7 +7,7 @@
  * @return {Promise<File | Error>} A promise that resolves to the parsed string.
  */
 export async function getFileLegacy(): Promise<File | Error> {
-	const filePicker = document.querySelector('#filePicker') as HTMLInputElement
+	const filePicker = document.querySelector(LECS.common.filePicker) as HTMLInputElement
 	return new Promise((resolve, reject) => {
 		//@ts-ignore
 		filePicker.onchange = (e) => {

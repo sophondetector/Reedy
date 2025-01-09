@@ -1,13 +1,24 @@
 export const LECS = {
-	legisInput: '#legis-input',
-	enterBut: '#legis-enter',
-	resesBut: '#legis-reset',
-	readingModeBut: '#reading-mode-toggle',
-	saveTextBut: "#save-text",
-	loadTextBut: "#load-text",
-	testPdfBut: "#test-pdf",
-	testContentList: "#content-select",
-	mainContent: '#reeding-room-content'
+	main: {
+		legisInput: '#legis-input',
+		enterBut: '#legis-enter',
+		resesBut: '#legis-reset',
+		readingModeBut: '#reading-mode-toggle',
+		saveTextBut: "#save-text",
+		loadTextBut: "#load-text",
+		testContentList: "#content-select",
+		mainContent: '#reeding-room-content'
+	},
+	pdfReader: {
+		pageCount: "#page-count",
+		pageNum: "#page-num",
+		prevBut: "#prev",
+		nextBut: "#next",
+		loadTextBut: "#load-text",
+		readingModeBut: '#reading-mode-toggle',
+		backToMainAnchor: "#back-to-main",
+		canvas: "#the-canvas"
+	}
 }
 
 export const STORAGE_KEYS = {

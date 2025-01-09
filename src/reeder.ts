@@ -4,12 +4,12 @@ import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
 
 function hideTextInput(): void {
-	const textEle = (document.querySelector(LECS.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
 	textEle.style.display = 'none';
 }
 
 function showTextInput(): void {
-	const textEle = (document.querySelector(LECS.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
 	textEle.style.display = 'flex';
 }
 
@@ -18,7 +18,7 @@ document.addEventListener("keypress", keypressHandler)
 
 document.addEventListener("DOMContentLoaded", function(): void {
 	console.log(`content paths: ${TEST_CONTENT_PATHS}`)
-	const selectEle = document.querySelector(LECS.testContentList) as HTMLSelectElement;
+	const selectEle = document.querySelector(LECS.main.testContentList) as HTMLSelectElement;
 	TEST_CONTENT_PATHS.forEach((path) => {
 		const opt = document.createElement('option')
 		const fnRegex = /[\w\.]+$/g
@@ -39,25 +39,25 @@ document.addEventListener("DOMContentLoaded", () => {
 	})
 })
 
-document.querySelector(LECS.enterBut)?.addEventListener("click", () => {
+document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	console.log("doing reading room")
-	const textEle = (document.querySelector(LECS.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
 	const text = textEle.value
 	initReedingRoom(text)
 	hideTextInput()
 })
 
-document.querySelector(LECS.resesBut)!.addEventListener("click", () => {
+document.querySelector(LECS.main.resesBut)!.addEventListener("click", () => {
 	console.log("resetting reading room")
-	const textEle = (document.querySelector(LECS.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
 	textEle.value = ''
-	const contentEle = (document.querySelector(LECS.mainContent) as HTMLDivElement)
+	const contentEle = (document.querySelector(LECS.main.mainContent) as HTMLDivElement)
 	contentEle.innerHTML = ''
 	showTextInput()
 })
 
-document.querySelector(LECS.testContentList)!.addEventListener("input", async () => {
-	const selectEle = document.querySelector(LECS.testContentList) as HTMLOptionElement
+document.querySelector(LECS.main.testContentList)!.addEventListener("input", async () => {
+	const selectEle = document.querySelector(LECS.main.testContentList) as HTMLOptionElement
 	const contentPath = selectEle.value
 	if (contentPath === "Test Files") {
 		return;
@@ -82,10 +82,10 @@ document.querySelector(LECS.testContentList)!.addEventListener("input", async ()
 	}
 })
 
-document.querySelector(LECS.readingModeBut)!.addEventListener("click", lexorToggle)
+document.querySelector(LECS.main.readingModeBut)!.addEventListener("click", lexorToggle)
 
-document.querySelector(LECS.saveTextBut)!.addEventListener("click", async () => {
-	const text = document.querySelector(LECS.mainContent)!.innerHTML
+document.querySelector(LECS.main.saveTextBut)!.addEventListener("click", async () => {
+	const text = document.querySelector(LECS.main.mainContent)!.innerHTML
 	const blob = new Blob([text], { type: 'text/html' });
 	const downloadUrl = URL.createObjectURL(blob)
 	const downloadOpts = {
@@ -98,8 +98,7 @@ document.querySelector(LECS.saveTextBut)!.addEventListener("click", async () => 
 	})
 })
 
-document.querySelector(LECS.loadTextBut)!.addEventListener("click", async function() {
-	// const contentEle = document.querySelector(LECS.mainContent) as HTMLElement
+document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async function() {
 	try {
 		const file: File = await getFileLegacy() as File
 		console.log(`loading ${file.type}`)
@@ -133,12 +132,4 @@ document.querySelector(LECS.loadTextBut)!.addEventListener("click", async functi
 		console.log(`load button handler finished`)
 	}
 })
-
-// document.querySelector(LECS.testPdfBut)!.addEventListener("click", async function() {
-// 	console.log("pdf test button clicked")
-// 	loadTestPdfText()
-// 		.then(initReedingRoom)
-// 		.then(hideTextInput)
-// 		.then(() => console.log("loading test pdf done"))
-// })
 
