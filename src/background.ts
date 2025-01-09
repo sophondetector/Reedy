@@ -15,19 +15,20 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 	// background.js *stores in legisText localStorage
 	// using resp here gives access to the document object selection api 
 	// which retains spacing information
-	if (tab && item.menuItemId === OPTION_ID) {
-		chrome.tabs.sendMessage(tab.id!, OPEN_SELECTION_MESSAGE, function(resp) {
-			console.log("sent message to tab")
-			if (resp.err) {
-				console.log(`there was an error: ${resp.err}`)
-				return
-			}
-			chrome.storage.local.set({ legisText: resp.selectionText }).then(() => {
-				console.log("opening app from context menu...")
-				chrome.tabs.create({ url: '../public/pages/index.html' })
-			})
+	if (!tab) return
+	if (item.menuItemId !== OPTION_ID) return
+
+	chrome.tabs.sendMessage(tab.id!, OPEN_SELECTION_MESSAGE, function(resp) {
+		console.log("sent message to tab")
+		if (resp.err) {
+			console.log(`there was an error: ${resp.err}`)
+			return
+		}
+		chrome.storage.local.set({ legisText: resp.selectionText }).then(() => {
+			console.log("opening Legis from context menu...")
+			chrome.tabs.create({ url: '../pages/index.html' })
 		})
-	}
+	})
 })
 
 // LEGACY METHOD for reference
