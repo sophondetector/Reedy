@@ -30,8 +30,10 @@ const SUPPORTED_DOMAINS = Array.from(DOMAIN_HANDLER_MAP.keys())
 const CURRENT_DOMAIN = getCurrentDomain()
 
 if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
-	DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)()
+	const handler = DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)
+	handler()
 } else {
 	console.log(`Legis does not support ${CURRENT_DOMAIN}`)
 }
+
 
