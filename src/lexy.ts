@@ -5,6 +5,8 @@ export type LexedText = LexedPara[]
 const ABBREV_FIX_ROUNDS: number = 4
 const SUFFIX_FIX_ROUNDS: number = 4
 
+const PARA_SPLITTER_REGEX = /\n\s*/gm
+const SENT_SPLITTER_REGEX = /([\.\?\!]"?(?![^\(]*\)) )/g
 const SUFFIX_REGEX = /([Jj]r\.|[Ss]r\.|[pP][hH]\.?[Dd]\.|[mMjJ]\.?[dD]\.)\s+$/g
 //@ts-ignore
 const STARTS_WITH_CAPITAL_REGEX = /^[A-Z]/
@@ -32,15 +34,12 @@ export function lex(text: string): LexedText {
 }
 
 function splitParas(text: string): string[] {
-	const paraRegex = /\n\s*/gm
-	const res = text.split(paraRegex)
+	const res = text.split(PARA_SPLITTER_REGEX)
 	return res
 }
 
 function splitSents(text: string): LexedPara {
-	const sentSplitter = /([\.\?\!]"?(?![^\(]*\)) )/g
-	const sents = text.split(sentSplitter)
-	return sents
+	return text.split(SENT_SPLITTER_REGEX)
 }
 
 function reCombinePunct(para: LexedPara): LexedPara {
