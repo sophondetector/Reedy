@@ -30,7 +30,9 @@ export function lex(text: string): LexedText {
 		stage6 = stage6.map(suffixAbbrevFixer)
 	}
 
-	return stage6
+	const stage7 = stage6.map(citationFixer)
+
+	return stage7
 }
 
 function splitParas(text: string): string[] {
@@ -135,5 +137,29 @@ function suffixAbbrevFixer(para: LexedPara): LexedPara {
 
 		res[res.length - 1] = prev + cur
 	}
+	return res
+}
+
+function citationFixer(para: LexedPara): LexedPara {
+	const citationRegex = /([\.\?\!]\[\d+\]) /g
+	const res: LexedPara = []
+	for (let idx = 0; idx < para.length; idx++) {
+		const sent = para[idx]
+		const sents = sent.split(citationRegex)
+		if (sents.length > 1) {
+			res.push(...citationFixerFixer(sents))
+			continue
+		}
+		res.push(...sents)
+	}
+	return res
+}
+
+function citationFixerFixer(sents: string[]): string[] {
+	const res = []
+	for (let idx = 1; idx < sents.length; idx += 2) {
+		res.push(sents[idx - 1] + sents[idx])
+	}
+	res.push(sents[sents.length - 1])
 	return res
 }
