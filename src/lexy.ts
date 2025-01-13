@@ -31,8 +31,9 @@ export function lex(text: string): LexedText {
 	}
 
 	const stage7 = stage6.map(citationFixer)
+	const stage8 = stage7.map(fixNumberedPara)
 
-	return stage7
+	return stage8
 }
 
 function splitParas(text: string): string[] {
@@ -161,5 +162,18 @@ function citationFixerFixer(sents: string[]): string[] {
 		res.push(sents[idx - 1] + sents[idx])
 	}
 	res.push(sents[sents.length - 1])
+	return res
+}
+
+function fixNumberedPara(para: LexedPara): LexedPara {
+	const firstSent = para[0]
+	const numberedParaRegex = /\d+\./
+	if (!firstSent.match(numberedParaRegex)) {
+		return para
+	}
+
+	const res = []
+	res.push(firstSent + para[1])
+	res.push(...para.slice(2))
 	return res
 }
