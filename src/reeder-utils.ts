@@ -15,6 +15,7 @@ const REEDING_ROOM_CONTENT_TITLE_SELECTOR = "#reeding-room-content-title"
 export const REEDING_ROOM_CONTENT = document.querySelector(REEDING_ROOM_CONTENT_SELECTOR)
 export const REEDING_ROOM_CONTENT_TITLE = document.querySelector(REEDING_ROOM_CONTENT_TITLE_SELECTOR)
 
+// TODO write addToReadingRoom function
 export async function initReedingRoom(content: string): Promise<void> {
 	console.log(`reeding-room init start`);
 

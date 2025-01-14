@@ -142,7 +142,11 @@ function suffixAbbrevFixer(para: LexedPara): LexedPara {
 }
 
 function citationFixer(para: LexedPara): LexedPara {
-	const citationRegex = /([\.\?\!]\[\d+\]) /g
+	// This doesn't cause repeats of citations only if the interior
+	// clause is BOTH a non capturing group (e.g. (?:...)) followed
+	// by a plus
+	// I'm not really sure why this works
+	const citationRegex = /([\.\?\!](?:\[\d+\])+) /g
 	const res: LexedPara = []
 	for (let idx = 0; idx < para.length; idx++) {
 		const sent = para[idx]

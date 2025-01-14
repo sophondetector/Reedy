@@ -1,5 +1,7 @@
 import { getSentBounds } from "./in-page-lexy.js"
 
+const HANDLER_ACTIVATION = false
+
 function Q(lec: string): Element | null {
 	return document.querySelector(lec)
 }
@@ -9,8 +11,11 @@ function QQ(lec: string): Array<Element> | null {
 }
 
 // get selection text and send it back
-// @ts-ignore
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
+	console.log(`response`)
+	console.log(response)
+	console.log(`sender`)
+	console.log(sender)
 	try {
 		const selectionText = document.getSelection()!.toString()
 		sendResponse({ selectionText })
@@ -53,7 +58,7 @@ DOMAIN_HANDLER_MAP.set("developer.mozilla.org", mdnHandler)
 const SUPPORTED_DOMAINS = Array.from(DOMAIN_HANDLER_MAP.keys())
 const CURRENT_DOMAIN = getCurrentDomain()
 
-if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
+if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN) && HANDLER_ACTIVATION) {
 	const handler = DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)
 	const text = handler()
 	const bounds = getSentBounds(text)
@@ -64,6 +69,7 @@ if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
 	}
 
 } else {
-	console.log(`Legis does not support ${CURRENT_DOMAIN}`)
+	if (HANDLER_ACTIVATION) console.log(`Legis does not support ${CURRENT_DOMAIN}`)
+	else console.log(`Legis site handlers deactivated`)
 }
 

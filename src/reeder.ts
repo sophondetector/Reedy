@@ -39,6 +39,18 @@ document.addEventListener("DOMContentLoaded", () => {
 	})
 })
 
+// so background.ts knows which tab to send a reopen to
+document.addEventListener("DOMContentLoaded", () => {
+	chrome.tabs.getCurrent(function(tab) {
+		if (tab) {
+			chrome.storage.local.set({ legisTabId: tab.id })
+			console.log(`Legis: set legisTabId to ${tab.id}`)
+			return
+		}
+		console.log("Legis: could not find tab!")
+	})
+})
+
 document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	console.log("doing reading room")
 	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
@@ -103,6 +115,7 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 		const file: File = await getFileLegacy() as File
 		console.log(`loading ${file.type}`)
 
+		// TODO change this to switch statement
 		if (file.type === "application/pdf") {
 			file2PdfProxy(file)
 				.then(pdfProxy2Str)
@@ -133,3 +146,13 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 	}
 })
 
+// adds text sent to this tab from background.ts to the current text.
+chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
+	chrome.storage.local.get([STORAGE_KEYS.legisText], (storage) => {
+		const newText = storage.legisText + '\n' + msg
+		initReedingRoom(newText)
+		chrome.storage.local.set({ legisText: newText })
+		sendResp()
+	})
+	console.log(`added text from ${sender}`)
+})
