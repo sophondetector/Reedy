@@ -82,11 +82,13 @@ document.querySelector(LECS.main.testContentList)!.addEventListener("input", asy
 		case "pdf":
 			pdfUrl2Str(contentPath)
 				.then(initReedingRoom)
+				.then(hideTextInput)
 			break;
 		case "txt":
 			fetch(contentPath)
 				.then(resp => resp.text())
 				.then(initReedingRoom)
+				.then(hideTextInput)
 			break;
 		default:
 			console.log(`unknown filetype ${fileType}`)
