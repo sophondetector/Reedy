@@ -38,6 +38,7 @@ export const TEST_CONTENT_PATHS = [
 	"../test-content/texts/many-abreves.txt",
 	"../test-content/texts/prob-sent.txt",
 	"../test-content/texts/father-casey.txt",
+	"../test-content/texts/another-quote-prob.txt",
 	"../test-content/pdfs/assemblywomen.pdf",
 	"../test-content/pdfs/dilexit-nos.pdf",
 	"../test-content/pdfs/hoffman-mediation.pdf",

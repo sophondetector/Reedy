@@ -6,7 +6,7 @@ const ABBREV_FIX_ROUNDS: number = 4
 const SUFFIX_FIX_ROUNDS: number = 4
 
 const PARA_SPLITTER_REGEX = /\n\s*/gm
-const SENT_SPLITTER_REGEX = /([\.\?\!]"?(?![^\(]*\)) )/g
+const SENT_SPLITTER_REGEX = /([\.\?\!]["”]?(?![^\(]*\)) )/g
 const SUFFIX_REGEX = /([Jj]r\.|[Ss]r\.|[pP][hH]\.?[Dd]\.|[mMjJ]\.?[dD]\.)\s+$/g
 //@ts-ignore
 const STARTS_WITH_CAPITAL_REGEX = /^[A-Z]/
@@ -60,7 +60,7 @@ function reCombinePunct(para: LexedPara): LexedPara {
 }
 
 function reCombinePunctQuote(para: LexedPara): LexedPara {
-	const punctQuoteRegex = /[\.\!\?]\"\s*/
+	const punctQuoteRegex = /[\.\!\?][\"”]\s*/
 	const res = [para[0]]
 	for (let idx = 1; idx < para.length; idx++) {
 		const sent = para[idx]
