@@ -21,6 +21,7 @@ export const REEDING_ROOM_CONTENT_TITLE = document.querySelector(REEDING_ROOM_CO
 
 function isBlank(para: LexedPara): boolean {
 	for (const sent of para) {
+		// if there is one NON-blank sentence, we return false
 		if (sent.trim()) return false
 	}
 	return true
