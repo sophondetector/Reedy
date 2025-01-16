@@ -151,6 +151,7 @@ function unsetTarget(): void {
 	getSent(LEXOR_TARGET_IDX).classList.remove("target");
 }
 
+// TODO make this function safer
 function getSent(id: number): HTMLSpanElement {
 	return document.querySelector(`#sent${id}`) as HTMLSpanElement
 }
