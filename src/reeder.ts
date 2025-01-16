@@ -117,24 +117,25 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 		const file: File = await getFileLegacy() as File
 		console.log(`loading ${file.type}`)
 
-		// TODO change this to switch statement
-		if (file.type === "application/pdf") {
-			file2PdfProxy(file)
-				.then(pdfProxy2Str)
-				.then(initReedingRoom)
-				.then(hideTextInput)
-				.then(() => console.log("loading pdf done"))
-		}
+		switch (file.type) {
+			case "application/pdf":
+				file2PdfProxy(file)
+					.then(pdfProxy2Str)
+					.then(initReedingRoom)
+					.then(hideTextInput)
+					.then(() => console.log("loading pdf done"))
+				break;
 
-		if (file.type === "txt") {
-			const fileString = await readFileLegacy(file) as string
-			initReedingRoom(fileString)
-				.then(hideTextInput)
-				.then(() => console.log("loading text done"))
-		}
+			case "txt":
+				const fileString = await readFileLegacy(file) as string
+				initReedingRoom(fileString)
+					.then(hideTextInput)
+					.then(() => console.log("loading text done"))
+				break;
 
-		if (file.type === "html" || file.type === "xml") {
-			throw new Error("loading xml/html not implemented")
+			case "html":
+			case "xml":
+				throw new Error("loading xml/html not implemented")
 			// read as reading room filetype 
 			// contentEle!.innerHTML = fileString
 			// TODO reset stuff
