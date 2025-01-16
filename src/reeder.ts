@@ -13,8 +13,7 @@ function showTextInput(): void {
 	textEle.style.display = 'flex';
 }
 
-// TODO update this to keydown
-document.addEventListener("keypress", keypressHandler)
+document.addEventListener("keydown", keypressHandler)
 
 document.addEventListener("DOMContentLoaded", function(): void {
 	console.log(`content paths: ${TEST_CONTENT_PATHS}`)

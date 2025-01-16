@@ -1,6 +1,7 @@
 import { toggleDevOnly } from './dev-only.js';
 import { lex } from './lexy.js'
 
+//TODO change this to a state object
 var LEXOR_ACTIVE = false;
 var LEXOR_TARGET_IDX = 0;
 var LEXOR_PARA_COUNT = 0;
@@ -71,7 +72,7 @@ export function keypressHandler(e: KeyboardEvent): void {
 			}
 			break;
 		case "`":
-			toggleDevOnly()
+			if (e.ctrlKey) toggleDevOnly()
 			break;
 		default:
 			// console.log(e.key);
