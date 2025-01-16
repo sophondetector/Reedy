@@ -1,3 +1,4 @@
+import { toggleDevOnly } from './dev-only.js';
 import { lex } from './lexy.js'
 
 var LEXOR_ACTIVE = false;
@@ -5,6 +6,7 @@ var LEXOR_TARGET_IDX = 0;
 var LEXOR_PARA_COUNT = 0;
 var LEXOR_MAX_SENT_IDX = 0;
 
+//TODO move all these into consts
 const LEXOR_ON_CLASS = "lexor-on"
 const LEXOR_OFF_CLASS = "lexor-off"
 const LEXOR_SENTENCE_CLASS = "lexor-sent"
@@ -12,6 +14,7 @@ const LEXOR_SENTENCE_CLASS = "lexor-sent"
 const REEDING_ROOM_CONTENT_SELECTOR = "#reeding-room-content"
 const REEDING_ROOM_CONTENT_TITLE_SELECTOR = "#reeding-room-content-title"
 
+//TODO this is dumb remove this
 export const REEDING_ROOM_CONTENT = document.querySelector(REEDING_ROOM_CONTENT_SELECTOR)
 export const REEDING_ROOM_CONTENT_TITLE = document.querySelector(REEDING_ROOM_CONTENT_TITLE_SELECTOR)
 
@@ -66,6 +69,9 @@ export function keypressHandler(e: KeyboardEvent): void {
 			if (LEXOR_ACTIVE) {
 				decTarget();
 			}
+			break;
+		case "`":
+			toggleDevOnly()
 			break;
 		default:
 			// console.log(e.key);

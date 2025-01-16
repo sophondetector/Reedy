@@ -1,6 +1,7 @@
 export const LECS = {
 	common: {
-		filePicker: '#file-picker'
+		filePicker: '#file-picker',
+		devOnly: ".dev-only"
 	},
 	main: {
 		legisInput: '#legis-input',
