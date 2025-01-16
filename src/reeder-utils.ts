@@ -1,5 +1,5 @@
 import { toggleDevOnly } from './dev-only.js';
-import { lex } from './lexy.js'
+import { lex, LexedPara } from './lexy.js'
 
 //TODO change this to a state object
 var LEXOR_ACTIVE = false;
@@ -19,6 +19,13 @@ const REEDING_ROOM_CONTENT_TITLE_SELECTOR = "#reeding-room-content-title"
 export const REEDING_ROOM_CONTENT = document.querySelector(REEDING_ROOM_CONTENT_SELECTOR)
 export const REEDING_ROOM_CONTENT_TITLE = document.querySelector(REEDING_ROOM_CONTENT_TITLE_SELECTOR)
 
+function isBlank(para: LexedPara): boolean {
+	for (const sent of para) {
+		if (sent.trim()) return false
+	}
+	return true
+}
+
 // TODO write addToReadingRoom function
 export async function initReedingRoom(content: string): Promise<void> {
 	console.log(`reeding-room init start`);
@@ -34,6 +41,8 @@ export async function initReedingRoom(content: string): Promise<void> {
 	const lexed = lex(content)
 
 	for (const lp of lexed) {
+		if (isBlank(lp)) continue
+
 		const newP = makePara()
 		contentDiv!.appendChild(newP)
 		for (const sent of lp) {
