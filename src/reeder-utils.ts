@@ -1,25 +1,39 @@
+import { LECS } from './consts.js';
 import { toggleDevOnly } from './dev-only.js';
 import { lex, LexedPara } from './lexy.js'
 
-//TODO change this to a state object
-var LEXOR_ACTIVE = false;
-var LEXOR_TARGET_IDX = 0;
-var LEXOR_PARA_COUNT = 0;
-var LEXOR_MAX_SENT_IDX = 0;
+interface ReedyState {
+	active: boolean,
+	targetIdx: number,
+	paraCount: number,
+	maxSentIdx: number,
+	reset: () => void,
+	log: () => void
+}
+
+const STATE: ReedyState = {
+	active: false,
+	targetIdx: 0,
+	paraCount: 0,
+	maxSentIdx: 0,
+	reset: function() {
+		this.active = false
+		this.targetIdx = 0
+		this.paraCount = 0
+		this.maxSentIdx = 0
+	},
+	log: function() {
+		console.log(this)
+	}
+}
 
 //TODO move all these into consts
 const LEXOR_ON_CLASS = "lexor-on"
 const LEXOR_OFF_CLASS = "lexor-off"
 const LEXOR_SENTENCE_CLASS = "lexor-sent"
+const TARGET_CLASS = "target"
 
-const REEDING_ROOM_CONTENT_SELECTOR = "#reeding-room-content"
-const REEDING_ROOM_CONTENT_TITLE_SELECTOR = "#reeding-room-content-title"
-
-//TODO this is dumb remove this
-export const REEDING_ROOM_CONTENT = document.querySelector(REEDING_ROOM_CONTENT_SELECTOR)
-export const REEDING_ROOM_CONTENT_TITLE = document.querySelector(REEDING_ROOM_CONTENT_TITLE_SELECTOR)
-
-function isBlank(para: LexedPara): boolean {
+function paraIsBlank(para: LexedPara): boolean {
 	for (const sent of para) {
 		// if there is one NON-blank sentence, we return false
 		if (sent.trim()) return false
@@ -31,22 +45,20 @@ function isBlank(para: LexedPara): boolean {
 export async function initReedingRoom(content: string): Promise<void> {
 	console.log(`reeding-room init start`);
 
-	LEXOR_ACTIVE = false
-	LEXOR_TARGET_IDX = 0
-	LEXOR_MAX_SENT_IDX = 0
-	LEXOR_PARA_COUNT = 0
+	lexorOff()
+	STATE.reset()
 
-	const contentDiv = document.querySelector(REEDING_ROOM_CONTENT_SELECTOR)
+	const contentDiv = document.querySelector(LECS.main.mainContent)
 	contentDiv!.innerHTML = ''
 
 	const lexed = lex(content)
 
-	for (const lp of lexed) {
-		if (isBlank(lp)) continue
+	for (const para of lexed) {
+		if (paraIsBlank(para)) continue
 
 		const newP = makePara()
 		contentDiv!.appendChild(newP)
-		for (const sent of lp) {
+		for (const sent of para) {
 			const ss = makeSentSpan(sent)
 
 			ss.addEventListener('click', function(event) {
@@ -72,12 +84,12 @@ export function keypressHandler(e: KeyboardEvent): void {
 			lexorToggle()
 			break;
 		case "j":
-			if (LEXOR_ACTIVE) {
+			if (STATE.active) {
 				incTarget();
 			}
 			break;
 		case "k":
-			if (LEXOR_ACTIVE) {
+			if (STATE.active) {
 				decTarget();
 			}
 			break;
@@ -91,8 +103,8 @@ export function keypressHandler(e: KeyboardEvent): void {
 }
 
 export function lexorToggle(): void {
-	LEXOR_ACTIVE = !LEXOR_ACTIVE;
-	LEXOR_ACTIVE ? lexorOn() : lexorOff();
+	STATE.active = !STATE.active;
+	STATE.active ? lexorOn() : lexorOff();
 }
 
 function lexorOn(): void {
@@ -108,51 +120,52 @@ function lexorOff(): void {
 }
 
 function makeSentSpan(sent: string): HTMLSpanElement {
-	let ele = document.createElement("span");
+	const ele = document.createElement("span");
 	ele.classList.add(LEXOR_SENTENCE_CLASS);
 	ele.textContent = sent + " ";
-	ele.id = `sent${LEXOR_MAX_SENT_IDX++}`;
+	ele.id = `sent${STATE.maxSentIdx++}`;
 	return ele;
 }
 
 function makePara(): HTMLParagraphElement {
-	let para = document.createElement("p");
+	const para = document.createElement("p");
 	para.classList.add("reading-room-para");
-	para.id = `para${LEXOR_PARA_COUNT++}`;
+	para.id = `para${STATE.paraCount++}`;
 	return para;
 }
 
 function decTarget(): void {
-	const sdx = LEXOR_TARGET_IDX - 1;
-	if (sdx < 0) {
-		return;
-	}
-	setNewTarget(sdx);
+	if (STATE.targetIdx <= 0) return
+	setNewTarget(STATE.targetIdx - 1);
 }
 
 function incTarget(): void {
-	const udx = LEXOR_TARGET_IDX + 1;
-	if (udx >= LEXOR_MAX_SENT_IDX) {
-		return;
-	}
-	setNewTarget(udx);
+	if (STATE.targetIdx >= STATE.maxSentIdx) return
+	setNewTarget(STATE.targetIdx + 1);
 }
 
-function setNewTarget(id: number): void {
+function setNewTarget(sentIdx: number): void {
+	const targSent = idx2Sent(sentIdx)
+	if (!targSent) return
 	unsetTarget();
-	const targSent = getSent(id)
-	targSent.classList.add("target");
-	LEXOR_TARGET_IDX = id;
+	targSent.classList.add(TARGET_CLASS);
+	STATE.targetIdx = sentIdx
 	// @ts-ignore
 	targSent.scrollIntoViewIfNeeded()
 }
 
 function unsetTarget(): void {
-	getSent(LEXOR_TARGET_IDX).classList.remove("target");
+	const targSent = idx2Sent(STATE.targetIdx)
+	if (!targSent) return
+	targSent.classList.remove("target");
 }
 
-// TODO make this function safer
-function getSent(id: number): HTMLSpanElement {
-	return document.querySelector(`#sent${id}`) as HTMLSpanElement
+function idx2Sent(sentIdx: number): HTMLSpanElement | undefined {
+	const sent = document.querySelector(`#sent${sentIdx}`) as HTMLSpanElement
+	if (!sent) {
+		console.log(`Reedy ERROR: Could not find sent with index ${sentIdx}`)
+		return
+	}
+	return sent
 }
 
