@@ -2,8 +2,8 @@ export type LexedSent = string
 export type LexedPara = LexedSent[]
 export type LexedText = LexedPara[]
 
-const ABBREV_FIX_ROUNDS: number = 4
-const SUFFIX_FIX_ROUNDS: number = 4
+const ABBREV_FIX_ROUNDS: number = 2
+const SUFFIX_FIX_ROUNDS: number = 2
 
 const PARA_SPLITTER_REGEX = /\n\s*/gm
 const SENT_SPLITTER_REGEX = /([\.\?\!]["”]?(?![^\(]*\)) )/g
@@ -15,24 +15,20 @@ const HONOR_ABBR_REGEX = /(Dr\.|Mr\.|Mrs\.|Fr\.)\s+$/g
 
 export function lex(text: string): LexedText {
 	const paraTexts = splitParas(text)
-	const stage1 = paraTexts.map(splitSents)
-	const stage2 = stage1.map(reCombinePunct)
-	const stage3 = stage2.map(reCombinePunctQuote)
-	const stage4 = stage3.map(quoteFixer)
+	const finalText = paraTexts.map(lexPara)
+	return finalText
+}
 
-	let stage5 = stage4.map(abbrevFixer)
-	for (let roundNum = 0; roundNum < ABBREV_FIX_ROUNDS - 1; roundNum++) {
-		stage5 = stage5.map(abbrevFixer)
-	}
-
-	let stage6 = stage5.map(suffixAbbrevFixer)
-	for (let roundNum = 0; roundNum < SUFFIX_FIX_ROUNDS - 1; roundNum++) {
-		stage6 = stage6.map(suffixAbbrevFixer)
-	}
-
-	const stage7 = stage6.map(citationFixer)
-	const stage8 = stage7.map(fixNumberedPara)
-
+function lexPara(para: string): LexedPara {
+	const stage0 = para
+	const stage1 = splitSents(stage0)
+	const stage2 = reCombinePunct(stage1)
+	const stage3 = reCombinePunctQuote(stage2)
+	const stage4 = quoteFixer(stage3)
+	const stage5 = abbrevFixer(stage4, ABBREV_FIX_ROUNDS)
+	const stage6 = suffixAbbrevFixer(stage5, SUFFIX_FIX_ROUNDS)
+	const stage7 = citationFixer(stage6)
+	const stage8 = fixNumberedPara(stage7)
 	return stage8
 }
 
@@ -106,7 +102,7 @@ function quoteFixer(para: LexedPara): LexedPara {
 	return res
 }
 
-function abbrevFixer(para: LexedPara): LexedPara {
+function abbrevFixerInner(para: LexedPara): LexedPara {
 	const res: LexedPara = [para[0]]
 	for (let idx = 1; idx < para.length; idx++) {
 		const cur = para[idx]
@@ -120,7 +116,13 @@ function abbrevFixer(para: LexedPara): LexedPara {
 	return res
 }
 
-function suffixAbbrevFixer(para: LexedPara): LexedPara {
+function abbrevFixer(para: LexedPara, roundsLeft: number = 2): LexedPara {
+	if (roundsLeft === 0) return para
+	const newPara = abbrevFixerInner(para)
+	return abbrevFixer(newPara, roundsLeft - 1)
+}
+
+function suffixAbbrevFixerInner(para: LexedPara): LexedPara {
 	const res: LexedPara = [para[0]]
 	for (let idx = 1; idx < para.length; idx++) {
 		const cur = para[idx]
@@ -139,6 +141,12 @@ function suffixAbbrevFixer(para: LexedPara): LexedPara {
 		res[res.length - 1] = prev + cur
 	}
 	return res
+}
+
+function suffixAbbrevFixer(para: LexedPara, roundsLeft: number = 2): LexedPara {
+	if (roundsLeft === 0) return para
+	const newPara = suffixAbbrevFixerInner(para)
+	return suffixAbbrevFixer(newPara, roundsLeft - 1)
 }
 
 function citationFixer(para: LexedPara): LexedPara {
@@ -171,11 +179,10 @@ function citationFixerFixer(sents: string[]): string[] {
 
 function fixNumberedPara(para: LexedPara): LexedPara {
 	const firstSent = para[0]
-	const numberedParaRegex = /\d+\./
+	const numberedParaRegex = /^\d+\./
 	if (!firstSent.match(numberedParaRegex)) {
 		return para
 	}
-
 	const res = []
 	res.push(firstSent + para[1])
 	res.push(...para.slice(2))
