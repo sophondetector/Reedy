@@ -1,16 +1,16 @@
 import { LECS } from './consts.js'
 
+// let ACTIVE: boolean = false
 let LINE_WIDTH: null | number = null
+// let TARGET_LINE: null | number = null
+// let CACHED_PARA: null | HTMLElement = null
 
-//@ts-ignore
 function getLineWidth(): number {
-	const res = document.querySelector(LECS.main.mainContent)!.clientWidth
-	return res
+	return document.querySelector(LECS.main.mainContent)!.clientWidth
 }
 
 document.addEventListener("DOMContentLoaded", function() {
 	LINE_WIDTH = getLineWidth()
-	console.log(LINE_WIDTH)
 })
 
 window.onresize = () => {
