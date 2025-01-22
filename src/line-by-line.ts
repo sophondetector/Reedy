@@ -1,3 +1,5 @@
+import { LECS } from "./consts"
+
 const TEXT_NODE_NAME = '#text'
 let CACHED_PARA: Node | null = null
 
@@ -36,7 +38,7 @@ function getEndIdxs(lens: Array<number>) {
 	return res
 }
 
-function para2Ranges(paraEle: HTMLElement): Array<Range> {
+function para2Ranges(paraEle: Element): Array<Range> {
 	const res = []
 	const finalIdx = paraEle.textContent!.length - 1
 	const textNodes = getAllTextNodes(paraEle as Node)
@@ -46,6 +48,8 @@ function para2Ranges(paraEle: HTMLElement): Array<Range> {
 
 	res.push(new Range())
 
+	// TODO try refactoring so only mainIdx is incremented and 
+	// other pointers are derived from mainIdx
 	let mainIdx = 0
 	let textNodeIdx = 0
 	let begOffset = 0
@@ -85,12 +89,25 @@ function para2Ranges(paraEle: HTMLElement): Array<Range> {
 }
 
 document.querySelector("#reading-mode-switch")!.addEventListener("click", function() {
-	const p = document.querySelector('p') as HTMLElement
-	const rngs = para2Ranges(p)
-	console.log(`ranges`)
-	rngs.forEach(r => console.log(r.toString()))
+	// const p = document.querySelector('p') as HTMLElement
+	// const rngs = para2Ranges(p)
+	// console.log(`ranges`)
+	// rngs.forEach(r => console.log(r.toString()))
+	console.log('sent-by-sent click!')
 })
 
-// window.onresize = () => {
-// 	// TODO recalc spans paragraph by paragraph on resize
-// }
+// ON INCREMENT
+// increment range-idx
+// replace doc para with clone of cached para
+// surround ranges[rangeIdx] with <highlight></highlight>
+
+window.onresize = () => {
+	const mainContent = document.querySelector(LECS.main.mainContent)
+	const paras = mainContent!.children
+	for (const para of paras) {
+		const ranges = para2Ranges(para)
+		for (const rng of ranges) {
+			console.log(rng.toString())
+		}
+	}
+}
