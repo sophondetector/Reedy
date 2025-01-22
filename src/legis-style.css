@@ -110,3 +110,7 @@ p {
 #file-picker {
 	display: none;
 }
+
+target {
+	background-color: yellow;
+}
