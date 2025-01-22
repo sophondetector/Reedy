@@ -2,6 +2,7 @@ import { initReedingRoom, keypressHandler, lexorToggle } from "./reeder-utils.js
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
+import "./line-by-line.js"
 
 function hideTextInput(): void {
 	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
