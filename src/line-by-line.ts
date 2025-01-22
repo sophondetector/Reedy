@@ -57,8 +57,9 @@ function incLine(): void {
 	const oldRng = RANGES[RANGE_IDX]
 	const oldPara = range2Para(oldRng)
 	const oldParaIdx = para2Idx(oldPara)
-	restoreCachedPara(oldParaIdx)
 
+	restoreCachedPara(oldParaIdx)
+	RANGES = paras2Ranges(getMainParas())
 	RANGE_IDX++
 
 	const rng = RANGES[RANGE_IDX]
