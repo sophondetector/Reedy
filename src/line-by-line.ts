@@ -1,14 +1,3 @@
-import { LECS } from './consts.js'
-
-// let ACTIVE: boolean = false
-let LINE_WIDTH: null | number = null
-// let TARGET_LINE: null | number = null
-// let CACHED_PARA: null | HTMLElement = null
-
-function getLineWidth(): number {
-	return document.querySelector(LECS.main.mainContent)!.clientWidth
-}
-
 const TEXT_NODE_NAME = '#text'
 
 function getAllTextNodes(node: Node): Node[] {
@@ -83,31 +72,13 @@ function getLineRanges(paraEle: HTMLElement): Array<Range> {
 	return res
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-	LINE_WIDTH = getLineWidth()
-})
-
 document.querySelector("#reading-mode-switch")!.addEventListener("click", function() {
-	// const txt = document.querySelector('p')!.textContent
-	// console.log(`TEXT CONTENT: ${txt}`)
-
 	const p = document.querySelector('p') as HTMLElement
-	const tns = getAllTextNodes(p as Node)
-	console.log(`nodes`)
-	console.log(tns)
-
 	const rngs = getLineRanges(p)
 	console.log(`ranges`)
-	console.log(rngs)
 	rngs.forEach(r => console.log(r.toString()))
-
-	// console.log('res')
-	// console.log(res)
-	// const ses = res.map(n => n.textContent)
-	// console.log(ses)
 })
 
-window.onresize = () => {
-	LINE_WIDTH = getLineWidth()
-	console.log(`LINE WIDTH: ${LINE_WIDTH}`)
-}
+// window.onresize = () => {
+// 	// TODO recalc spans paragraph by paragraph on resize
+// }
