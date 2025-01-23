@@ -34,8 +34,11 @@ function isPara(ele: HTMLElement | null): boolean {
 }
 
 function range2Para(rng: Range): HTMLElement {
-	// if this spans two ranges then the common ancestor is the paragraph
+	// if the range spans two different html elements 
+	// then the common ancestor is also an html element (probably the paragraph)
 	// if it doesn't then the common ancestor is a textNode
+	// we need to make sure it's of the type HTMLElement 
+	// before we feed to to the isPara while-loop
 	// if parentNode is of type text get the parent element
 	// if parentNode is of type Element then just go on
 	let parent = rng.commonAncestorContainer
