@@ -34,9 +34,16 @@ function isPara(ele: HTMLElement | null): boolean {
 }
 
 function range2Para(rng: Range): HTMLElement {
-	let parent = rng.commonAncestorContainer.parentElement
-	while (!isPara(parent)) {
-		parent = parent!.parentElement
+	// if this spans two ranges then the common ancestor is the paragraph
+	// if it doesn't then the common ancestor is a textNode
+	// if parentNode is of type text get the parent element
+	// if parentNode is of type Element then just go on
+	let parent = rng.commonAncestorContainer
+	if (parent.nodeName === TEXT_NODE_NAME) {
+		parent = parent.parentElement as HTMLElement
+	}
+	while (!isPara(parent as HTMLElement)) {
+		parent = parent.parentElement as HTMLElement
 	}
 	return parent as HTMLElement
 }
@@ -63,6 +70,14 @@ function incLine(): void {
 	RANGE_IDX++
 
 	const rng = RANGES[RANGE_IDX]
+	if (rng.startContainer !== rng.endContainer) {
+		const before = rng.startContainer.parentElement as HTMLElement
+		const target = document.createElement('target')
+		const frag = rng.extractContents()
+		target.textContent = frag.textContent
+		before!.insertAdjacentElement("afterend", target)
+		return
+	}
 	rng.surroundContents(document.createElement('target'))
 }
 
@@ -157,8 +172,8 @@ function getMainParas(): HTMLElement[] {
 //TODO this needs to happen on mainContent lec being filled
 document.querySelector("#cache-paras")!.addEventListener("click", function() {
 	CACHED_PARAS = []
-	const childParas = Array.from(document.querySelector(LECS.main.mainContent)!.children) as HTMLElement[]
-	for (const para of childParas) {
+	const paras = getMainParas()
+	for (const para of paras) {
 		CACHED_PARAS.push(para.cloneNode(true) as HTMLElement)
 	}
 	console.log(`para cache done`)
@@ -176,7 +191,6 @@ document.querySelector("#line-by-line")!.addEventListener("click", function() {
 document.querySelector('#inc-line')!.addEventListener("click", incLine)
 
 window.onresize = () => {
-	const mainContent = document.querySelector(LECS.main.mainContent)
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
 	MAX_IDX = RANGES.length
