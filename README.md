@@ -37,3 +37,5 @@ Press `ctrl + <backtick>` to enable **super janky** features in development
 * unify the apis for the line-by-line and sent-by-sent viewers
 * *in page* senting and line-by-line viewer
 
+# Copyright
+Copyright (c) 2025 Nathaniel Taylor
