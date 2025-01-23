@@ -1,7 +1,7 @@
 # Reedy
 A Chrome extension to help you stuff on the Internet. Built with `typescript`, `vite`, and `crxjs`.
-TODO - gif showing sentence scrolling here
-![image](https://github.com/sophondetector/legis/blob/main/public/images/icon-128.png?raw=true)
+
+![gif](https://github.com/sophondetector/legis/blob/main/demo.mkv?raw=true)
 
 ## Installation
 ### Building
@@ -21,8 +21,6 @@ This will create the source code in the `dist/` folder. You can then install it 
 1. Load the `dist/` folder
 
 ## Usage
-TODO - gif showing basic usage
-
 1. Highlight the text you want to load into `Reedy`
 1. Right click, choose `Reedy > Open as new text in Reedy`
 1. In the `Reedy` tab click `Reading Mode` (upper right) 
