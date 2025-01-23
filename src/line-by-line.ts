@@ -129,7 +129,7 @@ function para2Ranges(paraEle: Element): Array<Range> {
 	while (mainIdx < finalIdx) {
 		// Q how do we increment the textNodeIdx??
 		// A everytime the mainIdx crosses an end, increment textNodeIdx
-		// and reset endOffset to zero
+		// and reset endOffset to one
 		const curEnd = endIdxs[endIdxIdx]
 		if (mainIdx === curEnd) {
 			endIdxIdx++
