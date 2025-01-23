@@ -1,19 +1,19 @@
 import { STORAGE_KEYS } from "./consts"
 
-const NEW_TEXT_OPTION_ID = "legisOption"
-const ADD_TO_TEXT_OPTION_ID = "legisAdd"
+const NEW_TEXT_OPTION_ID = "reedyOption"
+const ADD_TO_TEXT_OPTION_ID = "reedyAdd"
 
-const OPEN_SELECTION_MESSAGE = "Legis: give background.ts the selected text"
+const OPEN_SELECTION_MESSAGE = "Reedy: give background.ts the selected text"
 
 chrome.runtime.onInstalled.addListener(function() {
 	chrome.contextMenus.create({
 		id: NEW_TEXT_OPTION_ID,
-		title: "Open selection as new text in Legis",
+		title: "Open selection as new text in Reedy",
 		contexts: ["selection"],
 	})
 	chrome.contextMenus.create({
 		id: ADD_TO_TEXT_OPTION_ID,
-		title: "Add selection to existing text in Legis",
+		title: "Add selection to existing text in Reedy",
 		contexts: ["selection"],
 	})
 })
@@ -30,14 +30,14 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 		// which retains spacing information
 		case NEW_TEXT_OPTION_ID:
 			chrome.tabs.sendMessage(tab.id!, OPEN_SELECTION_MESSAGE, function(resp) {
-				console.log("opening new Legis text")
+				console.log("opening new Reedy text")
 				if (resp.err) {
 					console.log(`there was an error: ${resp.err}`)
 					return
 				}
-				// TODO open in current Legis tab (if exists)
+				// TODO open in current Reedy tab (if exists)
 				chrome.storage.local.set({ legisText: resp.selectionText }).then(() => {
-					console.log("opening Legis from context menu...")
+					console.log("opening Reedy from context menu...")
 					chrome.tabs.create({ url: '../pages/index.html' })
 				})
 			})
@@ -47,7 +47,7 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 			console.log("background.ts add text!")
 			chrome.tabs.sendMessage(tab.id!, OPEN_SELECTION_MESSAGE, async (resp) => {
 				if (resp.err) {
-					console.log(`Legis: there was an error: ${resp.err}`)
+					console.log(`Reedy: there was an error: ${resp.err}`)
 					return
 				}
 				const respText = resp.selectionText
