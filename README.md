@@ -1,8 +1,6 @@
 # Reedy
 A Chrome extension to help you stuff on the Internet. Built with `typescript`, `vite`, and `crxjs`.
 
-![gif](demo.gif)
-
 ## Installation
 ### Building
 There's no "official" distribution yet, so you gotta install all the dev dependencies and then build it yourself.
