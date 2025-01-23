@@ -1,7 +1,7 @@
 # Reedy
 A Chrome extension to help you stuff on the Internet. Built with `typescript`, `vite`, and `crxjs`.
-
 TODO - gif showing sentence scrolling here
+![image](https://github.com/sophondetector/legis/blob/main/public/images/icon-128.png?raw=true)
 
 ## Installation
 ### Building
