@@ -9,11 +9,6 @@ let RANGE_IDX: number = 0
 let MAX_RANGE_IDX: number | null = null
 let CACHED_PARAS: HTMLElement[] | null = null
 
-// ON INCREMENT/DECREMENT
-// increment range-idx
-// replace doc para with clone of cached para
-// surround ranges[rangeIdx] with <highlight></highlight>
-
 function restoreCachedPara(paraIdx: number): void {
 	if (CACHED_PARAS === null) {
 		throw new Error(`no cached paras!`)
