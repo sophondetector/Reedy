@@ -1,10 +1,12 @@
 import { LECS } from "./consts"
 
 const TEXT_NODE_NAME = '#text'
+const PARA_CLASS = 'reading-room-para'
+const LINE_BY_LINE_LEC = "#line-by-line"
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
-let MAX_IDX: number | null = null
+let MAX_RANGE_IDX: number | null = null
 let CACHED_PARAS: HTMLElement[] | null = null
 
 // ON INCREMENT/DECREMENT
@@ -30,7 +32,7 @@ function isPara(ele: HTMLElement | null): boolean {
 	if (ele === null) {
 		throw new Error('range2Para null parentElement!')
 	}
-	return ele.classList.contains('reading-room-para')
+	return ele.classList.contains(PARA_CLASS)
 }
 
 function range2Para(rng: Range): HTMLElement {
@@ -183,7 +185,7 @@ document.querySelector("#cache-paras")!.addEventListener("click", function() {
 })
 
 //TODO this needs to happen on mainContent lec being filled
-document.querySelector("#line-by-line")!.addEventListener("click", function() {
+document.querySelector(LINE_BY_LINE_LEC)!.addEventListener("click", function() {
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
 	for (const rng of RANGES) {
@@ -196,5 +198,5 @@ document.querySelector('#inc-line')!.addEventListener("click", incLine)
 window.onresize = () => {
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
-	MAX_IDX = RANGES.length
+	MAX_RANGE_IDX = RANGES.length - 1
 }
