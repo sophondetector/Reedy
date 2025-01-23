@@ -30,7 +30,7 @@ TODO - gif showing basic usage
 1. If you want to add to an existing text, highlight the text you want to add, right click and choose `Reedy > Add selection to existing text in Reedy`
 
 ## Developer Mode
-Press `ctrl + <backtick>` to enable **super janky** features in development
+Press `ctrl + <backtick>` to enable **super janky** features that are in development.
 
 ## Plans
 * pdf mode built off of `pdfjs`
