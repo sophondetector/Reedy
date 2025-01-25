@@ -3,6 +3,8 @@ import { LECS } from "./consts"
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
 const LINE_BY_LINE_LEC = "#line-by-line"
+const INC_LINE_LEC = "#inc-line"
+const DEC_LINE_LEC = "#dec-line"
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
@@ -54,6 +56,32 @@ function para2Idx(para: HTMLElement): number {
 	return num
 }
 
+function decLine(): void {
+	console.log('dec line!')
+	if (RANGES === null) return
+	if (RANGE_IDX === 0) return
+
+	const oldRng = RANGES[RANGE_IDX]
+	const oldPara = range2Para(oldRng)
+	const oldParaIdx = para2Idx(oldPara)
+
+	restoreCachedPara(oldParaIdx)
+	RANGES = paras2Ranges(getMainParas())
+	RANGE_IDX--
+
+	const rng = RANGES[RANGE_IDX]
+	if (rng.startContainer !== rng.endContainer) {
+		const before = rng.startContainer.parentElement as HTMLElement
+		const target = document.createElement('target')
+		const frag = rng.extractContents()
+		// target.textContent = frag.textContent
+		target.append(frag)
+		before!.insertAdjacentElement("afterend", target)
+		return
+	}
+	rng.surroundContents(document.createElement('target'))
+}
+
 function incLine(): void {
 	console.log('inc line!')
 	if (RANGES === null) return
@@ -74,7 +102,8 @@ function incLine(): void {
 		const before = rng.startContainer.parentElement as HTMLElement
 		const target = document.createElement('target')
 		const frag = rng.extractContents()
-		target.textContent = frag.textContent
+		// target.textContent = frag.textContent
+		target.append(frag)
 		before!.insertAdjacentElement("afterend", target)
 		return
 	}
@@ -155,6 +184,10 @@ function para2Ranges(paraEle: Element): Array<Range> {
 	return res
 }
 
+/*
+* this returns a set of ranges representing 
+* the display-lines of text in a paragraph
+*/
 function paras2Ranges(paras: Element[]): Range[] {
 	const res = []
 	for (const para of paras) {
@@ -164,6 +197,8 @@ function paras2Ranges(paras: Element[]): Range[] {
 }
 
 function getMainParas(): HTMLElement[] {
+	// TODO if we are in a Reedy page do this
+	// if not get the main para some other page-specific way
 	const main = document.querySelector(LECS.main.mainContent)
 	const arr = Array.from(main!.children) as HTMLElement[]
 	return arr
@@ -188,9 +223,13 @@ document.querySelector(LINE_BY_LINE_LEC)!.addEventListener("click", function() {
 	}
 })
 
-document.querySelector('#inc-line')!.addEventListener("click", incLine)
+document.querySelector(INC_LINE_LEC)!.addEventListener("click", incLine)
+
+document.querySelector(DEC_LINE_LEC)!.addEventListener("click", decLine)
 
 window.onresize = () => {
+	// TODO find beginning of current active range
+	// somehow end up with active line-range containing that beginning
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
 	MAX_RANGE_IDX = RANGES.length - 1
