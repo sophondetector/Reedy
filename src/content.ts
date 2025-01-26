@@ -1,5 +1,5 @@
 import { getSentBounds } from "./in-page-lexy.js"
-// import { ele2Lec } from "./elem-2-lec.js"
+// import { ele2Lec } from "./ele2Lec.js"
 
 const HANDLER_ACTIVATION = false
 
