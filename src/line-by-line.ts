@@ -2,7 +2,6 @@ import { LECS, REEDER_EVENT } from "./consts"
 
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
-const LINE_BY_LINE_LEC = "#line-by-line"
 const INC_LINE_LEC = "#inc-line"
 const DEC_LINE_LEC = "#dec-line"
 
