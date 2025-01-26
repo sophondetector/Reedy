@@ -46,3 +46,4 @@ export const TEST_CONTENT_PATHS = [
 	"../test-content/pdfs/saint-john-of-damascus-writings.pdf",
 ]
 
+export const REEDER_EVENT = "reederEvent"

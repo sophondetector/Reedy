@@ -1,4 +1,4 @@
-import { LECS } from "./consts"
+import { LECS, REEDER_EVENT } from "./consts"
 
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
@@ -204,24 +204,14 @@ function getMainParas(): HTMLElement[] {
 	return arr
 }
 
-//TODO this needs to happen on mainContent lec being filled
-document.querySelector("#cache-paras")!.addEventListener("click", function() {
+function cacheParas(): void {
 	CACHED_PARAS = []
 	const paras = getMainParas()
 	for (const para of paras) {
 		CACHED_PARAS.push(para.cloneNode(true) as HTMLElement)
 	}
 	console.log(`para cache done`)
-})
-
-//TODO this needs to happen on mainContent lec being filled
-document.querySelector(LINE_BY_LINE_LEC)!.addEventListener("click", function() {
-	const paras = getMainParas()
-	RANGES = paras2Ranges(paras)
-	for (const rng of RANGES) {
-		console.log(rng.toString())
-	}
-})
+}
 
 document.querySelector(INC_LINE_LEC)!.addEventListener("click", incLine)
 
@@ -234,3 +224,14 @@ window.onresize = () => {
 	RANGES = paras2Ranges(paras)
 	MAX_RANGE_IDX = RANGES.length - 1
 }
+
+// TODO have inc and dec only visible when reeding room is on and 
+// mode is line-by-line
+document.addEventListener(REEDER_EVENT, function() {
+	console.log(`getting ready for line by line!`)
+	cacheParas()
+	const paras = getMainParas()
+	RANGES = paras2Ranges(paras)
+	incLine()
+	decLine()
+})

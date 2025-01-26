@@ -1,4 +1,4 @@
-import { LECS } from './consts.js';
+import { LECS, REEDER_EVENT } from './consts.js';
 import { toggleDevOnly } from './dev-only.js';
 import { lex, LexedPara } from './lexy.js'
 
@@ -73,6 +73,8 @@ export async function initReedingRoom(content: string): Promise<void> {
 	}
 
 	setNewTarget(0)
+
+	document.dispatchEvent(new CustomEvent(REEDER_EVENT))
 
 	console.log(`reeding-room init complete`);
 }
