@@ -1,4 +1,4 @@
-export function ele2lec(ele: HTMLElement): string {
+export function ele2Lec(ele: HTMLElement): string {
 	if (ele.id) return `#${ele.id}`
 	let current = ele.localName
 	if (current === 'html') return `html`
@@ -7,20 +7,20 @@ export function ele2lec(ele: HTMLElement): string {
 		current += '.' + ele.classList.toString().replace(' ', '.')
 	}
 
-	let prevSibNum = 0
-	const getPrevSibNum = (fle: Element) => {
-		while (fle.previousElementSibling) {
+	let prevSibNum = 1
+	const getPrevSibNum = (el: Element) => {
+		while (el.previousElementSibling) {
 			prevSibNum++
-			fle = fle.previousElementSibling
+			el = el.previousElementSibling
 		}
 	}
 
 	getPrevSibNum(ele)
-	if (prevSibNum > 0) {
+	if (prevSibNum > 1) {
 		current += `:nth-child(${prevSibNum})`
 	}
 
 	if (document.querySelectorAll(current).length === 1) return current
 
-	return `${ele2lec(ele.parentElement!)} > ${current}`
+	return `${ele2Lec(ele.parentElement!)} > ${current}`
 }

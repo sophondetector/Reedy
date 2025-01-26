@@ -1,4 +1,5 @@
 import { getSentBounds } from "./in-page-lexy.js"
+// import { ele2Lec } from "./elem-2-lec.js"
 
 const HANDLER_ACTIVATION = false
 
@@ -77,3 +78,15 @@ if (HANDLER_ACTIVATION) {
 	console.log(`Legis site handlers deactivated`)
 }
 
+// TEST BLOCK FOR ele2Lec
+// const lecs = [
+// 	'#content > article > div > p:nth-child(4)',
+// 	'#your_first_website_creating_the_content > a',
+// 	'#content > article > section:nth-child(4) > div > dl > dd:nth-child(8) > p > a:nth-child(4) > code'
+// ]
+//
+// for (const le of lecs) {
+// 	const ele = Q(le) as HTMLElement
+// 	const outLec = ele2Lec(ele)
+// 	console.log(`outLec: ${outLec}`)
+// }
