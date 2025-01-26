@@ -19,7 +19,7 @@ function restoreCachedPara(paraIdx: number): void {
 	const fromCache = CACHED_PARAS[paraIdx].cloneNode(true)
 
 	if (!fromCache) {
-		throw new Error(`cached paras miss for ${paraIdx}`)
+		throw new Error(`cached paras miss for #para${paraIdx}`)
 	}
 	mangled.replaceWith(fromCache)
 }
