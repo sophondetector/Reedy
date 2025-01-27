@@ -5,7 +5,6 @@ const PARA_CLASS = 'reading-room-para'
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
-let MAX_RANGE_IDX: number | null = null
 let CACHED_PARAS: HTMLElement[] | null = null
 
 function restoreCachedPara(paraIdx: number): void {
@@ -53,6 +52,24 @@ function para2Idx(para: HTMLElement): number {
 	return num
 }
 
+function setNewTargetRange(idx: number): void {
+	if (RANGES === null) {
+		console.error('setNewTargetRange: no ranges!')
+		return
+	}
+	const rng = RANGES[idx]
+	if (rng.startContainer === rng.endContainer) {
+		rng.surroundContents(document.createElement('target'))
+		return
+	}
+	const before = rng.startContainer.parentElement as HTMLElement
+	const target = document.createElement('target')
+	const frag = rng.extractContents()
+	// target.textContent = frag.textContent
+	target.append(frag)
+	before!.insertAdjacentElement("afterend", target)
+}
+
 export function decLine(): void {
 	console.log('dec line!')
 	if (RANGES === null) return
@@ -66,17 +83,7 @@ export function decLine(): void {
 	RANGES = paras2Ranges(getMainParas())
 	RANGE_IDX--
 
-	const rng = RANGES[RANGE_IDX]
-	if (rng.startContainer !== rng.endContainer) {
-		const before = rng.startContainer.parentElement as HTMLElement
-		const target = document.createElement('target')
-		const frag = rng.extractContents()
-		// target.textContent = frag.textContent
-		target.append(frag)
-		before!.insertAdjacentElement("afterend", target)
-		return
-	}
-	rng.surroundContents(document.createElement('target'))
+	setNewTargetRange(RANGE_IDX)
 }
 
 export function incLine(): void {
@@ -94,17 +101,7 @@ export function incLine(): void {
 	RANGES = paras2Ranges(getMainParas())
 	RANGE_IDX++
 
-	const rng = RANGES[RANGE_IDX]
-	if (rng.startContainer !== rng.endContainer) {
-		const before = rng.startContainer.parentElement as HTMLElement
-		const target = document.createElement('target')
-		const frag = rng.extractContents()
-		// target.textContent = frag.textContent
-		target.append(frag)
-		before!.insertAdjacentElement("afterend", target)
-		return
-	}
-	rng.surroundContents(document.createElement('target'))
+	setNewTargetRange(RANGE_IDX)
 }
 
 function getAllTextNodes(node: Node): Node[] {
@@ -215,7 +212,6 @@ window.onresize = () => {
 	// somehow end up with active line-range containing that beginning
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
-	MAX_RANGE_IDX = RANGES.length - 1
 }
 
 // TODO have inc and dec only visible when reeding room is on and 
