@@ -1,29 +1,84 @@
 import { LECS, REEDER_EVENT } from './consts.js';
 import { toggleDevOnly } from './dev-only.js';
-import { lex, LexedPara } from './lexy.js'
+import { lex, LexedPara } from './lexy.js';
+import { incLine, decLine } from './line-by-line.js'
+
+type ReederMode = "sent" | "line"
 
 interface ReedyState {
 	active: boolean,
 	targetIdx: number,
 	paraCount: number,
 	maxSentIdx: number,
+	reederMode: ReederMode,
 	reset: () => void,
-	log: () => void
+	log: () => void,
+	toggleSentMode: () => void,
+	toggleLineMode: () => void,
+	toggleMode: () => void,
+	inc: () => void,
+	dec: () => void
 }
 
-const STATE: ReedyState = {
+export const STATE: ReedyState = {
 	active: false,
 	targetIdx: 0,
 	paraCount: 0,
 	maxSentIdx: 0,
+	reederMode: "sent",
 	reset: function() {
 		this.active = false
 		this.targetIdx = 0
 		this.paraCount = 0
 		this.maxSentIdx = 0
+		this.reederMode = "sent"
 	},
 	log: function() {
 		console.log(this)
+	},
+	toggleSentMode: function() {
+		this.reederMode = "sent"
+		// TODO x-fer line target to sent target
+	},
+	toggleLineMode: function() {
+		this.reederMode = "line"
+		// TODO x-fer sent target to line target
+	},
+	toggleMode: function() {
+		switch (this.reederMode) {
+			case "sent":
+				this.toggleLineMode()
+				break;
+			case "line":
+				this.toggleSentMode()
+				break;
+			default:
+				console.error(`unknown reederMode ${this.reederMode}`)
+		}
+	},
+	inc: function() {
+		switch (this.reederMode) {
+			case "sent":
+				incTarget()
+				break;
+			case "line":
+				incLine()
+				break;
+			default:
+				console.error(`unknown reederMode ${this.reederMode}`)
+		}
+	},
+	dec: function() {
+		switch (this.reederMode) {
+			case "sent":
+				decTarget()
+				break;
+			case "line":
+				decLine()
+				break;
+			default:
+				console.error(`unknown reederMode ${this.reederMode}`)
+		}
 	}
 }
 
@@ -87,12 +142,12 @@ export function keypressHandler(e: KeyboardEvent): void {
 			break;
 		case "j":
 			if (STATE.active) {
-				incTarget();
+				STATE.inc()
 			}
 			break;
 		case "k":
 			if (STATE.active) {
-				decTarget();
+				STATE.dec()
 			}
 			break;
 		case "`":
@@ -104,6 +159,8 @@ export function keypressHandler(e: KeyboardEvent): void {
 	}
 }
 
+// TODO break lexor* funcs into separate script
+// TODO rename lexor* funcs to sent* 
 export function lexorToggle(): void {
 	STATE.active = !STATE.active;
 	STATE.active ? lexorOn() : lexorOff();
@@ -136,6 +193,8 @@ function makePara(): HTMLParagraphElement {
 	return para;
 }
 
+// TODO instead of using .target class just 
+// surround sent with a <target> tag
 function decTarget(): void {
 	if (STATE.targetIdx <= 0) return
 	setNewTarget(STATE.targetIdx - 1);

@@ -1,7 +1,8 @@
-import { initReedingRoom, keypressHandler, lexorToggle } from "./reeder-utils.js"
+import { initReedingRoom, keypressHandler, lexorToggle, STATE } from "./reeder-utils.js"
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
+import { incLine, decLine } from "./line-by-line.js"
 import "./line-by-line.js"
 
 function hideTextInput(): void {
@@ -149,6 +150,15 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 	}
 })
 
+document.querySelector(LECS.main.switchMode)!.addEventListener("click", function() {
+	STATE.toggleMode()
+	if (STATE.reederMode === 'sent') {
+		document.querySelector(LECS.main.switchMode)!.textContent = "Sentence Mode"
+		return
+	}
+	document.querySelector(LECS.main.switchMode)!.textContent = "Line Mode"
+})
+
 // adds text sent to this tab from background.ts to the current text.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
 	chrome.storage.local.get([STORAGE_KEYS.legisText], (storage) => {
@@ -159,3 +169,8 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
 	})
 	console.log(`added text from ${sender}`)
 })
+
+document.querySelector(LECS.main.forwardBut)!.addEventListener("click", incLine)
+
+document.querySelector(LECS.main.backBut)!.addEventListener("click", decLine)
+

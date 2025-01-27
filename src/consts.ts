@@ -11,7 +11,10 @@ export const LECS = {
 		saveTextBut: "#save-text",
 		loadTextBut: "#load-text",
 		testContentList: "#content-select",
-		mainContent: '#reeding-room-content'
+		mainContent: '#reeding-room-content',
+		switchMode: "#switch-mode",
+		forwardBut: "#forwardBut",
+		backBut: "#backBut"
 	},
 	pdfReader: {
 		pageCount: "#page-count",

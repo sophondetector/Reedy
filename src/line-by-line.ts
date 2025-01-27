@@ -2,8 +2,6 @@ import { LECS, REEDER_EVENT } from "./consts"
 
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
-const INC_LINE_LEC = "#inc-line"
-const DEC_LINE_LEC = "#dec-line"
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
@@ -55,7 +53,7 @@ function para2Idx(para: HTMLElement): number {
 	return num
 }
 
-function decLine(): void {
+export function decLine(): void {
 	console.log('dec line!')
 	if (RANGES === null) return
 	if (RANGE_IDX === 0) return
@@ -81,7 +79,7 @@ function decLine(): void {
 	rng.surroundContents(document.createElement('target'))
 }
 
-function incLine(): void {
+export function incLine(): void {
 	console.log('inc line!')
 	if (RANGES === null) return
 	if (RANGE_IDX === RANGES.length - 1) {
@@ -211,10 +209,6 @@ function cacheParas(): void {
 	}
 	console.log(`para cache done`)
 }
-
-document.querySelector(INC_LINE_LEC)!.addEventListener("click", incLine)
-
-document.querySelector(DEC_LINE_LEC)!.addEventListener("click", decLine)
 
 window.onresize = () => {
 	// TODO find beginning of current active range
