@@ -1,92 +1,31 @@
 import { LECS, REEDER_EVENT } from './consts.js';
-import { toggleDevOnly } from './dev-only.js';
 import { lex, LexedPara } from './lexy.js';
-import { incLine, decLine } from './line-by-line.js'
+import { reederOff } from './reedy-state.js'
 
-type ReederMode = "sent" | "line"
-
-interface ReedyState {
-	active: boolean,
-	targetIdx: number,
-	paraCount: number,
-	maxSentIdx: number,
-	reederMode: ReederMode,
-	reset: () => void,
-	log: () => void,
-	toggleSentMode: () => void,
-	toggleLineMode: () => void,
-	toggleMode: () => void,
-	inc: () => void,
-	dec: () => void
-}
-
-export const STATE: ReedyState = {
-	active: false,
-	targetIdx: 0,
-	paraCount: 0,
-	maxSentIdx: 0,
-	reederMode: "line",
-	reset: function() {
-		this.active = false
-		this.targetIdx = 0
-		this.paraCount = 0
-		this.maxSentIdx = 0
-		this.reederMode = "line"
-	},
-	log: function() {
-		console.log(this)
-	},
-	toggleSentMode: function() {
-		this.reederMode = "sent"
-		// TODO x-fer line target to sent target
-	},
-	toggleLineMode: function() {
-		this.reederMode = "line"
-		// TODO x-fer sent target to line target
-	},
-	toggleMode: function() {
-		switch (this.reederMode) {
-			case "sent":
-				this.toggleLineMode()
-				break;
-			case "line":
-				this.toggleSentMode()
-				break;
-			default:
-				console.error(`unknown reederMode ${this.reederMode}`)
-		}
-	},
-	inc: function() {
-		switch (this.reederMode) {
-			case "sent":
-				incTarget()
-				break;
-			case "line":
-				incLine()
-				break;
-			default:
-				console.error(`unknown reederMode ${this.reederMode}`)
-		}
-	},
-	dec: function() {
-		switch (this.reederMode) {
-			case "sent":
-				decTarget()
-				break;
-			case "line":
-				decLine()
-				break;
-			default:
-				console.error(`unknown reederMode ${this.reederMode}`)
-		}
-	}
-}
-
-//TODO move all these into consts
-const LEXOR_ON_CLASS = "lexor-on"
-const LEXOR_OFF_CLASS = "lexor-off"
 const LEXOR_SENTENCE_CLASS = "lexor-sent"
 const TARGET_CLASS = "target"
+
+let SENT_TARGET_IDX = 0
+let MAX_SENT_TARGET_IDX = 0
+let PARA_COUNT = 0
+
+// TODO instead of using .target class just 
+// surround sent with a <target> tag
+export function decTargetSent(): void {
+	if (SENT_TARGET_IDX <= 0) return
+	setNewTargetSent(SENT_TARGET_IDX - 1);
+}
+
+export function incTargetSent(): void {
+	if (SENT_TARGET_IDX >= MAX_SENT_TARGET_IDX) return
+	setNewTargetSent(SENT_TARGET_IDX + 1);
+}
+
+function resetSentState(): void {
+	SENT_TARGET_IDX = 0
+	MAX_SENT_TARGET_IDX = 0
+	PARA_COUNT = 0
+}
 
 function paraIsBlank(para: LexedPara): boolean {
 	for (const sent of para) {
@@ -96,12 +35,12 @@ function paraIsBlank(para: LexedPara): boolean {
 	return true
 }
 
-// TODO write addToReadingRoom function
-export async function initReedingRoom(content: string): Promise<void> {
-	console.log(`reeding-room init start`);
+// TODO write addSentsToReeder function
+export async function initSents(content: string): Promise<void> {
+	console.log(`Reeder sents init start`);
 
-	lexorOff()
-	STATE.reset()
+	reederOff()
+	resetSentState()
 
 	const contentDiv = document.querySelector(LECS.main.mainContent)
 	contentDiv!.innerHTML = ''
@@ -120,103 +59,47 @@ export async function initReedingRoom(content: string): Promise<void> {
 				const targetId = (event.target as HTMLElement).id
 				const targetNumStr = targetId.match(/\d+$/)!.toString()
 				const targetNum = Number(targetNumStr)
-				setNewTarget(targetNum)
+				setNewTargetSent(targetNum)
 			})
 
 			newP.appendChild(ss)
 		}
 	}
 
-	setNewTarget(0)
+	setNewTargetSent(0)
 
 	document.dispatchEvent(new CustomEvent(REEDER_EVENT))
 
-	console.log(`reeding-room init complete`);
-}
-
-export function keypressHandler(e: KeyboardEvent): void {
-	// console.log(`keypress handler: ${e.key}`)
-	switch (e.key) {
-		case "L":
-			lexorToggle()
-			break;
-		case "j":
-			if (STATE.active) {
-				STATE.inc()
-			}
-			break;
-		case "k":
-			if (STATE.active) {
-				STATE.dec()
-			}
-			break;
-		case "`":
-			if (e.ctrlKey) toggleDevOnly()
-			break;
-		default:
-			// console.log(e.key);
-			break;
-	}
-}
-
-// TODO break lexor* funcs into separate script
-// TODO rename lexor* funcs to sent* 
-export function lexorToggle(): void {
-	STATE.active = !STATE.active;
-	STATE.active ? lexorOn() : lexorOff();
-}
-
-function lexorOn(): void {
-	const ele = document.querySelector("body");
-	ele!.classList.remove(LEXOR_OFF_CLASS);
-	ele!.classList.add(LEXOR_ON_CLASS);
-}
-
-function lexorOff(): void {
-	const ele = document.querySelector("body");
-	ele!.classList.remove(LEXOR_ON_CLASS);
-	ele!.classList.add(LEXOR_OFF_CLASS);
+	console.log(`Reeder sents created`);
 }
 
 function makeSentSpan(sent: string): HTMLSpanElement {
 	const ele = document.createElement("span");
 	ele.classList.add(LEXOR_SENTENCE_CLASS);
 	ele.textContent = sent + " ";
-	ele.id = `sent${STATE.maxSentIdx++}`;
+	ele.id = `sent${MAX_SENT_TARGET_IDX++}`;
 	return ele;
 }
 
 function makePara(): HTMLParagraphElement {
 	const para = document.createElement("p");
 	para.classList.add("reading-room-para");
-	para.id = `para${STATE.paraCount++}`;
+	para.id = `para${PARA_COUNT++}`;
 	return para;
 }
 
-// TODO instead of using .target class just 
-// surround sent with a <target> tag
-function decTarget(): void {
-	if (STATE.targetIdx <= 0) return
-	setNewTarget(STATE.targetIdx - 1);
-}
-
-function incTarget(): void {
-	if (STATE.targetIdx >= STATE.maxSentIdx) return
-	setNewTarget(STATE.targetIdx + 1);
-}
-
-function setNewTarget(sentIdx: number): void {
+function setNewTargetSent(sentIdx: number): void {
 	const targSent = idx2Sent(sentIdx)
 	if (!targSent) return
-	unsetTarget();
+	unsetTargetSent();
 	targSent.classList.add(TARGET_CLASS);
-	STATE.targetIdx = sentIdx
+	SENT_TARGET_IDX = sentIdx
 	// @ts-ignore
 	targSent.scrollIntoViewIfNeeded()
 }
 
-function unsetTarget(): void {
-	const targSent = idx2Sent(STATE.targetIdx)
+function unsetTargetSent(): void {
+	const targSent = idx2Sent(SENT_TARGET_IDX)
 	if (!targSent) return
 	targSent.classList.remove("target");
 }
@@ -224,7 +107,7 @@ function unsetTarget(): void {
 function idx2Sent(sentIdx: number): HTMLSpanElement | undefined {
 	const sent = document.querySelector(`#sent${sentIdx}`) as HTMLSpanElement
 	if (!sent) {
-		console.log(`Reedy ERROR: Could not find sent with index ${sentIdx}`)
+		console.error(`Reedy ERROR: Could not find sent with index ${sentIdx}`)
 		return
 	}
 	return sent

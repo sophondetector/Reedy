@@ -1,9 +1,9 @@
-import { initReedingRoom, keypressHandler, lexorToggle, STATE } from "./reeder-utils.js"
+import { reederToggle, switchReederMode } from "./reedy-state.js"
+import { initSents } from "./reeder-utils.js"
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
-import { incLine, decLine, lineByLineOn, lineByLineOff } from "./line-by-line.js"
-import "./line-by-line.js"
+import { inc, dec, keypressHandler } from "./reedy-controls.js"
 
 function hideTextInput(): void {
 	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function(): void {
 document.addEventListener("DOMContentLoaded", () => {
 	chrome.storage.local.get([STORAGE_KEYS.legisText], ({ legisText }) => {
 		if (legisText) {
-			initReedingRoom(legisText)
+			initSents(legisText)
 			hideTextInput()
 		}
 	})
@@ -45,18 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
 	chrome.tabs.getCurrent(function(tab) {
 		if (tab) {
 			chrome.storage.local.set({ legisTabId: tab.id })
-			console.log(`Legis: set legisTabId to ${tab.id}`)
+			console.log(`Reedy: set legisTabId to ${tab.id}`)
 			return
 		}
-		console.log("Legis: could not find tab!")
+		console.log("Reedy: could not find tab!")
 	})
 })
 
 document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	console.log("doing reading room")
-	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
+	const textEle = document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement
 	const text = textEle.value
-	initReedingRoom(text)
+	initSents(text)
 	hideTextInput()
 })
 
@@ -82,13 +82,13 @@ document.querySelector(LECS.main.testContentList)!.addEventListener("input", asy
 	switch (fileType) {
 		case "pdf":
 			pdfUrl2Str(contentPath)
-				.then(initReedingRoom)
+				.then(initSents)
 				.then(hideTextInput)
 			break;
 		case "txt":
 			fetch(contentPath)
 				.then(resp => resp.text())
-				.then(initReedingRoom)
+				.then(initSents)
 				.then(hideTextInput)
 			break;
 		default:
@@ -97,7 +97,7 @@ document.querySelector(LECS.main.testContentList)!.addEventListener("input", asy
 	}
 })
 
-document.querySelector(LECS.main.readingModeBut)!.addEventListener("click", lexorToggle)
+document.querySelector(LECS.main.readingModeBut)!.addEventListener("click", reederToggle)
 
 document.querySelector(LECS.main.saveTextBut)!.addEventListener("click", async () => {
 	const text = document.querySelector(LECS.main.mainContent)!.innerHTML
@@ -122,14 +122,14 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 			case "application/pdf":
 				file2PdfProxy(file)
 					.then(pdfProxy2Str)
-					.then(initReedingRoom)
+					.then(initSents)
 					.then(hideTextInput)
 					.then(() => console.log("loading pdf done"))
 				break;
 
 			case "txt":
 				const fileString = await readFileLegacy(file) as string
-				initReedingRoom(fileString)
+				initSents(fileString)
 					.then(hideTextInput)
 					.then(() => console.log("loading text done"))
 				break;
@@ -150,29 +150,20 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 	}
 })
 
-document.querySelector(LECS.main.switchMode)!.addEventListener("click", function() {
-	STATE.toggleMode()
-	if (STATE.reederMode === 'sent') {
-		document.querySelector(LECS.main.switchMode)!.textContent = "Sentence Mode"
-		lineByLineOff()
-		return
-	}
-	document.querySelector(LECS.main.switchMode)!.textContent = "Line Mode"
-	lineByLineOn()
-})
+document.querySelector(LECS.main.switchMode)!.addEventListener("click", switchReederMode)
+
+document.querySelector(LECS.main.forwardBut)!.addEventListener("click", inc)
+
+document.querySelector(LECS.main.backBut)!.addEventListener("click", dec)
 
 // adds text sent to this tab from background.ts to the current text.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
 	chrome.storage.local.get([STORAGE_KEYS.legisText], (storage) => {
 		const newText = storage.legisText + '\n' + msg
-		initReedingRoom(newText)
+		initSents(newText)
 		chrome.storage.local.set({ legisText: newText })
 		sendResp()
 	})
 	console.log(`added text from ${sender}`)
 })
-
-document.querySelector(LECS.main.forwardBut)!.addEventListener("click", incLine)
-
-document.querySelector(LECS.main.backBut)!.addEventListener("click", decLine)
 

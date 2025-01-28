@@ -80,14 +80,14 @@ main {
 	color: black
 }
 
-.reeder-on .sent-by-sent-on .target {
+.reeder-on.sent-on .target {
 	background-color: white;
 	color: black;
 	padding-top: 2.5px;
 	padding-bottom: 2.5px
 }
 
-.reeder-on .line-by-line-on target {
+.reeder-on.line-on target {
 	background-color: white;
 	color: black;
 	padding-top: 2.5px;
