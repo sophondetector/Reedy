@@ -87,6 +87,10 @@ main {
 	padding-bottom: 2.5px
 }
 
+.line-by-line-on target {
+	background-color: yellow;
+}
+
 .darkTheme * {
 	background: #26292d;
 	color: #f0f0f0
@@ -107,8 +111,4 @@ p {
 
 #file-picker {
 	display: none;
-}
-
-target {
-	background-color: yellow;
 }

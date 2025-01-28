@@ -2,7 +2,7 @@ import { initReedingRoom, keypressHandler, lexorToggle, STATE } from "./reeder-u
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
-import { incLine, decLine } from "./line-by-line.js"
+import { incLine, decLine, lineByLineOn, lineByLineOff } from "./line-by-line.js"
 import "./line-by-line.js"
 
 function hideTextInput(): void {
@@ -154,9 +154,11 @@ document.querySelector(LECS.main.switchMode)!.addEventListener("click", function
 	STATE.toggleMode()
 	if (STATE.reederMode === 'sent') {
 		document.querySelector(LECS.main.switchMode)!.textContent = "Sentence Mode"
+		lineByLineOff()
 		return
 	}
 	document.querySelector(LECS.main.switchMode)!.textContent = "Line Mode"
+	lineByLineOn()
 })
 
 // adds text sent to this tab from background.ts to the current text.
