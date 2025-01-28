@@ -1,5 +1,5 @@
 import { reederToggle, switchReederMode } from "./reedy-state.js"
-import { initSents } from "./reeder-utils.js"
+import { initSents } from "./sent-by-sent.js"
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"

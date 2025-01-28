@@ -1,7 +1,7 @@
 import { incLine, decLine } from './line-by-line.js'
 import { reederToggle, reederIsActive, getReederMode } from './reedy-state.js'
 import { toggleDevOnly } from './dev-only.js';
-import { incTargetSent, decTargetSent } from "./reeder-utils.js"
+import { incTargetSent, decTargetSent } from "./sent-by-sent.js"
 
 export function inc(): void {
 	if (!reederIsActive) return
