@@ -36,7 +36,11 @@ function isSent(ele: HTMLElement | null): boolean {
 	return false
 }
 
-function range2Sent(rng: Range): HTMLElement | null {
+/*
+	* takes a range and returns the sent element which
+* contains the start node of that range
+*/
+export function range2Sent(rng: Range): HTMLElement | null {
 	let ele = rng.startContainer.parentElement as HTMLElement
 	while (!isSent(ele)) {
 		if (!ele.parentElement) return null
