@@ -82,7 +82,6 @@ function setNewTargetRange(idx: number): void {
 	const before = rng.startContainer.parentElement as HTMLElement
 	const target = document.createElement('target')
 	const frag = rng.extractContents()
-	// target.textContent = frag.textContent
 	target.append(frag)
 	before!.insertAdjacentElement("afterend", target)
 }
