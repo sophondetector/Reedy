@@ -28,6 +28,23 @@ function isPara(ele: HTMLElement | null): boolean {
 	return ele.classList.contains(PARA_CLASS)
 }
 
+function isSent(ele: HTMLElement | null): boolean {
+	if (ele === null) {
+		throw new Error('range2Sent null element!')
+	}
+	if (ele.id.match(/sent\d+/)) return true
+	return false
+}
+
+function range2Sent(rng: Range): HTMLElement | null {
+	let ele = rng.startContainer.parentElement as HTMLElement
+	while (!isSent(ele)) {
+		if (!ele.parentElement) return null
+		ele = ele.parentElement
+	}
+	return ele
+}
+
 function range2Para(rng: Range): HTMLElement {
 	// if the range spans two different html elements 
 	// then the common ancestor is also an html element (probably the paragraph)
@@ -70,37 +87,33 @@ function setNewTargetRange(idx: number): void {
 	before!.insertAdjacentElement("afterend", target)
 }
 
+function unsetTargetRange(): void {
+	if (RANGES === null) {
+		console.error("cant unset target range: null RANGES!")
+		return
+	}
+	const rng = RANGES[RANGE_IDX]
+	const para = range2Para(rng)
+	const idx = para2Idx(para)
+	restoreCachedPara(idx)
+	RANGES = paras2Ranges(getMainParas())
+}
+
 export function decLine(): void {
-	console.log('dec line!')
+	// console.log('dec line!')
 	if (RANGES === null) return
 	if (RANGE_IDX === 0) return
-
-	const oldRng = RANGES[RANGE_IDX]
-	const oldPara = range2Para(oldRng)
-	const oldParaIdx = para2Idx(oldPara)
-
-	restoreCachedPara(oldParaIdx)
-	RANGES = paras2Ranges(getMainParas())
+	unsetTargetRange()
 	RANGE_IDX--
-
 	setNewTargetRange(RANGE_IDX)
 }
 
 export function incLine(): void {
-	console.log('inc line!')
+	// console.log('inc line!')
 	if (RANGES === null) return
-	if (RANGE_IDX === RANGES.length - 1) {
-		return
-	}
-
-	const oldRng = RANGES[RANGE_IDX]
-	const oldPara = range2Para(oldRng)
-	const oldParaIdx = para2Idx(oldPara)
-
-	restoreCachedPara(oldParaIdx)
-	RANGES = paras2Ranges(getMainParas())
+	if (RANGE_IDX === RANGES.length - 1) return
+	unsetTargetRange()
 	RANGE_IDX++
-
 	setNewTargetRange(RANGE_IDX)
 }
 
@@ -131,8 +144,9 @@ function getEndIdxs(lens: Array<number>) {
 function para2Ranges(paraEle: Element): Array<Range> {
 	const res = []
 	const finalIdx = paraEle.textContent!.length - 1
-	const textNodes = getAllTextNodes(paraEle as Node)
-
+	const textNodes = getAllTextNodes(paraEle as Node).filter(
+		tn => tn.textContent && tn.textContent.length > 0
+	)
 	const lens = textNodes.map(tn => tn.textContent!.length)
 	const endIdxs = getEndIdxs(lens)
 
