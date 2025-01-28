@@ -25,13 +25,13 @@ export const STATE: ReedyState = {
 	targetIdx: 0,
 	paraCount: 0,
 	maxSentIdx: 0,
-	reederMode: "sent",
+	reederMode: "line",
 	reset: function() {
 		this.active = false
 		this.targetIdx = 0
 		this.paraCount = 0
 		this.maxSentIdx = 0
-		this.reederMode = "sent"
+		this.reederMode = "line"
 	},
 	log: function() {
 		console.log(this)
