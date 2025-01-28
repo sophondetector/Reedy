@@ -17,7 +17,7 @@ export function decTargetSent(): void {
 }
 
 export function incTargetSent(): void {
-	if (SENT_TARGET_IDX >= MAX_SENT_TARGET_IDX) return
+	if (SENT_TARGET_IDX === MAX_SENT_TARGET_IDX) return
 	setNewTargetSent(SENT_TARGET_IDX + 1);
 }
 
@@ -57,6 +57,7 @@ export async function initSents(content: string): Promise<void> {
 
 			ss.addEventListener('click', function(event) {
 				const targetId = (event.target as HTMLElement).id
+				console.log(`sent ${targetId} clicked!`)
 				const targetNumStr = targetId.match(/\d+$/)!.toString()
 				const targetNum = Number(targetNumStr)
 				setNewTargetSent(targetNum)
@@ -99,9 +100,10 @@ function setNewTargetSent(sentIdx: number): void {
 }
 
 function unsetTargetSent(): void {
-	const targSent = idx2Sent(SENT_TARGET_IDX)
-	if (!targSent) return
-	targSent.classList.remove("target");
+	const targets = document.querySelectorAll(`.${TARGET_CLASS}`)
+	targets.forEach(target => {
+		target.classList.remove(TARGET_CLASS)
+	})
 }
 
 function idx2Sent(sentIdx: number): HTMLSpanElement | undefined {
