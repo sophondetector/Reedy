@@ -2,6 +2,7 @@ import { LECS, REEDER_EVENT } from './consts.js';
 import { lex, LexedPara } from './lexy.js';
 import { reederOff } from './reedy-state.js'
 
+const REEDY_PARAGRAPH_CLASS = "reading-room-para"
 const REEDY_SENTENCE_CLASS = "reedy-sent"
 const TARGET_CLASS = "target"
 
@@ -84,7 +85,7 @@ function makeSentSpan(sent: string): HTMLSpanElement {
 
 function makePara(): HTMLParagraphElement {
 	const para = document.createElement("p");
-	para.classList.add("reading-room-para");
+	para.classList.add(REEDY_PARAGRAPH_CLASS);
 	para.id = `para${PARA_COUNT++}`;
 	return para;
 }
