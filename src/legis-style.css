@@ -70,24 +70,24 @@ main {
 	line-height: 1.5;
 }
 
-.lexor-on {
+.reeder-on {
 	background-color: grey;
 	color: darkgray
 }
 
-.lexor-off {
+.reeder-off {
 	background-color: white;
 	color: black
 }
 
-.lexor-on .target {
+.reeder-on .sent-by-sent-on .target {
 	background-color: white;
 	color: black;
 	padding-top: 2.5px;
 	padding-bottom: 2.5px
 }
 
-.line-by-line-on target {
+.reeder-on .line-by-line-on target {
 	background-color: white;
 	color: black;
 	padding-top: 2.5px;
