@@ -1,4 +1,4 @@
-import { getSentBounds } from "./in-page-lexy.js"
+import { getSentBounds } from "./in-page-reeder.js"
 // import { ele2Lec } from "./ele2Lec.js"
 
 const HANDLER_ACTIVATION = false
@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 		const selectionText = document.getSelection()!.toString()
 		sendResponse({ selectionText })
 	} catch (err) {
-		console.log('Legis content.js hit an error: ', err)
+		console.log('Reedy content.js hit an error: ', err)
 		sendResponse({ err })
 	}
 })
@@ -31,17 +31,17 @@ function getCurrentDomain(): string {
 }
 
 function mdnHandler(): string {
-	console.log("Legis MDN handler!")
+	console.log("Reedy MDN handler!")
 	return Q('article')!.textContent as string
 }
 
 function vaticanHandler(): string {
-	console.log("Legis vatican handler!")
+	console.log("Reedy vatican handler!")
 	return Q('.documento')!.textContent as string
 }
 
 function wikiHandler(): string {
-	console.log("Legis wiki handler!")
+	console.log("Reedy wiki handler!")
 	const paraLec = '#mw-content-text p'
 	const paras = QQ(paraLec) as Array<Element>
 	let text = ''
@@ -71,11 +71,11 @@ if (HANDLER_ACTIVATION) {
 			console.log(`SENT ${idx}: `, text.slice(sentBound[0], sentBound[1]))
 		}
 	} else {
-		console.log(`Legis does not support ${CURRENT_DOMAIN}`)
+		console.log(`Reedy does not support ${CURRENT_DOMAIN}`)
 	}
 
 } else {
-	console.log(`Legis site handlers deactivated`)
+	console.log(`Reedy site handlers deactivated`)
 }
 
 // TEST BLOCK FOR ele2Lec
