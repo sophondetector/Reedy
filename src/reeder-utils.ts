@@ -2,7 +2,7 @@ import { LECS, REEDER_EVENT } from './consts.js';
 import { lex, LexedPara } from './lexy.js';
 import { reederOff } from './reedy-state.js'
 
-const LEXOR_SENTENCE_CLASS = "lexor-sent"
+const REEDY_SENTENCE_CLASS = "reedy-sent"
 const TARGET_CLASS = "target"
 
 let SENT_TARGET_IDX = 0
@@ -75,7 +75,7 @@ export async function initSents(content: string): Promise<void> {
 
 function makeSentSpan(sent: string): HTMLSpanElement {
 	const ele = document.createElement("span");
-	ele.classList.add(LEXOR_SENTENCE_CLASS);
+	ele.classList.add(REEDY_SENTENCE_CLASS);
 	ele.textContent = sent + " ";
 	ele.id = `sent${MAX_SENT_TARGET_IDX++}`;
 	return ele;
@@ -105,6 +105,10 @@ function unsetTargetSent(): void {
 }
 
 function idx2Sent(sentIdx: number): HTMLSpanElement | undefined {
+	if (sentIdx > MAX_SENT_TARGET_IDX) {
+		console.error(`request idx ${sentIdx} exceeds max target idx ${MAX_SENT_TARGET_IDX}`)
+		return
+	}
 	const sent = document.querySelector(`#sent${sentIdx}`) as HTMLSpanElement
 	if (!sent) {
 		console.error(`Reedy ERROR: Could not find sent with index ${sentIdx}`)
