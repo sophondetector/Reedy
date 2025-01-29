@@ -106,13 +106,6 @@ main {
 	padding-bottom: 2.5px
 }
 
-.reeder-on.line-on target {
-	background-color: white;
-	color: black;
-	padding-top: 2.5px;
-	padding-bottom: 2.5px
-}
-
 .darkTheme * {
 	background: #26292d;
 	color: #f0f0f0
@@ -123,6 +116,14 @@ main {
 .darkTheme header,
 .darkTheme header * {
 	background-color: #3f3f3f;
+}
+
+.darkTheme .reeder-on.line-on target *,
+.reeder-on.line-on target {
+	background-color: white;
+	color: black;
+	padding-top: 2.5px;
+	padding-bottom: 2.5px
 }
 
 span {
