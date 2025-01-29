@@ -230,16 +230,6 @@ function getMainParas(): HTMLElement[] {
 	return arr
 }
 
-export function lineByLineOn(): void {
-	const ele = document.querySelector("body");
-	ele!.classList.add(LINE_ON_CLASS);
-}
-
-export function lineByLineOff(): void {
-	const ele = document.querySelector("body");
-	ele!.classList.remove(LINE_ON_CLASS);
-}
-
 window.onresize = () => {
 	// TODO find beginning of current active range
 	// somehow end up with active line-range containing that beginning
