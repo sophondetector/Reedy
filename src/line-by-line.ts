@@ -2,7 +2,7 @@ import { LECS, REEDER_EVENT } from "./consts"
 
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
-const LINE_ON_CLASS = "line-by-line-on"
+const LINE_ON_CLASS = "line-on"
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
