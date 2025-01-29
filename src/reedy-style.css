@@ -140,6 +140,7 @@ main {
 
 .dev-only {
 	background: lightpink;
+	font-family: monospace;
 }
 
 span {
