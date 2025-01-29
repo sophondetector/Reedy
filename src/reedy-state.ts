@@ -4,7 +4,7 @@ const REEDER_ON_CLASS = "reeder-on"
 const SENT_ON_CLASS = "sent-on"
 const LINE_ON_CLASS = "line-on"
 
-let REEDER_MODE: ReederMode = "sent"
+let REEDER_MODE: ReederMode = "line"
 let REEDER_ACTIVE = false
 
 export function reederOn(): void {
