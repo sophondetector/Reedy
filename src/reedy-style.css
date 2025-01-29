@@ -138,6 +138,10 @@ main {
 	padding-bottom: 2.5px
 }
 
+.dev-only {
+	background: lightpink;
+}
+
 span {
 	margin: 0;
 }
