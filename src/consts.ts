@@ -4,9 +4,9 @@ export const LECS = {
 		devOnly: ".dev-only"
 	},
 	main: {
-		legisInput: '#legis-input',
-		enterBut: '#legis-enter',
-		resesBut: '#legis-reset',
+		legisInput: '#reedy-input',
+		enterBut: '#reedy-enter',
+		resetBut: '#reedy-reset',
 		readingModeBut: '#reading-mode-toggle',
 		saveTextBut: "#save-text",
 		loadTextBut: "#load-text",
