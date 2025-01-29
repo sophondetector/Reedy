@@ -61,7 +61,7 @@ document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	hideTextInput()
 })
 
-document.querySelector(LECS.main.resesBut)!.addEventListener("click", () => {
+document.querySelector(LECS.main.resetBut)!.addEventListener("click", () => {
 	console.log("resetting reading room")
 	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
 	textEle.value = ''
