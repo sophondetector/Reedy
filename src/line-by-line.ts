@@ -8,6 +8,15 @@ const LINE_ON_CLASS = "line-on"
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
 
+export function getRangeIdx(): number {
+	return RANGE_IDX
+}
+
+export function rangeContent(): void {
+	const mainParas = getMainParas()
+	RANGES = paras2Ranges(mainParas)
+}
+
 function restoreCachedPara(paraIdx: number): void {
 	const paraId = `#para${paraIdx}`
 	const mangled = document.querySelector(paraId)
@@ -27,10 +36,7 @@ function restoreCachedPara(paraIdx: number): void {
 	mangled.replaceWith(fromCache)
 }
 
-function isPara(ele: HTMLElement | null): boolean {
-	if (ele === null) {
-		throw new Error('range2Para null parentElement!')
-	}
+function isPara(ele: HTMLElement): boolean {
 	return ele.classList.contains(PARA_CLASS)
 }
 
@@ -69,6 +75,9 @@ function range2Para(rng: Range): HTMLElement {
 	}
 	while (!isPara(parent as HTMLElement)) {
 		parent = parent.parentElement as HTMLElement
+		if (parent === null) {
+			throw new Error('range2Para null parentElement!')
+		}
 	}
 	return parent as HTMLElement
 }
@@ -79,7 +88,7 @@ function para2Idx(para: HTMLElement): number {
 	return num
 }
 
-function setNewTargetRange(idx: number): void {
+export function setNewTargetRange(idx: number): void {
 	if (RANGES === null) {
 		console.error('setNewTargetRange: no ranges!')
 		return
