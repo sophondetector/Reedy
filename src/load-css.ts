@@ -1,2 +1,2 @@
 //@ts-ignore
-import './legis-style.css'
+import './reedy-style.css'
