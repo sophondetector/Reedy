@@ -1,4 +1,5 @@
 import { LECS, REEDER_EVENT } from "./consts"
+import { getCachedContent, setCachedContent } from "./cache"
 
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
@@ -6,19 +7,23 @@ const LINE_ON_CLASS = "line-on"
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
-let CACHED_PARAS: HTMLElement[] | null = null
 
 function restoreCachedPara(paraIdx: number): void {
-	if (CACHED_PARAS === null) {
-		throw new Error(`no cached paras!`)
+	const paraId = `#para${paraIdx}`
+	const mangled = document.querySelector(paraId)
+
+	if (!mangled) {
+		console.error(`cant find mangled para ${paraId}!`)
+		return
 	}
 
-	const mangled = document.querySelector(`#para${paraIdx}`) as HTMLElement
-	const fromCache = CACHED_PARAS[paraIdx].cloneNode(true)
+	const fromCache = getCachedContent()?.querySelector(paraId)
 
 	if (!fromCache) {
-		throw new Error(`cached paras miss for #para${paraIdx}`)
+		console.error(`cache miss!`)
+		return
 	}
+
 	mangled.replaceWith(fromCache)
 }
 
@@ -216,15 +221,6 @@ function getMainParas(): HTMLElement[] {
 	return arr
 }
 
-function cacheParas(): void {
-	CACHED_PARAS = []
-	const paras = getMainParas()
-	for (const para of paras) {
-		CACHED_PARAS.push(para.cloneNode(true) as HTMLElement)
-	}
-	console.log(`para cache done`)
-}
-
 export function lineByLineOn(): void {
 	const ele = document.querySelector("body");
 	ele!.classList.add(LINE_ON_CLASS);
@@ -246,7 +242,7 @@ window.onresize = () => {
 // mode is line-by-line
 document.addEventListener(REEDER_EVENT, function() {
 	console.log(`getting ready for line by line!`)
-	cacheParas()
+	setCachedContent(document.querySelector(LECS.main.mainContent)!)
 	const paras = getMainParas()
 	RANGES = paras2Ranges(paras)
 	incLine()

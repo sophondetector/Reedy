@@ -4,6 +4,7 @@ import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
 import { inc, dec, keypressHandler } from "./reedy-controls.js"
+import { getCachedContent } from "./cache.js"
 
 function hideTextInput(): void {
 	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
@@ -150,7 +151,15 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 	}
 })
 
-document.querySelector(LECS.main.switchMode)!.addEventListener("click", switchReederMode)
+document.querySelector(LECS.main.switchMode)!.addEventListener("click", function() {
+	const cached = getCachedContent()
+	if (!cached) {
+		console.error('cache content is null!')
+		return
+	}
+	document.querySelector(LECS.main.mainContent)?.replaceWith(cached)
+	switchReederMode()
+})
 
 document.querySelector(LECS.main.forwardBut)!.addEventListener("click", inc)
 
