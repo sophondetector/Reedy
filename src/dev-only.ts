@@ -8,7 +8,6 @@ function hideDevOnly() {
 	})
 }
 
-
 function showDevOnly() {
 	document.querySelectorAll(LECS.common.devOnly).forEach(ele => {
 		//@ts-ignore
