@@ -118,7 +118,17 @@ main {
 	background-color: #3f3f3f;
 }
 
-.darkTheme .reeder-on.line-on target *,
+.reeder-on header {
+	border-bottom-color: #3b3b3b;
+	border-bottom-width: .5px
+}
+
+.reeder-on footer {
+	border-top-color: #3b3b3b;
+	border-top-width: .5px
+}
+
+.reeder-on.line-on target *,
 .reeder-on.line-on target {
 	background-color: white;
 	color: black;
