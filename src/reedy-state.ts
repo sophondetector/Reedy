@@ -27,6 +27,14 @@ export function reederToggle(): boolean {
 	return REEDER_ACTIVE
 }
 
+export function switchReederMode(): void {
+	if (REEDER_MODE === "sent") {
+		setLineMode()
+		return
+	}
+	setSentMode()
+}
+
 export function reederIsActive(): boolean {
 	return REEDER_ACTIVE
 }
@@ -49,13 +57,5 @@ function setSentMode(): void {
 	const body = document.querySelector('body') as HTMLElement
 	body.classList.remove(LINE_ON_CLASS);
 	body.classList.add(SENT_ON_CLASS);
-}
-
-export function switchReederMode(): void {
-	if (REEDER_MODE === "sent") {
-		setLineMode()
-		return
-	}
-	setSentMode()
 }
 
