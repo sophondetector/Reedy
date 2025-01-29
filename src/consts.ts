@@ -4,7 +4,8 @@ export const LECS = {
 		devOnly: ".dev-only"
 	},
 	main: {
-		legisInput: '#reedy-input',
+		reedyInputContainer: '#reedy-input-container',
+		reedyInput: '#reedy-input',
 		enterBut: '#reedy-enter',
 		resetBut: '#reedy-reset',
 		readingModeBut: '#reading-mode-toggle',

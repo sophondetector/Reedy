@@ -7,12 +7,12 @@ import { inc, dec, keypressHandler } from "./reedy-controls.js"
 import { getCachedContent } from "./cache.js"
 
 function hideTextInput(): void {
-	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.reedyInputContainer) as HTMLTextAreaElement)
 	textEle.style.display = 'none';
 }
 
 function showTextInput(): void {
-	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.reedyInputContainer) as HTMLTextAreaElement)
 	textEle.style.display = 'flex';
 }
 
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	console.log("doing reading room")
-	const textEle = document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement
+	const textEle = document.querySelector(LECS.main.reedyInput) as HTMLTextAreaElement
 	const text = textEle.value
 	initSents(text)
 	hideTextInput()
@@ -63,7 +63,7 @@ document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 
 document.querySelector(LECS.main.resetBut)!.addEventListener("click", () => {
 	console.log("resetting reading room")
-	const textEle = (document.querySelector(LECS.main.legisInput) as HTMLTextAreaElement)
+	const textEle = (document.querySelector(LECS.main.reedyInput) as HTMLTextAreaElement)
 	textEle.value = ''
 	const contentEle = (document.querySelector(LECS.main.mainContent) as HTMLDivElement)
 	contentEle.innerHTML = ''
