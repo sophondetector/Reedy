@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", function(): void {
 })
 
 document.addEventListener("DOMContentLoaded", () => {
-	chrome.storage.local.get([STORAGE_KEYS.legisText], ({ legisText }) => {
-		if (legisText) {
-			initSents(legisText)
+	chrome.storage.local.get([STORAGE_KEYS.reedyText], ({ reedyText }) => {
+		if (reedyText) {
+			initSents(reedyText)
 			hideTextInput()
 		}
 	})
@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
 	chrome.tabs.getCurrent(function(tab) {
 		if (tab) {
-			chrome.storage.local.set({ legisTabId: tab.id })
-			console.log(`Reedy: set legisTabId to ${tab.id}`)
+			chrome.storage.local.set({ reedyTabId: tab.id })
+			console.log(`Reedy: set reedyTabId to ${tab.id}`)
 			return
 		}
 		console.log("Reedy: could not find tab!")
@@ -107,7 +107,7 @@ document.querySelector(LECS.main.saveTextBut)!.addEventListener("click", async (
 	const downloadOpts = {
 		saveAs: true,
 		url: downloadUrl,
-		filename: `legisFile.html`
+		filename: `reedyFile.html`
 	}
 	chrome.downloads.download(downloadOpts).then(() => {
 		window.URL.revokeObjectURL(downloadUrl)
@@ -173,10 +173,10 @@ document.querySelector(LECS.main.backBut)!.addEventListener("click", dec)
 
 // adds text sent to this tab from background.ts to the current text.
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
-	chrome.storage.local.get([STORAGE_KEYS.legisText], (storage) => {
-		const newText = storage.legisText + '\n' + msg
+	chrome.storage.local.get([STORAGE_KEYS.reedyText], (storage) => {
+		const newText = storage.reedyText + '\n' + msg
 		initSents(newText)
-		chrome.storage.local.set({ legisText: newText })
+		chrome.storage.local.set({ reedyText: newText })
 		sendResp()
 	})
 	console.log(`added text from ${sender}`)

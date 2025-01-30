@@ -30,8 +30,8 @@ export const LECS = {
 }
 
 export const STORAGE_KEYS = {
-	legisText: 'legisText',
-	legisTabId: 'legisTabId'
+	reedyText: 'reedyText',
+	reedyTabId: 'reedyTabId'
 }
 
 export const TEST_CONTENT_PATHS = [
