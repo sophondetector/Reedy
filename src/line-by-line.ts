@@ -95,6 +95,9 @@ function range2Para(rng: Range): HTMLElement {
 	return parent as HTMLElement
 }
 
+/* 
+	* return the paragraph's index number from the id #para<number>
+*/
 function para2Idx(para: HTMLElement): number {
 	const numStr = para.id.match(/\d+/)!.toString()
 	const num = Number(numStr)
@@ -125,18 +128,32 @@ function unsetTargetRange(): void {
 	}
 	const rng = getRange(RANGE_IDX)
 	const para = range2Para(rng)
-	const idx = para2Idx(para)
-	restoreCachedPara(idx)
-	rangeAllContent()
-	// TODO replace rangeContent with reRangePara
-	// reRangePara(para)
+	const paraIdx = para2Idx(para)
+	restoreCachedPara(paraIdx) // this removes the <target> tag; and destroys those ranges
+	reRangePara(paraIdx)
+}
+
+function paraIdx2Para(paraIdx: number): HTMLElement {
+	const paraLec = `#para${paraIdx}`
+	const para = document.querySelector(paraLec)
+	if (!para) {
+		throw new Error(`could not find paragraph with lec ${paraLec}`)
+	}
+	return para as HTMLElement
+}
+
+function reRangePara(paraIdx: number): void {
+	const newPara = paraIdx2Para(paraIdx)
+	const newParaRanges = para2Ranges(newPara)
+	RANGES![paraIdx] = newParaRanges
+	console.log(`re ranging of para with idx ${paraIdx} done`)
 }
 
 export function decLine(): void {
 	// console.log('dec line!')
 	if (RANGES === null) return
 	if (RANGE_IDX === 0) return
-	unsetTargetRange()
+	unsetTargetRange() // reRanging happens in here
 	RANGE_IDX--
 	setNewTargetRange(RANGE_IDX)
 }
@@ -145,7 +162,7 @@ export function incLine(): void {
 	// console.log('inc line!')
 	if (RANGES === null) return
 	if (RANGE_IDX === getMaxRangeIdx()) return
-	unsetTargetRange()
+	unsetTargetRange() // reRanging happens in here
 	RANGE_IDX++
 	setNewTargetRange(RANGE_IDX)
 }
@@ -234,6 +251,7 @@ function getMainParas(): HTMLElement[] {
 }
 
 window.onresize = () => {
+	// TODO have this only happen when the mouse button is let go of
 	// TODO find beginning of current active range
 	// somehow end up with active line-range containing that beginning
 	rangeAllContent()
