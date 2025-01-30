@@ -155,3 +155,7 @@ p {
 #file-picker {
 	display: none;
 }
+
+.reeder-on #reading-mode-toggle {
+	background-color: gray;
+}
