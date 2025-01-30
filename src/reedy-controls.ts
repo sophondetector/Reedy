@@ -38,10 +38,12 @@ export function keypressHandler(e: KeyboardEvent): void {
 		case "L":
 			reederToggle()
 			break;
+		case "ArrowRight":
 		case "j":
 			if (!reederIsActive()) return
 			inc()
 			break;
+		case "ArrowLeft":
 		case "k":
 			if (!reederIsActive()) return
 			dec()
