@@ -1,4 +1,4 @@
-import { reederToggle, switchReederMode } from "./reedy-state.js"
+import { getReederMode, reederToggle, switchReederMode } from "./reedy-state.js"
 import { initSents } from "./sent-by-sent.js"
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
@@ -159,6 +159,12 @@ document.querySelector(LECS.main.switchMode)!.addEventListener("click", function
 	}
 	document.querySelector(LECS.main.mainContent)?.replaceWith(cached)
 	switchReederMode()
+	const mode = getReederMode()
+	if (mode === "line") {
+		document.querySelector(LECS.main.switchMode)!.textContent = "Line Mode"
+		return
+	}
+	document.querySelector(LECS.main.switchMode)!.textContent = "Sentence Mode"
 })
 
 document.querySelector(LECS.main.forwardBut)!.addEventListener("click", inc)
