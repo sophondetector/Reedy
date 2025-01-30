@@ -4,7 +4,7 @@ import { getCachedContent, setCachedContent } from "./cache"
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
 
-let RANGES: Range[] | null = null
+let RANGES: Array<Range[]> | null = null
 let RANGE_IDX: number = 0
 
 export function getRangeIdx(): number {
@@ -12,12 +12,22 @@ export function getRangeIdx(): number {
 }
 
 function getRange(idx: number): Range {
-	return RANGES![idx]
+	return RANGES!.flat()[idx]
 }
 
-export function rangeContent(): void {
+function getMaxRangeIdx(): number {
+	return RANGES!.flat().length - 1
+}
+
+export function rangeAllContent(): void {
+	RANGES = []
 	const mainParas = getMainParas()
-	RANGES = paras2Ranges(mainParas)
+	for (let idx = 0; idx < mainParas.length; idx++) {
+		const para = mainParas[idx]
+		const row = para2Ranges(para)
+		RANGES.push(row)
+	}
+	console.log(`rangeAllContent done`)
 }
 
 function restoreCachedPara(paraIdx: number): void {
@@ -117,7 +127,7 @@ function unsetTargetRange(): void {
 	const para = range2Para(rng)
 	const idx = para2Idx(para)
 	restoreCachedPara(idx)
-	rangeContent()
+	rangeAllContent()
 	// TODO replace rangeContent with reRangePara
 	// reRangePara(para)
 }
@@ -134,7 +144,7 @@ export function decLine(): void {
 export function incLine(): void {
 	// console.log('inc line!')
 	if (RANGES === null) return
-	if (RANGE_IDX === RANGES.length - 1) return
+	if (RANGE_IDX === getMaxRangeIdx()) return
 	unsetTargetRange()
 	RANGE_IDX++
 	setNewTargetRange(RANGE_IDX)
@@ -215,18 +225,6 @@ function para2Ranges(paraEle: Element): Array<Range> {
 	return res
 }
 
-/*
-* this returns a set of ranges representing 
-* the display-lines of text in a paragraph
-*/
-function paras2Ranges(paras: Element[]): Range[] {
-	const res = []
-	for (const para of paras) {
-		res.push(...para2Ranges(para))
-	}
-	return res
-}
-
 function getMainParas(): HTMLElement[] {
 	// TODO if we are in a Reedy page do this
 	// if not get the main para some other page-specific way
@@ -238,7 +236,7 @@ function getMainParas(): HTMLElement[] {
 window.onresize = () => {
 	// TODO find beginning of current active range
 	// somehow end up with active line-range containing that beginning
-	rangeContent()
+	rangeAllContent()
 }
 
 // TODO have inc and dec only visible when reeding room is on and 
@@ -246,8 +244,7 @@ window.onresize = () => {
 document.addEventListener(REEDER_EVENT, function() {
 	console.log(`getting ready for line by line!`)
 	setCachedContent(document.querySelector(LECS.main.mainContent)!)
-	const paras = getMainParas()
-	RANGES = paras2Ranges(paras)
+	rangeAllContent()
 	incLine()
 	decLine()
 })

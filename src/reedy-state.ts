@@ -1,4 +1,4 @@
-import { rangeContent, setNewTargetRange, getRangeIdx } from "./line-by-line.js"
+import { rangeAllContent, setNewTargetRange, getRangeIdx } from "./line-by-line.js"
 
 type ReederMode = "sent" | "line"
 
@@ -48,7 +48,7 @@ function setLineMode(): void {
 	const body = document.querySelector('body') as HTMLElement
 	body.classList.remove(SENT_ON_CLASS);
 	body.classList.add(LINE_ON_CLASS);
-	rangeContent()
+	rangeAllContent()
 	setNewTargetRange(getRangeIdx())
 }
 
