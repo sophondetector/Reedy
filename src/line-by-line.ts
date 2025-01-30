@@ -113,7 +113,10 @@ function unsetTargetRange(): void {
 	const para = range2Para(rng)
 	const idx = para2Idx(para)
 	restoreCachedPara(idx)
-	RANGES = paras2Ranges(getMainParas())
+	const paraRanges = para2Ranges(para)
+	// TODO insert these ranges into the RANGES in the appropriate spot
+	// TODO make RANGES two dimensional
+	// rangeContent()
 }
 
 export function decLine(): void {
@@ -232,8 +235,7 @@ function getMainParas(): HTMLElement[] {
 window.onresize = () => {
 	// TODO find beginning of current active range
 	// somehow end up with active line-range containing that beginning
-	const paras = getMainParas()
-	RANGES = paras2Ranges(paras)
+	rangeContent()
 }
 
 // TODO have inc and dec only visible when reeding room is on and 
