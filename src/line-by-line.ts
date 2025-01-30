@@ -11,6 +11,10 @@ export function getRangeIdx(): number {
 	return RANGE_IDX
 }
 
+function getRange(idx: number): Range {
+	return RANGES![idx]
+}
+
 export function rangeContent(): void {
 	const mainParas = getMainParas()
 	RANGES = paras2Ranges(mainParas)
@@ -92,7 +96,7 @@ export function setNewTargetRange(idx: number): void {
 		console.error('setNewTargetRange: no ranges!')
 		return
 	}
-	const rng = RANGES[idx]
+	const rng = getRange(idx)
 	if (rng.startContainer === rng.endContainer) {
 		rng.surroundContents(document.createElement('target'))
 		return
@@ -109,11 +113,13 @@ function unsetTargetRange(): void {
 		console.error("cant unset target range: null RANGES!")
 		return
 	}
-	const rng = RANGES[RANGE_IDX]
+	const rng = getRange(RANGE_IDX)
 	const para = range2Para(rng)
 	const idx = para2Idx(para)
 	restoreCachedPara(idx)
 	rangeContent()
+	// TODO replace rangeContent with reRangePara
+	// reRangePara(para)
 }
 
 export function decLine(): void {
