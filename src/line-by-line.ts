@@ -113,10 +113,7 @@ function unsetTargetRange(): void {
 	const para = range2Para(rng)
 	const idx = para2Idx(para)
 	restoreCachedPara(idx)
-	const paraRanges = para2Ranges(para)
-	// TODO insert these ranges into the RANGES in the appropriate spot
-	// TODO make RANGES two dimensional
-	// rangeContent()
+	rangeContent()
 }
 
 export function decLine(): void {
