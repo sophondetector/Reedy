@@ -15,6 +15,10 @@ button {
 	min-width: 70px;
 }
 
+button:hover {
+	border-color: black;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
