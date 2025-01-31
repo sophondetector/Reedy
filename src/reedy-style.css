@@ -188,7 +188,7 @@ p {
 	justify-content: space-between;
 }
 
-#helpHeader>h1 {
+#helpHeader>h2 {
 	margin: .5rem;
 	font-weight: normal;
 }
@@ -218,4 +218,10 @@ p {
 #help-content>div {
 	margin-top: .2rem;
 	margin-bottom: .2rem;
+}
+
+#help-content>h3 {
+	font-weight: normal;
+	margin-bottom: 0;
+	margin-top: 1.5rem;
 }
