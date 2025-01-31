@@ -205,6 +205,9 @@ p {
 	cursor: pointer;
 }
 
-#help-content>* {
-	margin: .5rem;
+#help-content {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	margin-left: 3rem;
+	margin-right: 3rem
 }
