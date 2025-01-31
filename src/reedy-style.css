@@ -191,11 +191,10 @@ p {
 
 /* The Close Button */
 #hide-help {
-	color: #aaa;
-	font-size: 20px;
+	color: darkgrey;
+	font-size: 25px;
 	font-weight: bolder;
-	margin: .1rem;
-	margin-top: 0;
+	margin-right: .3rem;
 }
 
 #hide-help:hover,
@@ -210,4 +209,9 @@ p {
 	margin-bottom: 1rem;
 	margin-left: 3rem;
 	margin-right: 3rem
+}
+
+#help-content>div {
+	margin-top: .2rem;
+	margin-bottom: .2rem;
 }
