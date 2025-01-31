@@ -145,7 +145,6 @@ main {
 .dev-only *,
 .dev-only {
 	background: lightpink;
-	font-family: monospace;
 }
 
 span {
