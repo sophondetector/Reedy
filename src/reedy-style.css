@@ -188,7 +188,8 @@ p {
 }
 
 #helpHeader>h2 {
-	margin: .5rem;
+	margin: 1.5rem;
+	margin-bottom: .5rem;
 	font-weight: normal;
 }
 

@@ -17,18 +17,18 @@ function showTextInput(): void {
 }
 
 function showHelp(): void {
-	const helpModal = document.querySelector('#helpModal') as HTMLElement
+	const helpModal = document.querySelector(LECS.main.helpModal) as HTMLElement
 	helpModal.style.display = "flex"
 }
 
 function hideHelp(): void {
-	const helpModal = document.querySelector('#helpModal') as HTMLElement
+	const helpModal = document.querySelector(LECS.main.helpModal) as HTMLElement
 	helpModal.style.display = "none"
 }
 
-document.querySelector('#show-help')!.addEventListener("click", showHelp)
+document.querySelector(LECS.main.showHelp)!.addEventListener("click", showHelp)
 
-document.querySelector('#hide-help')!.addEventListener("click", hideHelp)
+document.querySelector(LECS.main.hideHelp)!.addEventListener("click", hideHelp)
 
 document.addEventListener("keydown", keypressHandler)
 

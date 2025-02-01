@@ -15,7 +15,10 @@ export const LECS = {
 		mainContent: '#reeding-room-content',
 		switchMode: "#switch-mode",
 		forwardBut: "#forwardBut",
-		backBut: "#backBut"
+		backBut: "#backBut",
+		showHelp: "#show-help",
+		hideHelp: "#hide-help",
+		helpModal: "#helpModal"
 	},
 	pdfReader: {
 		pageCount: "#page-count",
