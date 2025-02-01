@@ -36,6 +36,16 @@ function paraIsBlank(para: LexedPara): boolean {
 	return true
 }
 
+function addListenerToSent(sent: HTMLElement): void {
+	sent.addEventListener('click', function(event) {
+		const targetId = (event.target as HTMLElement).id
+		console.log(`sent ${targetId} clicked!`)
+		const targetNumStr = targetId.match(/\d+$/)!.toString()
+		const targetNum = Number(targetNumStr)
+		setNewTargetSent(targetNum)
+	})
+}
+
 // TODO write addSentsToReeder function
 export async function initSents(content: string): Promise<void> {
 	console.log(`Reeder sents init start`);
@@ -54,15 +64,9 @@ export async function initSents(content: string): Promise<void> {
 		const newP = makePara()
 		contentDiv!.appendChild(newP)
 		for (const sent of para) {
-			const ss = makeSentSpan(sent)
 
-			ss.addEventListener('click', function(event) {
-				const targetId = (event.target as HTMLElement).id
-				console.log(`sent ${targetId} clicked!`)
-				const targetNumStr = targetId.match(/\d+$/)!.toString()
-				const targetNum = Number(targetNumStr)
-				setNewTargetSent(targetNum)
-			})
+			const ss = makeSentSpan(sent)
+			addListenerToSent(ss)
 
 			newP.appendChild(ss)
 		}
