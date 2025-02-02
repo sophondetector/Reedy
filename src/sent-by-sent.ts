@@ -1,5 +1,5 @@
 import { LECS, REEDER_EVENT } from './consts.js';
-import { lexText, LexedPara } from './lexy.js';
+import { lexText } from './lexy.js';
 import { reederOff } from './reedy-state.js'
 
 const PARA_SPLITTER_REGEX = /\n\s*/gm
@@ -28,14 +28,6 @@ function resetSentState(): void {
 	SENT_TARGET_IDX = 0
 	MAX_SENT_TARGET_IDX = 0
 	PARA_COUNT = 0
-}
-
-function paraIsBlank(para: LexedPara): boolean {
-	for (const sent of para) {
-		// if there is one NON-blank sentence, we return false
-		if (sent.trim()) return false
-	}
-	return true
 }
 
 function addListenerToSent(sent: HTMLElement): void {
