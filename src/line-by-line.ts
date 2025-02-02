@@ -1,4 +1,4 @@
-import { LECS, REEDER_EVENT } from "./consts"
+import { LECS } from "./consts"
 import { getCachedContent, setCachedContent } from "./cache"
 
 const TEXT_NODE_NAME = '#text'

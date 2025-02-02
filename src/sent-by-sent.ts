@@ -1,6 +1,5 @@
-import { LECS, REEDER_EVENT } from './consts.js';
+import { LECS } from './consts.js';
 import { lexText } from './lexy.js';
-import { reederOff } from './reedy-state.js'
 
 const PARA_SPLITTER_REGEX = /\n\s*/gm
 const REEDY_PARAGRAPH_CLASS = "reading-room-para"
