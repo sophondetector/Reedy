@@ -23,7 +23,7 @@ export function incTargetSent(): void {
 	setNewTargetSent(SENT_TARGET_IDX + 1);
 }
 
-function resetSentState(): void {
+export function resetSentState(): void {
 	SENT_TARGET_IDX = 0
 	MAX_SENT_TARGET_IDX = 0
 	PARA_COUNT = 0
@@ -39,16 +39,7 @@ function addListenerToSent(sent: HTMLElement): void {
 	})
 }
 
-export async function initReeder(content: string): Promise<void> {
-	reederOff()
-	resetSentState()
-	await initContent(content)
-	await initSents()
-	setNewTargetSent(0)
-	document.dispatchEvent(new CustomEvent(REEDER_EVENT))
-}
-
-async function initContent(content: string): Promise<void> {
+export async function initContent(content: string): Promise<void> {
 	console.log(`initContent start`)
 	const contentDiv = document.querySelector(LECS.main.mainContent) as HTMLElement
 	contentDiv.innerHTML = ''
@@ -63,7 +54,7 @@ async function initContent(content: string): Promise<void> {
 }
 
 // TODO write addSentsToReeder function
-async function initSents(): Promise<void> {
+export async function initSents(): Promise<void> {
 	console.log(`initSents start`);
 	const mainContent = document.querySelector(LECS.main.mainContent) as HTMLElement
 	const paras = mainContent.querySelectorAll(`.${REEDY_PARAGRAPH_CLASS}`)
@@ -101,7 +92,7 @@ function makePara(): HTMLParagraphElement {
 	return para;
 }
 
-function setNewTargetSent(sentIdx: number): void {
+export function setNewTargetSent(sentIdx: number): void {
 	const targSent = idx2Sent(sentIdx)
 	if (!targSent) return
 	unsetTargetSent();

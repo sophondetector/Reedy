@@ -1,4 +1,5 @@
-import { rangeAllContent, setNewTargetRange, getRangeIdx } from "./line-by-line.js"
+import { setNewTargetSent, resetSentState, initSents, initContent } from "./sent-by-sent"
+import { rangeAllContent, setNewTargetRange, getRangeIdx, initLineByLine } from "./line-by-line.js"
 
 type ReederMode = "sent" | "line"
 
@@ -8,6 +9,15 @@ const LINE_ON_CLASS = "line-on"
 
 let REEDER_MODE: ReederMode = "line"
 let REEDER_ACTIVE = false
+
+export async function initReeder(content: string): Promise<void> {
+	reederOff()
+	resetSentState()
+	await initContent(content)
+	await initSents()
+	setNewTargetSent(0)
+	await initLineByLine()
+}
 
 export function reederOn(): void {
 	REEDER_ACTIVE = true

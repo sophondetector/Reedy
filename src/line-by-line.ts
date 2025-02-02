@@ -250,17 +250,18 @@ function getMainParas(): HTMLElement[] {
 	return arr
 }
 
+export async function initLineByLine(): Promise<void> {
+	console.log(`initLineByLine begin!`)
+	setCachedContent(document.querySelector(LECS.main.mainContent)!)
+	rangeAllContent()
+	incLine()
+	decLine()
+	console.log(`initLineByLine done!`)
+}
+
 window.onresize = () => {
 	// TODO have this only happen when the mouse button is let go of
 	// TODO find beginning of current active range
 	// somehow end up with active line-range containing that beginning
 	rangeAllContent()
 }
-
-document.addEventListener(REEDER_EVENT, function() {
-	console.log(`getting ready for line by line!`)
-	setCachedContent(document.querySelector(LECS.main.mainContent)!)
-	rangeAllContent()
-	incLine()
-	decLine()
-})
