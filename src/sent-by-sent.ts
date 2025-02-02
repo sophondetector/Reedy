@@ -3,7 +3,6 @@ import { lexText } from './lexy.js';
 import { reederOff } from './reedy-state.js'
 
 const PARA_SPLITTER_REGEX = /\n\s*/gm
-
 const REEDY_PARAGRAPH_CLASS = "reading-room-para"
 const REEDY_SENTENCE_CLASS = "reedy-sent"
 const TARGET_CLASS = "target"
@@ -78,7 +77,6 @@ async function initSents(): Promise<void> {
 			addListenerToSent(sentSpan)
 			para.appendChild(sentSpan)
 		}
-
 	}
 
 	console.log(`initSents done`);
