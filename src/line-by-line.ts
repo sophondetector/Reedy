@@ -257,8 +257,6 @@ window.onresize = () => {
 	rangeAllContent()
 }
 
-// TODO have inc and dec only visible when reeding room is on and 
-// mode is line-by-line
 document.addEventListener(REEDER_EVENT, function() {
 	console.log(`getting ready for line by line!`)
 	setCachedContent(document.querySelector(LECS.main.mainContent)!)
