@@ -1,6 +1,8 @@
 import { LECS, REEDER_EVENT } from './consts.js';
-import { lex, LexedPara } from './lexy.js';
+import { lexText, LexedPara } from './lexy.js';
 import { reederOff } from './reedy-state.js'
+
+const PARA_SPLITTER_REGEX = /\n\s*/gm
 
 const REEDY_PARAGRAPH_CLASS = "reading-room-para"
 const REEDY_SENTENCE_CLASS = "reedy-sent"
@@ -46,37 +48,48 @@ function addListenerToSent(sent: HTMLElement): void {
 	})
 }
 
-// TODO write addSentsToReeder function
-export async function initSents(content: string): Promise<void> {
-	console.log(`Reeder sents init start`);
-
+export async function initReeder(content: string): Promise<void> {
 	reederOff()
 	resetSentState()
+	await initContent(content)
+	await initSents()
+	setNewTargetSent(0)
+	document.dispatchEvent(new CustomEvent(REEDER_EVENT))
+}
 
-	const contentDiv = document.querySelector(LECS.main.mainContent)
-	contentDiv!.innerHTML = ''
+async function initContent(content: string): Promise<void> {
+	console.log(`initContent start`)
+	const contentDiv = document.querySelector(LECS.main.mainContent) as HTMLElement
+	contentDiv.innerHTML = ''
+	const paraStrings = content.split(PARA_SPLITTER_REGEX)
+	for (const ps of paraStrings) {
+		if (!ps.trim()) continue
+		const para = makePara()
+		para.textContent = ps
+		contentDiv.appendChild(para)
+	}
+	console.log(`initContent done`)
+}
 
-	const lexed = lex(content)
+// TODO write addSentsToReeder function
+async function initSents(): Promise<void> {
+	console.log(`initSents start`);
+	const mainContent = document.querySelector(LECS.main.mainContent) as HTMLElement
+	const paras = mainContent.querySelectorAll(`.${REEDY_PARAGRAPH_CLASS}`)
+	for (const para of paras) {
+		if (!para.textContent) continue
+		const sents = lexText(para.textContent)
+		para.textContent = ''
 
-	for (const para of lexed) {
-		if (paraIsBlank(para)) continue
-
-		const newP = makePara()
-		contentDiv!.appendChild(newP)
-		for (const sent of para) {
-
-			const ss = makeSentSpan(sent)
-			addListenerToSent(ss)
-
-			newP.appendChild(ss)
+		for (const sent of sents) {
+			const sentSpan = makeSentSpan(sent)
+			addListenerToSent(sentSpan)
+			para.appendChild(sentSpan)
 		}
+
 	}
 
-	setNewTargetSent(0)
-
-	document.dispatchEvent(new CustomEvent(REEDER_EVENT))
-
-	console.log(`Reeder sents created`);
+	console.log(`initSents done`);
 }
 
 function makeSentSpan(sent: string): HTMLSpanElement {
@@ -87,6 +100,10 @@ function makeSentSpan(sent: string): HTMLSpanElement {
 	return ele;
 }
 
+/*
+* this creates a paragraph element with the proper class
+* and also increments the paragraph count
+*/
 function makePara(): HTMLParagraphElement {
 	const para = document.createElement("p");
 	para.classList.add(REEDY_PARAGRAPH_CLASS);

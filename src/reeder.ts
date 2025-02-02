@@ -1,5 +1,5 @@
 import { getReederMode, reederToggle, switchReederMode } from "./reedy-state.js"
-import { initSents } from "./sent-by-sent.js"
+import { initReeder } from "./sent-by-sent.js"
 import { pdfProxy2Str, file2PdfProxy, pdfUrl2Str } from "./pdf-utils.js"
 import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function(): void {
 document.addEventListener("DOMContentLoaded", () => {
 	chrome.storage.local.get([STORAGE_KEYS.reedyText], ({ reedyText }) => {
 		if (reedyText) {
-			initSents(reedyText)
+			initReeder(reedyText)
 			hideTextInput()
 		}
 	})
@@ -71,7 +71,7 @@ document.querySelector(LECS.main.enterBut)?.addEventListener("click", () => {
 	console.log("doing reading room")
 	const textEle = document.querySelector(LECS.main.reedyInput) as HTMLTextAreaElement
 	const text = textEle.value
-	initSents(text)
+	initReeder(text)
 	hideTextInput()
 })
 
@@ -97,13 +97,13 @@ document.querySelector(LECS.main.testContentList)!.addEventListener("input", asy
 	switch (fileType) {
 		case "pdf":
 			pdfUrl2Str(contentPath)
-				.then(initSents)
+				.then(initReeder)
 				.then(hideTextInput)
 			break;
 		case "txt":
 			fetch(contentPath)
 				.then(resp => resp.text())
-				.then(initSents)
+				.then(initReeder)
 				.then(hideTextInput)
 			break;
 		default:
@@ -137,14 +137,14 @@ document.querySelector(LECS.main.loadTextBut)!.addEventListener("click", async f
 			case "application/pdf":
 				file2PdfProxy(file)
 					.then(pdfProxy2Str)
-					.then(initSents)
+					.then(initReeder)
 					.then(hideTextInput)
 					.then(() => console.log("loading pdf done"))
 				break;
 
 			case "txt":
 				const fileString = await readFileLegacy(file) as string
-				initSents(fileString)
+				initReeder(fileString)
 					.then(hideTextInput)
 					.then(() => console.log("loading text done"))
 				break;
@@ -189,7 +189,7 @@ document.querySelector(LECS.main.backBut)!.addEventListener("click", dec)
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResp) {
 	chrome.storage.local.get([STORAGE_KEYS.reedyText], (storage) => {
 		const newText = storage.reedyText + '\n' + msg
-		initSents(newText)
+		initReeder(newText)
 		chrome.storage.local.set({ reedyText: newText })
 		sendResp()
 	})

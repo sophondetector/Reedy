@@ -5,7 +5,6 @@ export type LexedText = LexedPara[]
 const ABBREV_FIX_ROUNDS: number = 2
 const SUFFIX_FIX_ROUNDS: number = 2
 
-const PARA_SPLITTER_REGEX = /\n\s*/gm
 const SENT_SPLITTER_REGEX = /([\.\?\!]["”]?(?![^\(]*\)) )/g
 const SUFFIX_REGEX = /([Jj]r\.|[Ss]r\.|[pP][hH]\.?[Dd]\.|[mMjJ]\.?[dD]\.)\s+$/g
 //@ts-ignore
@@ -13,13 +12,7 @@ const STARTS_WITH_CAPITAL_REGEX = /^[A-Z]/
 const STARTS_WITH_LOWERCASE_REGEX = /^[a-z]/
 const HONOR_ABBR_REGEX = /(Dr\.|Mr\.|Mrs\.|Fr\.)\s+$/g
 
-export function lex(text: string): LexedText {
-	const paraTexts = splitParas(text)
-	const finalText = paraTexts.map(lexPara)
-	return finalText
-}
-
-function lexPara(para: string): LexedPara {
+export function lexText(para: string): LexedPara {
 	const stage0 = para
 	const stage1 = splitSents(stage0)
 	const stage2 = reCombinePunct(stage1)
@@ -30,11 +23,6 @@ function lexPara(para: string): LexedPara {
 	const stage7 = citationFixer(stage6)
 	const stage8 = fixNumberedPara(stage7)
 	return stage8
-}
-
-function splitParas(text: string): string[] {
-	const res = text.split(PARA_SPLITTER_REGEX)
-	return res
 }
 
 function splitSents(text: string): LexedPara {
