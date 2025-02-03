@@ -1,5 +1,10 @@
 # Reedy
-A Chrome extension to help you stuff on the Internet. Built with `typescript`, `vite`, and `crxjs`.
+Reedy is a Chrome extension to help you read stuff on the Internet. 
+Reedy helps you read by darkening the screen except for a single line or sentence, so you can read them one at a time.
+Reedy also allows you to select text to open in a clean, distraction free reading window.
+
+## Development
+Reedy is written in `typescript`, and built with `vite` and `crxjs`. 
 
 ## Installation
 ### Building
