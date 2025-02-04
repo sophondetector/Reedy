@@ -54,3 +54,8 @@ export const TEST_CONTENT_PATHS = [
 ]
 
 export const REEDER_EVENT = "reederEvent"
+export const REEDY_PARAGRAPH_CLASS = "reading-room-para"
+export const REEDER_ON_CLASS = "reeder-on"
+export const SENT_ON_CLASS = "sent-on"
+export const LINE_ON_CLASS = "line-on"
+

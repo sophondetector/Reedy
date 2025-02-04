@@ -1,14 +1,13 @@
 import { LECS } from './consts.js';
 import { lexText } from './lexy.js';
+import { REEDY_PARAGRAPH_CLASS } from './consts.js';
+import { setParaCount } from './reedy-state.js';
 
-const PARA_SPLITTER_REGEX = /\n\s*/gm
-const REEDY_PARAGRAPH_CLASS = "reading-room-para"
 const REEDY_SENTENCE_CLASS = "reedy-sent"
 const TARGET_CLASS = "target"
 
 let SENT_TARGET_IDX = 0
 let MAX_SENT_TARGET_IDX = 0
-let PARA_COUNT = 0
 
 // TODO instead of using .target class just 
 // surround sent with a <target> tag
@@ -25,7 +24,7 @@ export function incTargetSent(): void {
 export function resetSentState(): void {
 	SENT_TARGET_IDX = 0
 	MAX_SENT_TARGET_IDX = 0
-	PARA_COUNT = 0
+	setParaCount(0)
 }
 
 function addListenerToSent(sent: HTMLElement): void {
@@ -36,20 +35,6 @@ function addListenerToSent(sent: HTMLElement): void {
 		const targetNum = Number(targetNumStr)
 		setNewTargetSent(targetNum)
 	})
-}
-
-export async function initContent(content: string): Promise<void> {
-	console.log(`initContent start`)
-	const contentDiv = document.querySelector(LECS.main.mainContent) as HTMLElement
-	contentDiv.innerHTML = ''
-	const paraStrings = content.split(PARA_SPLITTER_REGEX)
-	for (const ps of paraStrings) {
-		if (!ps.trim()) continue
-		const para = makePara()
-		para.textContent = ps
-		contentDiv.appendChild(para)
-	}
-	console.log(`initContent done`)
 }
 
 // TODO write addSentsToReeder function
@@ -78,17 +63,6 @@ function makeSentSpan(sent: string): HTMLSpanElement {
 	ele.textContent = sent + " ";
 	ele.id = `sent${MAX_SENT_TARGET_IDX++}`;
 	return ele;
-}
-
-/*
-* this creates a paragraph element with the proper class
-* and also increments the paragraph count
-*/
-function makePara(): HTMLParagraphElement {
-	const para = document.createElement("p");
-	para.classList.add(REEDY_PARAGRAPH_CLASS);
-	para.id = `para${PARA_COUNT++}`;
-	return para;
 }
 
 export function setNewTargetSent(sentIdx: number): void {
