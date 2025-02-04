@@ -23,11 +23,9 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
 	if (!tab) return
 
 	switch (item.menuItemId) {
-		// background.js -> tab "hey give me your document.selectionText"
+		// background.js -> tab "hey give me your current selection as HTML
 		// background.js <- tab "here it is!"
-		// background.js *stores in reedyText localStorage
-		// using resp here gives access to the document object selection api 
-		// which retains spacing information
+		// background.js *stores the html in localStorage
 		case NEW_TEXT_OPTION_ID:
 			chrome.tabs.sendMessage(tab.id!, OPEN_SELECTION_MESSAGE, function(resp) {
 				console.log("opening new Reedy text")

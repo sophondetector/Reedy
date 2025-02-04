@@ -21,7 +21,8 @@ export function incTargetSent(): void {
 	setNewTargetSent(SENT_TARGET_IDX + 1);
 }
 
-export function resetSentState(): void {
+function resetSentState(): void {
+	console.log('resetting sent state')
 	SENT_TARGET_IDX = 0
 	MAX_SENT_TARGET_IDX = 0
 	setParaCount(0)
@@ -40,6 +41,7 @@ function addListenerToSent(sent: HTMLElement): void {
 // TODO write addSentsToReeder function
 export async function initSents(): Promise<void> {
 	console.log(`initSents start`);
+	resetSentState()
 	const mainContent = document.querySelector(LECS.main.mainContent) as HTMLElement
 	const paras = mainContent.querySelectorAll(`.${REEDY_PARAGRAPH_CLASS}`)
 	for (const para of paras) {

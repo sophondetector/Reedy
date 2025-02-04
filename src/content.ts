@@ -11,15 +11,33 @@ function QQ(lec: string): Array<Element> | null {
 	return Array.from(document.querySelectorAll(lec))
 }
 
+/*
+* takes a selection and returns a string
+* representing the HTML of that selection
+* wrapped in a div with the id "clonedContainer"
+*/
+function getSelectionHtml(sel: Selection): string {
+	const range = sel.getRangeAt(0)
+	const cloned = range.cloneContents()
+	let htmlAcc = ''
+	for (const ele of Array.from(cloned.children)) {
+		console.log(ele)
+		htmlAcc += ele.outerHTML
+	}
+	return htmlAcc
+}
+
 // get selection text and send it back
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-	console.log(`response`)
-	console.log(response)
-	console.log(`sender`)
-	console.log(sender)
+	// console.log(`response`)
+	// console.log(response)
+	// console.log(`sender`)
+	// console.log(sender)
 	try {
-		const selectionText = document.getSelection()!.toString()
-		sendResponse({ selectionText })
+		const sel = document.getSelection() as Selection
+		const html = getSelectionHtml(sel)
+		console.log(html)
+		sendResponse({ selectionText: html })
 	} catch (err) {
 		console.log('Reedy content.js hit an error: ', err)
 		sendResponse({ err })

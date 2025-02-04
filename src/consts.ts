@@ -59,3 +59,4 @@ export const REEDER_ON_CLASS = "reeder-on"
 export const SENT_ON_CLASS = "sent-on"
 export const LINE_ON_CLASS = "line-on"
 
+export const CLONED_CONTENT_DIV_ID = "clonedContainer"

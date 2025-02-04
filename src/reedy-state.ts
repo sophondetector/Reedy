@@ -1,10 +1,10 @@
-import { resetSentState, initSents } from "./sent-by-sent"
+// import { initSents } from "./sent-by-sent"
 import { rangeAllContent, setNewTargetRange, getRangeIdx, initLineByLine } from "./line-by-line.js"
 import { REEDY_PARAGRAPH_CLASS, REEDER_ON_CLASS, LINE_ON_CLASS, SENT_ON_CLASS, LECS } from './consts.js';
 
 type ReederMode = "sent" | "line"
 
-const PARA_SPLITTER_REGEX = /\n\s*/gm
+// const PARA_SPLITTER_REGEX = /\n\s*/gm
 
 let REEDER_MODE: ReederMode = "line"
 let REEDER_ACTIVE = false
@@ -21,27 +21,33 @@ function makePara(): HTMLParagraphElement {
 	return para;
 }
 
-export async function initContent(content: string): Promise<void> {
+function getContentDiv(): HTMLElement {
+	return document.querySelector(LECS.main.mainContent) as HTMLElement
+}
 
+function resetContent(): void {
+	getContentDiv().innerHTML = ''
+}
+
+export async function initContent(contentHTML: string): Promise<void> {
 	console.log(`initContent start`)
-	const contentDiv = document.querySelector(LECS.main.mainContent) as HTMLElement
-	contentDiv.innerHTML = ''
-	const paraStrings = content.split(PARA_SPLITTER_REGEX)
-	for (const ps of paraStrings) {
-		if (!ps.trim()) continue
-		const para = makePara()
-		para.textContent = ps
-		contentDiv.appendChild(para)
+	const contentDiv = getContentDiv()
+	const newContainer = document.createElement('div')
+	newContainer.innerHTML = contentHTML
+	for (const child of Array.from(newContainer.children)) {
+		child.classList.add(REEDY_PARAGRAPH_CLASS)
+		child.id = `para${PARA_COUNT++}`
+		contentDiv.appendChild(child.cloneNode(true))
 	}
 	console.log(`initContent done`)
 }
 
-export async function initReeder(content: string): Promise<void> {
+export async function initReeder(contentHTML: string): Promise<void> {
 	reederOff()
-	resetSentState()
-	await initContent(content)
-	await initSents()
+	resetContent()
+	await initContent(contentHTML)
 	await initLineByLine()
+	// await initSents()
 }
 
 export function reederOn(): void {
