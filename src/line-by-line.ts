@@ -1,11 +1,35 @@
 import { LECS } from "./consts"
 import { getCachedContent, setCachedContent } from "./cache"
 
+interface DocCoordinate {
+	selector: string,
+	offset: number
+}
+
+interface RangeAddress {
+	start: DocCoordinate,
+	end: DocCoordinate
+}
+
+const RANGE_ADDRESSES: RangeAddress[] | null = null
+
 const TEXT_NODE_NAME = '#text'
 const PARA_CLASS = 'reading-room-para'
 
 let RANGES: Array<Range[]> | null = null
 let RANGE_IDX: number = 0
+
+function rangeAddress2Range(rangeAddress: RangeAddress): Range {
+}
+
+function range2RangeAddress(range: Range): RangeAddress {
+}
+
+function para2RangeAddresses(para: HTMLElement): RangeAddress[] {
+	const textNodes = getAllTextNodes(para)
+	// basically same as para2Ranges 
+	// is there a point besides saving memory?
+}
 
 export function getRangeIdx(): number {
 	return RANGE_IDX
