@@ -17,7 +17,7 @@ function getRange(idx: number): Range {
 
 function getMaxRangeIdx(): number {
 	return RANGES!.flat().length - 1
-}
+};
 
 export function rangeAllContent(): void {
 	RANGES = []
@@ -62,7 +62,7 @@ function isSent(ele: HTMLElement | null): boolean {
 }
 
 /*
-	* takes a range and returns the sent element which
+* takes a range and returns the sent element which
 * contains the start node of that range
 */
 export function range2Sent(rng: Range): HTMLElement | null {
@@ -74,6 +74,10 @@ export function range2Sent(rng: Range): HTMLElement | null {
 	return ele
 }
 
+/*
+* moves from a range's startContainer up the element 
+* hierarchy until it finds a reedy_paragraph
+*/
 function range2Para(rng: Range): HTMLElement {
 	// if the range spans two different html elements 
 	// then the common ancestor is also an html element (probably the paragraph)
