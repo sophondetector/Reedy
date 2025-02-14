@@ -35,6 +35,9 @@ export async function initContent(contentHTML: string): Promise<void> {
 	const newContainer = document.createElement('div')
 	newContainer.innerHTML = contentHTML
 	for (const child of Array.from(newContainer.children)) {
+		if (!child.textContent || child.textContent.trim().length < 1) {
+			continue
+		}
 		child.classList.add(REEDY_PARAGRAPH_CLASS)
 		child.id = `para${PARA_COUNT++}`
 		contentDiv.appendChild(child.cloneNode(true))
