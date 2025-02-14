@@ -3,14 +3,6 @@ import { getSentBounds } from "./in-page-reeder.js"
 
 const HANDLER_ACTIVATION = false
 
-function Q(lec: string): Element | null {
-	return document.querySelector(lec)
-}
-
-function QQ(lec: string): Array<Element> | null {
-	return Array.from(document.querySelectorAll(lec))
-}
-
 // get selection text and send it back
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 	console.log(`response`)
@@ -32,18 +24,18 @@ function getCurrentDomain(): string {
 
 function mdnHandler(): string {
 	console.log("Reedy MDN handler!")
-	return Q('article')!.textContent as string
+	return document.querySelector('article')!.textContent as string
 }
 
 function vaticanHandler(): string {
 	console.log("Reedy vatican handler!")
-	return Q('.documento')!.textContent as string
+	return document.querySelector('.documento')!.textContent as string
 }
 
 function wikiHandler(): string {
 	console.log("Reedy wiki handler!")
 	const paraLec = '#mw-content-text p'
-	const paras = QQ(paraLec) as Array<Element>
+	const paras = Array.from(document.querySelectorAll(paraLec)) as Array<Element>
 	let text = ''
 	for (let para of paras) {
 		text += para.textContent
