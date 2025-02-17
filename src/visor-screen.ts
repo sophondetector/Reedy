@@ -13,14 +13,14 @@ function createVisorScreen(): HTMLDivElement {
 	div.style.right = `0`
 	div.style.overflow = `auto`
 	div.style.pointerEvents = `none`
-	div.style.zIndex = `0`
+	div.style.zIndex = `100`
 
 	div.id = VISOR_SCREEN_ID
 
 	return div
 }
 
-export function injectVisorScreen(): void {
+export function visorScreenInject(): void {
 	const vsDiv = createVisorScreen()
 	document.body.appendChild(vsDiv)
 	console.log('visor screen div injected')
