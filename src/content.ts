@@ -5,10 +5,10 @@ const HANDLER_ACTIVATION = false
 
 // get selection text and send it back
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-	console.log(`response`)
-	console.log(response)
-	console.log(`sender`)
-	console.log(sender)
+	// console.log(`response`)
+	// console.log(response)
+	// console.log(`sender`)
+	// console.log(sender)
 	try {
 		const selectionText = document.getSelection()!.toString()
 		sendResponse({ selectionText })
@@ -82,3 +82,4 @@ if (HANDLER_ACTIVATION) {
 // 	const outLec = ele2Lec(ele)
 // 	console.log(`outLec: ${outLec}`)
 // }
+

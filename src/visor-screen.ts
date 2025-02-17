@@ -6,7 +6,7 @@ function createVisorScreen(): HTMLDivElement {
 
 	div.style.display = VISOR_SCREEN_DISPLAY
 	div.style.backgroundColor = `rgba(0, 0, 0, 0.6)`
-	div.style.position = `fixed`
+	div.style.position = `fixed` // NOTE: target div must be relative
 	div.style.top = `0`
 	div.style.left = `0`
 	div.style.bottom = `0`
