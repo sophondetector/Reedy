@@ -117,6 +117,16 @@ function deleteBlankElements(frag: DocumentFragment): DocumentFragment {
 	return frag
 }
 
+function cleanListStyle(frag: DocumentFragment): DocumentFragment {
+	for (const ele of frag.children) {
+		if (ele.tagName === 'LI') {
+			//@ts-ignore 
+			ele.style.listStyleType = 'none'
+		}
+	}
+	return frag
+}
+
 export function setNewTargetRange(idx: number): void {
 	if (RANGES === null) {
 		console.error('setNewTargetRange: no ranges!')
@@ -129,8 +139,10 @@ export function setNewTargetRange(idx: number): void {
 	}
 	const before = rng.startContainer.parentElement as HTMLElement
 	const target = document.createElement('target')
-	const frag = deleteBlankElements(rng.extractContents())
-	target.append(frag)
+	const rawFrag = rng.extractContents()
+	const frag1 = deleteBlankElements(rawFrag)
+	const frag2 = cleanListStyle(frag1)
+	target.append(frag2)
 	before.insertAdjacentElement("afterend", target)
 }
 
@@ -250,7 +262,7 @@ function para2Ranges(paraEle: Element): Array<Range> {
 		endOffset++
 	}
 
-	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1] - 1)
+	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
 
 	return res
 }
