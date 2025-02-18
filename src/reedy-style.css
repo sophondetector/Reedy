@@ -139,7 +139,8 @@ main {
 	background-color: white;
 	color: black;
 	padding-top: 2.5px;
-	padding-bottom: 2.5px
+	padding-bottom: 2.5px;
+	font-family: inherit;
 }
 
 .dev-only *,

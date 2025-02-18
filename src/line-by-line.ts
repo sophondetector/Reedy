@@ -108,6 +108,15 @@ function para2Idx(para: HTMLElement): number {
 	return num
 }
 
+function deleteBlankElements(frag: DocumentFragment): DocumentFragment {
+	for (const ele of frag.children) {
+		if (!ele.textContent) {
+			frag.removeChild(ele)
+		}
+	}
+	return frag
+}
+
 export function setNewTargetRange(idx: number): void {
 	if (RANGES === null) {
 		console.error('setNewTargetRange: no ranges!')
@@ -120,9 +129,9 @@ export function setNewTargetRange(idx: number): void {
 	}
 	const before = rng.startContainer.parentElement as HTMLElement
 	const target = document.createElement('target')
-	const frag = rng.extractContents()
+	const frag = deleteBlankElements(rng.extractContents())
 	target.append(frag)
-	before!.insertAdjacentElement("afterend", target)
+	before.insertAdjacentElement("afterend", target)
 }
 
 function unsetTargetRange(): void {
