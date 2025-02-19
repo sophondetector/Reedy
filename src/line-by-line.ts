@@ -264,7 +264,9 @@ function para2Ranges(paraEle: Element): Array<Range> {
 
 	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
 
-	return res
+	const filteredRes = res.filter(range => range.toString().trim().length > 0)
+
+	return filteredRes
 }
 
 function getMainParas(): HTMLElement[] {
