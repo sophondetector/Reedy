@@ -4,6 +4,7 @@ import { getFileLegacy, readFileLegacy } from "./file-loading-utils.js"
 import { LECS, STORAGE_KEYS, TEST_CONTENT_PATHS } from "./consts.js"
 import { inc, dec, keypressHandler } from "./reedy-controls.js"
 import { getCachedContent } from "./cache.js"
+import { getRangeIdx } from "./line-by-line.js"
 
 function hideTextInput(): void {
 	const textEle = (document.querySelector(LECS.main.reedyInputContainer) as HTMLTextAreaElement)
@@ -23,6 +24,10 @@ function showHelp(): void {
 function hideHelp(): void {
 	const helpModal = document.querySelector(LECS.main.helpModal) as HTMLElement
 	helpModal.style.display = "none"
+}
+
+document.onkeydown = () => {
+	document.getElementById('rangeIdxDisplay')!.textContent = getRangeIdx().toString()
 }
 
 document.querySelector(LECS.main.showHelp)!.addEventListener("click", showHelp)
