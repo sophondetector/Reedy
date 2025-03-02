@@ -23,7 +23,7 @@ function createVisorScreen(): HTMLDivElement {
 export function visorScreenInject(): void {
 	const vsDiv = createVisorScreen()
 	document.body.appendChild(vsDiv)
-	console.log('visor screen div injected')
+	console.log('visorScreenInject: visor screen div injected')
 }
 
 export function visorScreenOn(): void {
