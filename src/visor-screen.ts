@@ -2,18 +2,23 @@ const VISOR_SCREEN_ID = 'visorScreen'
 const VISOR_SCREEN_DISPLAY = 'flex'
 
 function createVisorScreen(): HTMLDivElement {
+	// the box itself is transparent
+	// and all around it is colored with the "shadow"
+
 	const div = document.createElement('div')
 
 	div.style.display = VISOR_SCREEN_DISPLAY
-	div.style.backgroundColor = `rgba(0, 0, 0, 0.6)`
-	div.style.position = `fixed` // NOTE: target div must be relative
-	div.style.top = `0`
-	div.style.left = `0`
-	div.style.bottom = `0`
-	div.style.right = `0`
+	div.style.position = `absolute` // NOTE: target div must be relative
 	div.style.overflow = `auto`
 	div.style.pointerEvents = `none`
-	div.style.zIndex = `100`
+	div.style.zIndex = `100` // some websites are able to override this
+	// maybe recurse through and remove all z-index rules?
+
+	div.style.top = `50px` // line-top
+	div.style.left = `50px` // line-left
+	div.style.width = `50px` // line-right - line-left
+	div.style.height = `50px` // line-bttom - line-top
+	div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, .8)`
 
 	div.id = VISOR_SCREEN_ID
 
