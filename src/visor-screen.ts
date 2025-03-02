@@ -39,7 +39,7 @@ export function visorScreenOn(): void {
 export function visorScreenOff(): void {
 	const vsDiv = document.getElementById(VISOR_SCREEN_ID)
 	if (!vsDiv) {
-		console.log(`visorScreenOn: Reedy screen not found!`)
+		console.log(`visorScreenOff: Reedy screen not found!`)
 		return
 	}
 	vsDiv.style.display = 'none'
