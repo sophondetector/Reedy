@@ -1,4 +1,5 @@
 import { getSentBounds } from "./in-page-reeder.js"
+import { moveVisor, visorScreenInject } from "./visor-screen.js"
 // import { ele2Lec } from "./ele2Lec.js"
 
 const HANDLER_ACTIVATION = false
@@ -69,6 +70,12 @@ if (HANDLER_ACTIVATION) {
 } else {
 	console.log(`Reedy site handlers deactivated`)
 }
+
+visorScreenInject()
+
+document.addEventListener('click', (ev) => {
+	moveVisor(ev.pageX, ev.pageY)
+})
 
 // TEST BLOCK FOR ele2Lec
 // const lecs = [

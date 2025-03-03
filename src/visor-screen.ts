@@ -25,6 +25,20 @@ function createVisorScreen(): HTMLDivElement {
 	return div
 }
 
+function getVsEle(): HTMLDivElement {
+	const vsEle = document.getElementById(VISOR_SCREEN_ID) as HTMLDivElement
+	if (!vsEle) {
+		throw new Error(`getVsEle: could not find element with id ${VISOR_SCREEN_ID}`)
+	}
+	return vsEle
+}
+
+export function moveVisor(x: number, y: number): void {
+	const vsEle = getVsEle()
+	vsEle.style.left = `${x}px`
+	vsEle.style.top = `${y}px`
+}
+
 export function visorScreenInject(): void {
 	const vsDiv = createVisorScreen()
 	document.body.appendChild(vsDiv)
