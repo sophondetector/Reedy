@@ -11,7 +11,7 @@ function createVisorScreen(): HTMLDivElement {
 	div.style.position = `absolute` // NOTE: target div must be relative
 	div.style.overflow = `auto`
 	div.style.pointerEvents = `none`
-	div.style.zIndex = `100` // some websites are able to override this
+	div.style.zIndex = `99999` // some websites are able to override this
 	// maybe recurse through and remove all z-index rules?
 
 	div.style.top = `0px` // line-top
