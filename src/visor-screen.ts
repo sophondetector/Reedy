@@ -33,7 +33,7 @@ function getVisorScreen(): HTMLDivElement {
 	return vsEle
 }
 
-export function moveVisor(x: number, y: number, width: number, height: number): void {
+export function visorScreenMove(x: number, y: number, width: number, height: number): void {
 	const vsEle = getVisorScreen()
 	const finalX = x + window.scrollX
 	const finalY = y + window.scrollY

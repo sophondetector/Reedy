@@ -1,5 +1,5 @@
 import { rangePageContent } from "./line-by-line.js"
-import { moveVisor, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
+import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
 
 const HANDLER_ACTIVATION = true
 
@@ -72,7 +72,7 @@ function setRange(idx: number): void {
 	}
 
 	const rect = range.getBoundingClientRect()
-	moveVisor(rect.left, rect.top, rect.width, rect.height)
+	visorScreenMove(rect.left, rect.top, rect.width, rect.height)
 	console.log(`setRange: done`)
 }
 
