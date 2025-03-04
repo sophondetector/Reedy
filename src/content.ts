@@ -29,25 +29,20 @@ function getCurrentDomain(): string {
 
 // TODO move handlers into separate module
 
-function mdnHandler(): string {
-	console.log("Reedy MDN handler!")
-	return document.querySelector('article')!.textContent as string
+function mdnHandler(): Element {
+	throw new Error('Reedy mdn not implmented')
 }
 
-function vaticanHandler(): string {
-	console.log("Reedy vatican handler!")
-	return document.querySelector('.documento')!.textContent as string
-}
-
-function wikiHandler(): string {
-	console.log("Reedy wiki handler!")
-	const paraLec = '#mw-content-text p'
-	const paras = Array.from(document.querySelectorAll(paraLec)) as Array<Element>
-	let text = ''
-	for (let para of paras) {
-		text += para.textContent
+function vaticanHandler(): Element {
+	const mainContent = document.querySelector('.testo')
+	if (!mainContent) {
+		throw new Error('vaticalHandler: could not find main content!')
 	}
-	return text
+	return mainContent
+}
+
+function wikiHandler(): Element {
+	throw new Error('Reedy wikipedia not implmented')
 }
 
 const DOMAIN_HANDLER_MAP = new Map()
@@ -127,16 +122,19 @@ document.addEventListener('keyup', (e) => {
 if (HANDLER_ACTIVATION) {
 
 	if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
+
+		const handler = DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)
+
+		const mainElemenet = handler()
+
 		visorInit()
 
-		// TODO set RANGES with page handler
-
-		RANGES = rangePageContent(document.querySelector('.testo') as HTMLElement)
+		RANGES = rangePageContent(mainElemenet)
 			.filter(range => range.getBoundingClientRect().width > 0)
 
 		setRange(RANGE_IDX)
 
-		console.log(RANGES)
+		console.log(`Reedy init complete`)
 
 	} else {
 		console.log(`Reedy does not support ${CURRENT_DOMAIN}`)
