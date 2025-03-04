@@ -267,9 +267,9 @@ export async function initLineByLine(): Promise<void> {
 	console.log(`initLineByLine done!`)
 }
 
-window.onresize = () => {
-	// TODO have this only happen when the mouse button is let go of
-	// TODO find beginning of current active range
-	// somehow end up with active line-range containing that beginning
-	rangeAllContent()
-}
+// TODO have this only happen when the mouse button is let go of
+// TODO find beginning of current active range
+// somehow end up with active line-range containing that beginning
+// window.onresize = () => {
+// rangeAllContent()
+// }
