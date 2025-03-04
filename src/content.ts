@@ -1,8 +1,7 @@
-import { getSentBounds } from "./in-page-reeder.js"
-import { moveVisor, visorScreenInject } from "./visor-screen.js"
-// import { ele2Lec } from "./ele2Lec.js"
+import { rangePageContent } from "./line-by-line.js"
+import { moveVisor, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
 
-const HANDLER_ACTIVATION = false
+const HANDLER_ACTIVATION = true
 
 // get selection text and send it back
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
@@ -19,9 +18,16 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 	}
 })
 
+function visorInit(): void {
+	visorScreenInject()
+	console.log(`visorInit: visor init complete`)
+}
+
 function getCurrentDomain(): string {
 	return window.location.host
 }
+
+// TODO move handlers into separate module
 
 function mdnHandler(): string {
 	console.log("Reedy MDN handler!")
@@ -52,17 +58,86 @@ DOMAIN_HANDLER_MAP.set("developer.mozilla.org", mdnHandler)
 const SUPPORTED_DOMAINS = Array.from(DOMAIN_HANDLER_MAP.keys())
 const CURRENT_DOMAIN = getCurrentDomain()
 
+let RANGES: Range[] | null = null
+let RANGE_IDX: number = 0
+
+function setRange(idx: number): void {
+	if (RANGES === null) {
+		throw new Error(`setRange: RANGES is null`)
+	}
+
+	const range = RANGES[idx]
+	if (range === undefined) {
+		throw new Error(`setRange: RANGES[${idx}] is undefined!`)
+	}
+
+	const rect = range.getBoundingClientRect()
+	moveVisor(rect.left, rect.top, rect.width, rect.height)
+	console.log(`setRange: done`)
+}
+
+function incRange(): void {
+	if (RANGES === null) {
+		throw new Error(`incRange: RANGES is null`)
+	}
+	const newIdx = RANGE_IDX + 1
+	if (newIdx > RANGES.length - 1) {
+		console.log(`incRange: max range idx reached!`)
+		return
+	}
+	setRange(newIdx)
+	RANGE_IDX = newIdx
+	console.log(`incRange: range set to range at index ${RANGE_IDX}`)
+	return
+}
+
+function decRange(): void {
+	if (RANGES === null) {
+		throw new Error(`decRange: RANGES is null`)
+	}
+	const newIdx = RANGE_IDX - 1
+	if (newIdx < 0) {
+		console.log(`decRange: min range idx reached!`)
+		return
+	}
+	setRange(newIdx)
+	RANGE_IDX = newIdx
+	console.log(`decRange: range set to range at index ${RANGE_IDX}`)
+	return
+}
+
+document.addEventListener('keyup', (e) => {
+	switch (e.key) {
+		case "L":
+			visorScreenToggle()
+			break;
+		case "ArrowRight":
+		case "j":
+			visorScreenStatus() && incRange()
+			break;
+		case "ArrowLeft":
+		case "k":
+			visorScreenStatus() && decRange()
+			break;
+		default:
+			break;
+	}
+})
+
 if (HANDLER_ACTIVATION) {
 
 	if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
-		const handler = DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)
-		const text = handler()
-		const bounds = getSentBounds(text)
+		visorInit()
 
-		for (let idx = 0; idx < bounds.length; idx++) {
-			const sentBound = bounds[idx]
-			console.log(`SENT ${idx}: `, text.slice(sentBound[0], sentBound[1]))
-		}
+		// TODO set RANGES with page handler
+
+		RANGES = rangePageContent(document.querySelector('.testo') as HTMLElement)
+			.filter(range => range.getBoundingClientRect().width > 0)
+
+		setRange(RANGE_IDX)
+
+		console.log(RANGES)
+
 	} else {
 		console.log(`Reedy does not support ${CURRENT_DOMAIN}`)
 	}
@@ -70,23 +145,3 @@ if (HANDLER_ACTIVATION) {
 } else {
 	console.log(`Reedy site handlers deactivated`)
 }
-
-visorScreenInject()
-
-document.addEventListener('click', (ev) => {
-	moveVisor(ev.pageX, ev.pageY)
-})
-
-// TEST BLOCK FOR ele2Lec
-// const lecs = [
-// 	'#content > article > div > p:nth-child(4)',
-// 	'#your_first_website_creating_the_content > a',
-// 	'#content > article > section:nth-child(4) > div > dl > dd:nth-child(8) > p > a:nth-child(4) > code'
-// ]
-//
-// for (const le of lecs) {
-// 	const ele = Q(le) as HTMLElement
-// 	const outLec = ele2Lec(ele)
-// 	console.log(`outLec: ${outLec}`)
-// }
-

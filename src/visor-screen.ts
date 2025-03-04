@@ -14,10 +14,10 @@ function createVisorScreen(): HTMLDivElement {
 	div.style.zIndex = `100` // some websites are able to override this
 	// maybe recurse through and remove all z-index rules?
 
-	div.style.top = `50px` // line-top
-	div.style.left = `50px` // line-left
-	div.style.width = `50px` // line-right - line-left
-	div.style.height = `50px` // line-bttom - line-top
+	div.style.top = `0px` // line-top
+	div.style.left = `0px` // line-left
+	div.style.width = `0px` // line-right - line-left
+	div.style.height = `0px` // line-bttom - line-top
 	div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, .8)`
 
 	div.id = VISOR_SCREEN_ID
@@ -25,7 +25,7 @@ function createVisorScreen(): HTMLDivElement {
 	return div
 }
 
-function getVsEle(): HTMLDivElement {
+function getVisorScreen(): HTMLDivElement {
 	const vsEle = document.getElementById(VISOR_SCREEN_ID) as HTMLDivElement
 	if (!vsEle) {
 		throw new Error(`getVsEle: could not find element with id ${VISOR_SCREEN_ID}`)
@@ -33,10 +33,14 @@ function getVsEle(): HTMLDivElement {
 	return vsEle
 }
 
-export function moveVisor(x: number, y: number): void {
-	const vsEle = getVsEle()
-	vsEle.style.left = `${x}px`
-	vsEle.style.top = `${y}px`
+export function moveVisor(x: number, y: number, width: number, height: number): void {
+	const vsEle = getVisorScreen()
+	const finalX = x + window.scrollX
+	const finalY = y + window.scrollY
+	vsEle.style.left = `${finalX}px`
+	vsEle.style.top = `${finalY}px`
+	vsEle.style.width = `${width}px`
+	vsEle.style.height = `${height}px`
 }
 
 export function visorScreenInject(): void {
@@ -65,3 +69,19 @@ export function visorScreenOff(): void {
 	console.log(`Reedy screen turned off!`)
 }
 
+/*
+* if visor screen is on return true
+* else return false
+*/
+export function visorScreenStatus(): boolean {
+	const vsEle = getVisorScreen()
+	return !(vsEle.style.display === 'none')
+}
+
+export function visorScreenToggle(): void {
+	if (visorScreenStatus()) {
+		visorScreenOff()
+		return
+	}
+	visorScreenOn()
+}

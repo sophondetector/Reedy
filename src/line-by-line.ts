@@ -19,6 +19,11 @@ function getMaxRangeIdx(): number {
 	return RANGES!.flat().length - 1
 }
 
+export function rangePageContent(mainContentEle: HTMLElement): Range[] {
+	const res = para2Ranges(mainContentEle)
+	return res
+}
+
 export function rangeAllContent(): void {
 	RANGES = []
 	const mainParas = getMainParas()
