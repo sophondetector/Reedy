@@ -30,7 +30,11 @@ function getCurrentDomain(): string {
 // TODO move handlers into separate module
 
 function mdnHandler(): Element {
-	throw new Error('Reedy mdn not implmented')
+	const mainContent = document.querySelector('article')
+	if (!mainContent) {
+		throw new Error('mdnHandler: could not find main content!')
+	}
+	return mainContent
 }
 
 function vaticanHandler(): Element {
@@ -42,7 +46,12 @@ function vaticanHandler(): Element {
 }
 
 function wikiHandler(): Element {
-	throw new Error('Reedy wikipedia not implmented')
+	// const mainContent = document.querySelector('#mw-content-text')
+	// if (!mainContent) {
+	// 	throw new Error('wikiHandler: could not find main content!')
+	// }
+	// return mainContent
+	throw new Error('wikiHandler: handler not implemented!')
 }
 
 const DOMAIN_HANDLER_MAP = new Map()
