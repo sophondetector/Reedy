@@ -197,6 +197,7 @@ function getEndIdxs(lens: Array<number>) {
 }
 
 function para2Ranges(paraEle: Element): Array<Range> {
+	const THRESH = 10
 	const res = []
 	const finalIdx = paraEle.textContent!.length - 1
 	const textNodes = getAllTextNodes(paraEle as Node).filter(
@@ -230,7 +231,7 @@ function para2Ranges(paraEle: Element): Array<Range> {
 		}
 		res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset)
 		const bottom = res[res.length - 1].getBoundingClientRect().bottom
-		if (bottom > prevBottom) {
+		if ((bottom - prevBottom) > THRESH) {
 			res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset - 1)
 			begOffset = endOffset - 1
 			const newRange = new Range()
@@ -242,9 +243,11 @@ function para2Ranges(paraEle: Element): Array<Range> {
 		endOffset++
 	}
 
-	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1] - 1)
+	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
 
-	return res
+	const filteredRes = res.filter(range => range.toString().trim().length > 0)
+
+	return filteredRes
 }
 
 function getMainParas(): HTMLElement[] {
