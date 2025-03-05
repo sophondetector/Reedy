@@ -1,5 +1,6 @@
 const VISOR_SCREEN_ID = 'visorScreen'
 const VISOR_SCREEN_DISPLAY = 'flex'
+const VISOR_SCREEN_BUFFER_RADIUS = 3
 
 function createVisorScreen(): HTMLDivElement {
 	// the box itself is transparent
@@ -8,16 +9,15 @@ function createVisorScreen(): HTMLDivElement {
 	const div = document.createElement('div')
 
 	div.style.display = VISOR_SCREEN_DISPLAY
-	div.style.position = `absolute` // NOTE: target div must be relative
+	div.style.position = `absolute`
 	div.style.overflow = `auto`
 	div.style.pointerEvents = `none`
-	div.style.zIndex = `99999` // some websites are able to override this
-	// maybe recurse through and remove all z-index rules?
+	div.style.zIndex = `99999`
 
-	div.style.top = `0px` // line-top
-	div.style.left = `0px` // line-left
-	div.style.width = `0px` // line-right - line-left
-	div.style.height = `0px` // line-bttom - line-top
+	div.style.top = `0px`
+	div.style.left = `0px`
+	div.style.width = `0px`
+	div.style.height = `0px`
 	div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, .8)`
 
 	div.id = VISOR_SCREEN_ID
@@ -28,19 +28,23 @@ function createVisorScreen(): HTMLDivElement {
 function getVisorScreen(): HTMLDivElement {
 	const vsEle = document.getElementById(VISOR_SCREEN_ID) as HTMLDivElement
 	if (!vsEle) {
-		throw new Error(`getVsEle: could not find element with id ${VISOR_SCREEN_ID}`)
+		throw new Error(`getVisorScreen: could not find element with id ${VISOR_SCREEN_ID}`)
 	}
 	return vsEle
 }
 
 export function visorScreenMove(x: number, y: number, width: number, height: number): void {
 	const vsEle = getVisorScreen()
-	const finalX = x + window.scrollX
-	const finalY = y + window.scrollY
+
+	const finalX = x + window.scrollX - VISOR_SCREEN_BUFFER_RADIUS
+	const finalY = y + window.scrollY - VISOR_SCREEN_BUFFER_RADIUS
+	const finalWidth = width + (VISOR_SCREEN_BUFFER_RADIUS * 2)
+	const finalHeight = height + (VISOR_SCREEN_BUFFER_RADIUS * 2)
+
 	vsEle.style.left = `${finalX}px`
 	vsEle.style.top = `${finalY}px`
-	vsEle.style.width = `${width}px`
-	vsEle.style.height = `${height}px`
+	vsEle.style.width = `${finalWidth}px`
+	vsEle.style.height = `${finalHeight}px`
 }
 
 export function visorScreenInject(): void {

@@ -134,10 +134,10 @@ function decRange(): void {
 	return
 }
 
-document.addEventListener('keyup', (e) => {
-	switch (e.key) {
+document.addEventListener('keyup', (event) => {
+	switch (event.key) {
 		case "l":
-			e.altKey && visorScreenToggle()
+			event.altKey && visorScreenToggle()
 			break;
 		case "ArrowRight":
 		case "j":
