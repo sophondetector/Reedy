@@ -65,6 +65,26 @@ const CURRENT_DOMAIN = getCurrentDomain()
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
 
+function getMaxHeight(range: Range): number {
+	let res = 0
+	for (const rect of range.getClientRects()) {
+		if (rect.height > res) {
+			res = rect.height
+		}
+	}
+	return res
+}
+
+function getMaxWidth(range: Range): number {
+	let res = 0
+	for (const rect of range.getClientRects()) {
+		if (rect.width > res) {
+			res = rect.width
+		}
+	}
+	return res
+}
+
 function setRange(idx: number): void {
 	if (RANGES === null) {
 		throw new Error(`setRange: RANGES is null`)
@@ -76,7 +96,11 @@ function setRange(idx: number): void {
 	}
 
 	const rect = range.getBoundingClientRect()
-	visorScreenMove(rect.left, rect.top, rect.width, rect.height)
+	const rectHeight = getMaxHeight(range)
+	// we do the above because sometimes the "extraneous" rects from the range
+	// creation process don't remain with the range
+
+	visorScreenMove(rect.left, rect.top, rect.width, rectHeight)
 	console.log(`setRange: done`)
 }
 
@@ -112,8 +136,8 @@ function decRange(): void {
 
 document.addEventListener('keyup', (e) => {
 	switch (e.key) {
-		case "L":
-			visorScreenToggle()
+		case "l":
+			e.altKey && visorScreenToggle()
 			break;
 		case "ArrowRight":
 		case "j":
