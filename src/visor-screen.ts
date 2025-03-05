@@ -54,21 +54,13 @@ export function visorScreenInject(): void {
 }
 
 export function visorScreenOn(): void {
-	const vsDiv = document.getElementById(VISOR_SCREEN_ID)
-	if (!vsDiv) {
-		console.log(`visorScreenOn: Reedy screen not found!`)
-		return
-	}
+	const vsDiv = getVisorScreen()
 	vsDiv.style.display = VISOR_SCREEN_DISPLAY
 	console.log(`Reedy screen turned on!`)
 }
 
 export function visorScreenOff(): void {
-	const vsDiv = document.getElementById(VISOR_SCREEN_ID)
-	if (!vsDiv) {
-		console.log(`visorScreenOff: Reedy screen not found!`)
-		return
-	}
+	const vsDiv = getVisorScreen()
 	vsDiv.style.display = 'none'
 	console.log(`Reedy screen turned off!`)
 }
