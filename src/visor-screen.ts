@@ -2,7 +2,7 @@ const VISOR_SCREEN_ID = 'visorScreen'
 const VISOR_SCREEN_DISPLAY = 'flex'
 const VISOR_SCREEN_BUFFER_RADIUS = 3
 
-function createVisorScreen(): HTMLDivElement {
+function visorScreenCreate(): HTMLDivElement {
 	// the box itself is transparent
 	// and all around it is colored with the "shadow"
 
@@ -25,7 +25,7 @@ function createVisorScreen(): HTMLDivElement {
 	return div
 }
 
-function getVisorScreen(): HTMLDivElement {
+function visorScreenGet(): HTMLDivElement {
 	const vsEle = document.getElementById(VISOR_SCREEN_ID) as HTMLDivElement
 	if (!vsEle) {
 		throw new Error(`getVisorScreen: could not find element with id ${VISOR_SCREEN_ID}`)
@@ -34,7 +34,7 @@ function getVisorScreen(): HTMLDivElement {
 }
 
 export function visorScreenMove(x: number, y: number, width: number, height: number): void {
-	const vsEle = getVisorScreen()
+	const vsEle = visorScreenGet()
 
 	const finalX = x + window.scrollX - VISOR_SCREEN_BUFFER_RADIUS
 	const finalY = y + window.scrollY - VISOR_SCREEN_BUFFER_RADIUS
@@ -48,19 +48,19 @@ export function visorScreenMove(x: number, y: number, width: number, height: num
 }
 
 export function visorScreenInject(): void {
-	const vsDiv = createVisorScreen()
+	const vsDiv = visorScreenCreate()
 	document.body.appendChild(vsDiv)
 	console.log('visorScreenInject: visor screen div injected')
 }
 
 export function visorScreenOn(): void {
-	const vsDiv = getVisorScreen()
+	const vsDiv = visorScreenGet()
 	vsDiv.style.display = VISOR_SCREEN_DISPLAY
 	console.log(`Reedy screen turned on!`)
 }
 
 export function visorScreenOff(): void {
-	const vsDiv = getVisorScreen()
+	const vsDiv = visorScreenGet()
 	vsDiv.style.display = 'none'
 	console.log(`Reedy screen turned off!`)
 }
@@ -70,7 +70,7 @@ export function visorScreenOff(): void {
 * else return false
 */
 export function visorScreenStatus(): boolean {
-	const vsEle = getVisorScreen()
+	const vsEle = visorScreenGet()
 	return !(vsEle.style.display === 'none')
 }
 
