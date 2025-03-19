@@ -91,6 +91,8 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
+// TODO add screen resize event listener with a debouncer
+
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
