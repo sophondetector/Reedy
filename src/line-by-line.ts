@@ -1,13 +1,16 @@
 const TEXT_NODE_NAME = '#text'
 
+// TODO find way to filter or skip non visible ranges
 
 export function ele2Ranges(ele: Element): Array<Range> {
-	const textNodes = getAllTextNodes(ele)
-	const ranges = textNodes2Ranges(textNodes)
+	const textNodesWithText = getAllTextNodes(ele).filter((tn) => {
+		return tn.textContent!.trim().length > 0
+	})
+	const ranges = textNodes2Ranges(textNodesWithText)
 	return ranges
 }
 
-function getAllTextNodes(node: Node): Node[] {
+function getAllTextNodes(node: Node): Array<Node> {
 	const res = []
 	if (node.nodeName === TEXT_NODE_NAME) {
 		res.push(node)
@@ -41,6 +44,7 @@ function getFinalTextIdx(textNodes: Array<Node>): number {
 }
 
 function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
+	const incrementThresh = 5
 
 	const res = []
 	const finalIdx = getFinalTextIdx(textNodes)
@@ -73,7 +77,8 @@ function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
 
 		res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset)
 		const bottom = res[res.length - 1].getBoundingClientRect().bottom
-		if (bottom > prevBottom) {
+
+		if (bottom - prevBottom > incrementThresh) {
 			res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset - 1)
 			begOffset = endOffset - 1
 			const newRange = new Range()
@@ -81,6 +86,7 @@ function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
 			res.push(newRange)
 			prevBottom = bottom
 		}
+
 		mainIdx++
 		endOffset++
 	}
