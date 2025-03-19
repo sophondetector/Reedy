@@ -70,11 +70,6 @@ function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
 			endOffset = 1
 		}
 
-		const tn = textNodes[textNodeIdx]
-		if (!tn) {
-			throw new Error('oh no!')
-		}
-
 		res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset)
 		const bottom = res[res.length - 1].getBoundingClientRect().bottom
 		if (bottom > prevBottom) {
