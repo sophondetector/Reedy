@@ -2,6 +2,8 @@ const VISOR_SCREEN_ID = 'visorScreen'
 const VISOR_SCREEN_DISPLAY = 'flex'
 const VISOR_SCREEN_BUFFER_RADIUS = 3
 
+//TODO refactor visorScreen into a class
+
 function visorScreenCreate(): HTMLDivElement {
 	// the box itself is transparent
 	// and all around it is colored with the "shadow"
