@@ -3,7 +3,8 @@ const TEXT_NODE_NAME = '#text'
 
 export function ele2Ranges(ele: Element): Array<Range> {
 	const textNodes = getAllTextNodes(ele)
-	return textNodes2Ranges(textNodes)
+	const ranges = textNodes2Ranges(textNodes)
+	return ranges
 }
 
 function getAllTextNodes(node: Node): Node[] {
