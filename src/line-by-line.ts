@@ -20,6 +20,8 @@ function getAllTextNodes(node: Node): Node[] {
 }
 
 function textNodes2Ranges(listOfTextNodes: Array<Node>) {
+	listOfTextNodes = listOfTextNodes.filter((tn) => tn.textContent!.trim().length > 0)
+
 	const thresh = 5
 	const res = []
 
@@ -33,7 +35,13 @@ function textNodes2Ranges(listOfTextNodes: Array<Node>) {
 	let bottom = rng.getBoundingClientRect().bottom
 	let curMaxOffset = listOfTextNodes[nodeIdx].textContent?.length || 0
 
+	const maxIters = 1e3
+	let counter = 0
 	while (nodeIdx < listOfTextNodes.length) {
+		counter++
+		if (counter > maxIters) {
+			break
+		}
 
 		let shouldInc = true
 		if (offset >= curMaxOffset) {
@@ -59,5 +67,6 @@ function textNodes2Ranges(listOfTextNodes: Array<Node>) {
 		rng = testRng
 	}
 
+	res.forEach(r => console.log(r.toString()))
 	return res
 }
