@@ -3,10 +3,15 @@ import { ele2Ranges } from "./line-by-line.js"
 import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
 
 const HANDLER_ACTIVATION = true
-const CURRENT_DOMAIN = window.location.host
+const CURRENT_DOMAIN = getCurrentTld()
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
+
+// TODO make this able to discriminate by subdomain
+function getCurrentTld(): string {
+	return window.location.host.match(/\w+\.\w+$/g)![0]
+}
 
 function getMaxHeight(range: Range): number {
 	let res = 0
