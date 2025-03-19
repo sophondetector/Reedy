@@ -72,6 +72,7 @@ function decRange(): void {
 	return
 }
 
+// TODO shift + arrow increases/decreases highlit ranges
 document.addEventListener('keyup', (event) => {
 	switch (event.key) {
 		case "l":
