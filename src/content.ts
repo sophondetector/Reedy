@@ -3,13 +3,13 @@ import { ele2Ranges } from "./line-by-line.js"
 import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
 
 const HANDLER_ACTIVATION = true
-const CURRENT_DOMAIN = getCurrentTld()
+const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
 
 // TODO make this able to discriminate by subdomain
-function getCurrentTld(): string {
+function getCurrentTopLevelHost(): string {
 	return window.location.host.match(/\w+\.\w+$/g)![0]
 }
 
@@ -91,9 +91,9 @@ document.addEventListener('keyup', (event) => {
 })
 
 if (HANDLER_ACTIVATION) {
-	if (SUPPORTED_DOMAINS.includes(CURRENT_DOMAIN)) {
+	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
-		const handler = DOMAIN_HANDLER_MAP.get(CURRENT_DOMAIN)
+		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const mainEle = handler()
 		visorScreenInject()
 		RANGES = ele2Ranges(mainEle)
@@ -101,7 +101,7 @@ if (HANDLER_ACTIVATION) {
 		console.log(`Reedy init complete`)
 
 	} else {
-		console.log(`Reedy does not support ${CURRENT_DOMAIN}`)
+		console.log(`Reedy does not support ${TOP_LEVEL_HOST}`)
 	}
 } else {
 	console.log(`Reedy site handlers deactivated`)
