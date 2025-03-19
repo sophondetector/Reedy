@@ -1,41 +1,9 @@
-// TODO refactor all of these so instead of throwing
-// they return a Array<Element> | undefined
+import { mdnHandler } from "./mdn-handler"
+import { substackHandler } from "./substack-handler"
+import { vaticanHandler } from "./vatican-handler"
+import { wikiHandler } from "./wiki-handler"
 
-// TODO set official handler type signature
-
-// TODO put each handler into it's own module even if it's short
-
-function mdnHandler(): Element {
-	const mainContent = document.querySelector('article')
-	if (!mainContent) {
-		throw new Error('mdnHandler: could not find main content!')
-	}
-	return mainContent
-}
-
-function vaticanHandler(): Element {
-	const mainContent = document.querySelector('.testo')
-	if (!mainContent) {
-		throw new Error('vaticanHandler: could not find main content!')
-	}
-	return mainContent
-}
-
-function wikiHandler(): Element {
-	const mainContent = document.querySelector('#mw-content-text')
-	if (!mainContent) {
-		throw new Error('wikiHandler: could not find main content!')
-	}
-	return mainContent
-}
-
-function substackHandler(): Element {
-	const mainContent = document.querySelector('article')
-	if (!mainContent) {
-		throw new Error('substackHandler: could not find main content!')
-	}
-	return mainContent
-}
+// TODO refactor so handlers return ranges
 
 export const DOMAIN_HANDLER_MAP = new Map()
 DOMAIN_HANDLER_MAP.set("vatican.va", vaticanHandler)
