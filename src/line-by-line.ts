@@ -1,11 +1,19 @@
 const TEXT_NODE_NAME = '#text'
 
-// TODO find way to filter or skip non visible ranges
+
+function nodeHasRealText(textNode: Node): boolean {
+	return textNode.textContent!.trim().length > 0
+}
+
+function nodeIsVisible(textNode: Node): boolean {
+	const parent = textNode.parentElement
+	return parent!.checkVisibility()
+}
 
 export function ele2Ranges(ele: Element): Array<Range> {
-	const textNodesWithText = getAllTextNodes(ele).filter((tn) => {
-		return tn.textContent!.trim().length > 0
-	})
+	const textNodesWithText = getAllTextNodes(ele)
+		.filter(nodeHasRealText)
+		.filter(nodeIsVisible)
 	const ranges = textNodes2Ranges(textNodesWithText)
 	return ranges
 }
