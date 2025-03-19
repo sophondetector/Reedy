@@ -91,7 +91,7 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
-// TODO add screen resize event listener with a debouncer
+// TODO refactor so supported domains are in the manifest
 
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
@@ -99,8 +99,25 @@ if (HANDLER_ACTIVATION) {
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const mainEle = handler()
 		visorScreenInject()
+		// TODO refactor range to async generator to work with very large texts
 		RANGES = ele2Ranges(mainEle)
 		setRange(RANGE_IDX)
+
+		const RESIZE_DEBOUNCE_MILLIS = 500
+		let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
+
+		window.onresize = () => {
+			clearTimeout(DEBOUNCE_TIMEOUT_ID)
+			DEBOUNCE_TIMEOUT_ID = setTimeout(
+				() => {
+					RANGES = ele2Ranges(mainEle)
+					// TODO reset active range to earliest range 
+					// which overlaps with range which was active before
+					// resize
+				},
+				RESIZE_DEBOUNCE_MILLIS) as unknown as number
+		}
+
 		console.log(`Reedy init complete`)
 
 	} else {
