@@ -19,54 +19,77 @@ function getAllTextNodes(node: Node): Node[] {
 	return res
 }
 
-function textNodes2Ranges(listOfTextNodes: Array<Node>) {
-	listOfTextNodes = listOfTextNodes.filter((tn) => tn.textContent!.trim().length > 0)
+function getEndIdxs(lens: Array<number>) {
+	const ends = []
+	let acc = 0
+	for (let idx = 0; idx < lens.length; idx++) {
+		acc += lens[idx]
+		ends.push(acc)
+	}
+	const res = ends.map(e => e - 1)
+	return res
+}
 
-	const thresh = 5
+function getFinalTextIdx(textNodes: Array<Node>): number {
+	let res = 0
+	for (const tn of textNodes) {
+		res += tn.textContent!.length
+	}
+	res--
+	return res
+}
+
+function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
+
 	const res = []
+	const finalIdx = getFinalTextIdx(textNodes)
+	const lens = textNodes.map(tn => tn.textContent!.length)
+	const endIdxs = getEndIdxs(lens)
 
-	let rng = new Range()
-	let offset = 0
-	let nodeIdx = 0
+	res.push(new Range())
 
-	rng.setStart(listOfTextNodes[0], offset)
-	rng.setEnd(listOfTextNodes[0], offset)
+	// TODO try refactoring so only mainIdx is incremented and 
+	// other pointers are derived from mainIdx
+	let mainIdx = 0
+	let textNodeIdx = 0
+	let begOffset = 0
+	let endOffset = 1
+	let endIdxIdx = 0
 
-	let bottom = rng.getBoundingClientRect().bottom
-	let curMaxOffset = listOfTextNodes[nodeIdx].textContent?.length || 0
+	res[res.length - 1].setStart(textNodes[textNodeIdx], begOffset)
+	let prevBottom = res[res.length - 1].getBoundingClientRect().bottom
 
-	const maxIters = 1e3
-	let counter = 0
-	while (nodeIdx < listOfTextNodes.length) {
-		counter++
-		if (counter > maxIters) {
-			break
+	while (mainIdx < finalIdx) {
+		// Q how do we increment the textNodeIdx??
+		// A everytime the mainIdx crosses an end, increment textNodeIdx
+		// and reset endOffset to one
+		const curEnd = endIdxs[endIdxIdx]
+		if (mainIdx === curEnd) {
+			endIdxIdx++
+			textNodeIdx++
+			endOffset = 1
 		}
 
-		let shouldInc = true
-		if (offset >= curMaxOffset) {
-			nodeIdx++
-			offset = 0
-			curMaxOffset = listOfTextNodes[nodeIdx].textContent?.length || 0
-			shouldInc = false
+		const tn = textNodes[textNodeIdx]
+		if (!tn) {
+			throw new Error('oh no!')
 		}
 
-		const testRng = rng.cloneRange()
-		testRng.setEnd(listOfTextNodes[nodeIdx], offset + (shouldInc ? 1 : 0))
-		const testBottom = testRng.getBoundingClientRect().bottom
-
-		if (testBottom - bottom > thresh) {
-			res.push(rng)
-			rng = new Range()
-			rng.setStart(testRng.endContainer, testRng.endOffset)
-			rng.setEnd(testRng.endContainer, testRng.endOffset)
-			continue
+		res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset)
+		const bottom = res[res.length - 1].getBoundingClientRect().bottom
+		if (bottom > prevBottom) {
+			res[res.length - 1].setEnd(textNodes[textNodeIdx], endOffset - 1)
+			begOffset = endOffset - 1
+			const newRange = new Range()
+			newRange.setStart(textNodes[textNodeIdx], begOffset)
+			res.push(newRange)
+			prevBottom = bottom
 		}
-
-		offset++
-		rng = testRng
+		mainIdx++
+		endOffset++
 	}
 
-	res.forEach(r => console.log(r.toString()))
+	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1] - 1)
+
 	return res
 }
