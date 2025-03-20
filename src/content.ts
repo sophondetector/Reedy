@@ -135,8 +135,8 @@ function onResizeCallback(eleArray: Array<Element>): void {
 	}
 
 	// case smaller
-	for (RANGE_IDX; RANGE_IDX < RANGES!.length; RANGE_IDX++) {
-		const iterRange = RANGES![RANGE_IDX]
+	for (RANGE_IDX; RANGE_IDX < RANGES.length; RANGE_IDX++) {
+		const iterRange = RANGES[RANGE_IDX]
 		if (iterRange.isPointInRange(prevNode, prevOffset)) {
 			setRange(RANGE_IDX)
 			return
