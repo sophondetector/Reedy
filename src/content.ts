@@ -157,6 +157,11 @@ if (HANDLER_ACTIVATION) {
 		RANGES = eleArray2Ranges(eleArray)
 		setRange(RANGE_IDX)
 		incRange() // this ensures the first range that is set is visible
+		decRange()
+
+		// RANGES.forEach(r => {
+		// 	console.log(r.toString())
+		// })
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
