@@ -45,6 +45,7 @@ function setRange(idx: number): void {
 	console.log(`setRange: done`)
 }
 
+// TODO set inc and dec range to skip over nonvisible ranges
 function incRange(): void {
 	if (RANGES === null) {
 		throw new Error(`incRange: RANGES is null`)
