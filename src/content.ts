@@ -134,6 +134,7 @@ function onResizeCallback(mainEle: Element): void {
 
 // TODO refactor so supported domains are in the manifest
 // TODO refactor ele2Ranges to async generator to work with very large texts
+// TODO alt+click+drag creates a highlight box
 
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
