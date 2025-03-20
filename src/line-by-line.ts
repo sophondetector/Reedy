@@ -5,15 +5,9 @@ function nodeHasRealText(textNode: Node): boolean {
 	return textNode.textContent!.trim().length > 0
 }
 
-function nodeIsVisible(textNode: Node): boolean {
-	const parent = textNode.parentElement
-	return parent!.checkVisibility()
-}
-
 export function ele2Ranges(ele: Element): Array<Range> {
 	const textNodesWithText = getAllTextNodes(ele)
 		.filter(nodeHasRealText)
-		.filter(nodeIsVisible)
 	const ranges = textNodes2Ranges(textNodesWithText)
 	return ranges
 }

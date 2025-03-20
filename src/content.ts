@@ -26,6 +26,7 @@ function getMaxHeight(range: Range): number {
 	return res
 }
 
+// TODO refactor all line by line code into a class
 function setRange(idx: number): void {
 	if (RANGES === null) {
 		throw new Error(`setRange: RANGES is null`)
@@ -45,35 +46,45 @@ function setRange(idx: number): void {
 	console.log(`setRange: done`)
 }
 
-// TODO set inc and dec range to skip over nonvisible ranges
+function rangeIsVisible(rng: Range): boolean {
+	const textNode = rng.startContainer
+	const parent = textNode.parentElement
+	const isVisible = parent!.checkVisibility()
+	return isVisible
+}
+
 function incRange(): void {
 	if (RANGES === null) {
 		throw new Error(`incRange: RANGES is null`)
 	}
-	const newIdx = RANGE_IDX + 1
-	if (newIdx > RANGES.length - 1) {
-		console.log(`incRange: max range idx reached!`)
-		return
+	// find the next visible range
+	for (let newIdx = RANGE_IDX + 1; newIdx < RANGES.length; newIdx++) {
+		const iterRange = RANGES[newIdx]
+		if (rangeIsVisible(iterRange)) {
+			setRange(newIdx)
+			RANGE_IDX = newIdx
+			console.log(`decRange: range set to range at index ${RANGE_IDX}`)
+			return
+		}
 	}
-	setRange(newIdx)
-	RANGE_IDX = newIdx
-	console.log(`incRange: range set to range at index ${RANGE_IDX}`)
-	return
+	console.log(`incRange: no visible ranges after RANGE_IDX ${RANGE_IDX}`)
 }
 
 function decRange(): void {
 	if (RANGES === null) {
 		throw new Error(`decRange: RANGES is null`)
 	}
-	const newIdx = RANGE_IDX - 1
-	if (newIdx < 0) {
-		console.log(`decRange: min range idx reached!`)
-		return
+	// find the next visible range
+	for (let newIdx = RANGE_IDX - 1; newIdx >= 0; newIdx--) {
+		const iterRange = RANGES[newIdx]
+		if (rangeIsVisible(iterRange)) {
+			setRange(newIdx)
+			RANGE_IDX = newIdx
+			console.log(`decRange: range set to range at index ${RANGE_IDX}`)
+			return
+		}
 	}
-	setRange(newIdx)
-	RANGE_IDX = newIdx
-	console.log(`decRange: range set to range at index ${RANGE_IDX}`)
-	return
+	console.log(`decRange: no visible ranges before RANGE_IDX ${RANGE_IDX}`)
 }
 
 // TODO shift + arrow increases/decreases highlit ranges
@@ -145,6 +156,7 @@ if (HANDLER_ACTIVATION) {
 		visorScreenInject()
 		RANGES = ele2Ranges(mainEle)
 		setRange(RANGE_IDX)
+		incRange() // this ensures the first range that is set is visible
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
