@@ -4,9 +4,12 @@ import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggl
 
 const HANDLER_ACTIVATION = true
 const TOP_LEVEL_HOST = getCurrentTopLevelHost()
+const RESIZE_DEBOUNCE_MILLIS = 500
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
+let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
+let WIN_WIDTH = window.innerWidth
 
 // TODO make this able to discriminate by subdomain
 function getCurrentTopLevelHost(): string {
@@ -91,7 +94,46 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
+// TODO this is buggy; WHY!??!?!
+function onResizeCallback(mainEle: Element): void {
+	// if same size -> return
+	if (window.innerWidth === WIN_WIDTH) return
+
+	// if bigger window -> go backwards
+	// if smaller window -> go forwards
+
+	const prevRange = RANGES![RANGE_IDX]
+	const prevNode = prevRange.startContainer
+	const prevOffset = prevRange.startOffset
+
+	RANGES = ele2Ranges(mainEle)
+	const newWidth = window.innerWidth
+	const delta = WIN_WIDTH - newWidth
+	WIN_WIDTH = newWidth
+
+	// case bigger
+	if (delta < 0) {
+		for (RANGE_IDX; RANGE_IDX > 0; RANGE_IDX--) {
+			const iterRange = RANGES[RANGE_IDX]
+			if (iterRange.isPointInRange(prevNode, prevOffset)) {
+				setRange(RANGE_IDX)
+				return
+			}
+		}
+	}
+
+	// case smaller
+	for (RANGE_IDX; RANGE_IDX < RANGES.length; RANGE_IDX++) {
+		const iterRange = RANGES[RANGE_IDX]
+		if (iterRange.isPointInRange(prevNode, prevOffset)) {
+			setRange(RANGE_IDX)
+			return
+		}
+	}
+}
+
 // TODO refactor so supported domains are in the manifest
+// TODO refactor ele2Ranges to async generator to work with very large texts
 
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
@@ -99,22 +141,13 @@ if (HANDLER_ACTIVATION) {
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const mainEle = handler()
 		visorScreenInject()
-		// TODO refactor range to async generator to work with very large texts
 		RANGES = ele2Ranges(mainEle)
 		setRange(RANGE_IDX)
-
-		const RESIZE_DEBOUNCE_MILLIS = 500
-		let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
 			DEBOUNCE_TIMEOUT_ID = setTimeout(
-				() => {
-					RANGES = ele2Ranges(mainEle)
-					// TODO reset active range to earliest range 
-					// which overlaps with range which was active before
-					// resize
-				},
+				() => onResizeCallback(mainEle),
 				RESIZE_DEBOUNCE_MILLIS) as unknown as number
 		}
 
