@@ -1,8 +1,8 @@
-export function mdnHandler(): Element {
+export function mdnHandler(): Array<Element> | null {
 	const mainContent = document.querySelector('article')
-	if (!mainContent) {
-		throw new Error('mdnHandler: could not find main content!')
+	if (mainContent === null) {
+		return null
 	}
-	return mainContent
+	return [mainContent]
 }
 
