@@ -1,5 +1,5 @@
 import { DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "./site-handlers/index.js"
-import { ele2Ranges } from "./line-by-line.js"
+import { eleArray2Ranges } from "./line-by-line.js"
 import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
 
 const HANDLER_ACTIVATION = true
@@ -107,7 +107,7 @@ document.addEventListener('keyup', (event) => {
 })
 
 // TODO this is buggy; WHY!??!?!
-function onResizeCallback(mainEle: Element): void {
+function onResizeCallback(eleArray: Array<Element>): void {
 	// if same size -> return
 	if (window.innerWidth === WIN_WIDTH) return
 
@@ -118,7 +118,7 @@ function onResizeCallback(mainEle: Element): void {
 	const prevNode = prevRange.startContainer
 	const prevOffset = prevRange.startOffset
 
-	RANGES = ele2Ranges(mainEle)
+	RANGES = eleArray2Ranges(eleArray)
 	const newWidth = window.innerWidth
 	const delta = WIN_WIDTH - newWidth
 	WIN_WIDTH = newWidth
@@ -135,8 +135,8 @@ function onResizeCallback(mainEle: Element): void {
 	}
 
 	// case smaller
-	for (RANGE_IDX; RANGE_IDX < RANGES.length; RANGE_IDX++) {
-		const iterRange = RANGES[RANGE_IDX]
+	for (RANGE_IDX; RANGE_IDX < RANGES!.length; RANGE_IDX++) {
+		const iterRange = RANGES![RANGE_IDX]
 		if (iterRange.isPointInRange(prevNode, prevOffset)) {
 			setRange(RANGE_IDX)
 			return
@@ -152,16 +152,16 @@ if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
-		const mainEle = handler()
+		const eleArray = handler()
 		visorScreenInject()
-		RANGES = ele2Ranges(mainEle)
+		RANGES = eleArray2Ranges(eleArray)
 		setRange(RANGE_IDX)
 		incRange() // this ensures the first range that is set is visible
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
 			DEBOUNCE_TIMEOUT_ID = setTimeout(
-				() => onResizeCallback(mainEle),
+				() => onResizeCallback(eleArray),
 				RESIZE_DEBOUNCE_MILLIS) as unknown as number
 		}
 

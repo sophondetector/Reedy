@@ -5,7 +5,17 @@ function nodeHasRealText(textNode: Node): boolean {
 	return textNode.textContent!.trim().length > 0
 }
 
-export function ele2Ranges(ele: Element): Array<Range> {
+export function eleArray2Ranges(eleArray: Array<Element>): Array<Range> {
+	const res: Array<Range> = []
+	for (let idx = 0; idx < eleArray.length; idx++) {
+		const ele = eleArray[idx]
+		const iterRes = ele2Ranges(ele)
+		res.push(...iterRes)
+	}
+	return res
+}
+
+function ele2Ranges(ele: Element): Array<Range> {
 	const textNodesWithText = getAllTextNodes(ele)
 		.filter(nodeHasRealText)
 	const ranges = textNodes2Ranges(textNodesWithText)
