@@ -56,8 +56,9 @@ function getFinalTextIdx(textNodes: Array<Node>): number {
 }
 
 function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
-	const incrementThresh = 5
+	if (textNodes.length < 1) return []
 
+	const incrementThresh = 5
 	const res = []
 	const finalIdx = getFinalTextIdx(textNodes)
 	const lens = textNodes.map(tn => tn.textContent!.length)
