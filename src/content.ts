@@ -145,7 +145,7 @@ function onResizeCallback(eleArray: Array<Element>): void {
 }
 
 // TODO refactor so supported domains are in the manifest
-// TODO refactor ele2Ranges to async generator to work with very large texts
+// TODO refactor eleArray2Ranges to async generator to work with very large texts
 // TODO alt+click+drag creates a highlight box
 
 if (HANDLER_ACTIVATION) {
