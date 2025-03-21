@@ -1,4 +1,3 @@
-// TODO this has an issue where ranges are cut off one char too early; why?!?!?!
 export function genericHandler(root: Document | Element | null = null): Array<Element> {
 	if (root === null) {
 		root = document
