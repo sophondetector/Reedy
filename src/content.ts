@@ -93,13 +93,13 @@ document.addEventListener('keyup', (event) => {
 		case "l":
 			event.altKey && visorScreenToggle()
 			break;
-		case "ArrowRight":
+		case "ArrowDown":
 		case "j":
-			visorScreenStatus() && incRange()
+			visorScreenStatus() && event.altKey && incRange()
 			break;
-		case "ArrowLeft":
+		case "ArrowUp":
 		case "k":
-			visorScreenStatus() && decRange()
+			visorScreenStatus() && event.altKey && decRange()
 			break;
 		default:
 			break;
