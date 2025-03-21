@@ -2,6 +2,7 @@ const VISOR_SCREEN_ID = 'visorScreen'
 const VISOR_SCREEN_DISPLAY = 'flex'
 const VISOR_SCREEN_BUFFER_RADIUS = 3
 
+//TODO make it so you can click on lines to highlight them
 //TODO refactor visorScreen into a class
 
 function visorScreenCreate(): HTMLDivElement {
