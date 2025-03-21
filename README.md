@@ -1,7 +1,6 @@
 # Reedy
 Reedy is a Chrome extension to help you read stuff on the Internet. 
 Reedy helps you read by darkening the screen except for a single line or sentence, so you can read them one at a time.
-Reedy also allows you to select text to open in a clean, distraction free reading window.
 
 ## Development
 Reedy is written in `typescript`, and built with `vite` and `crxjs`. 
@@ -24,19 +23,12 @@ This will create the source code in the `dist/` folder. You can then install it 
 1. Load the `dist/` folder
 
 ## Usage
-1. Highlight the text you want to load into `Reedy`
-1. Right click, choose `Reedy > Open as new text in Reedy`
-1. In the `Reedy` tab click `Reading Mode` (upper right) 
-1. Scroll through the sentences using the `up` and `down` arrows, or the keys `j` and `k` 
-1. If you want to add to an existing text, highlight the text you want to add, right click and choose `Reedy > Add selection to existing text in Reedy`
-
-## Developer Mode
-Press `ctrl + <backtick>` to enable **super janky** features that are in development.
+* Press `alt-l` to turn the Reedy-screen on and off.
+* When the Reedy-screen is on, press `alt-upArrow` or `alt-downArrow` to move the highlighted range up or down
+* You can also you `alt-j` and `alt-k` to move the highlighted range up or down
 
 ## Plans
 * pdf mode built off of `pdfjs`
-* unify the apis for the line-by-line and sent-by-sent viewers
-* *in page* senting and line-by-line viewer
 
 ## Copyright
 Copyright (c) 2025 Nathaniel Taylor
