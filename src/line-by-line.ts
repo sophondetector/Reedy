@@ -104,7 +104,7 @@ function textNodes2Ranges(textNodes: Array<Node>): Array<Range> {
 		endOffset++
 	}
 
-	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1] - 1)
+	res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
 
 	return res
 }
