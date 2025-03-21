@@ -106,7 +106,7 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
-// TODO this is buggy; WHY!??!?!
+// TODO this crashes sometimes; WHY!?!?!
 function onResizeCallback(eleArray: Array<Element>): void {
 	// if same size -> return
 	if (window.innerWidth === WIN_WIDTH) return
