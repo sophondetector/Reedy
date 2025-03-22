@@ -11,7 +11,6 @@ let RANGE_IDX: number = 0
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let WIN_WIDTH = window.innerWidth
 
-// TODO make this able to discriminate by subdomain
 function getCurrentTopLevelHost(): string {
 	return window.location.host.match(/\w+\.\w+$/g)![0]
 }
@@ -151,6 +150,7 @@ function onResizeCallback(eleArray: Array<Element>): void {
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
+		// TODO make this able to discriminate by subdomain
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const eleArray = handler()
 		visorScreenInject()
