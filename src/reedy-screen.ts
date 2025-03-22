@@ -26,16 +26,16 @@ export class ReedyScreen {
 		return div
 	}
 
-	static getEle(): HTMLDivElement {
+	static getScreenEle(): HTMLDivElement {
 		const screenEle = document.getElementById(REEDY_SCREEN_ID)
 		if (!screenEle) {
-			throw new Error(`ReedyScreen.getEle: could not find element with id ${REEDY_SCREEN_ID}`)
+			throw new Error(`ReedyScreen.getScreenEle: could not find element with id ${REEDY_SCREEN_ID}`)
 		}
 		return screenEle as HTMLDivElement
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
-		const screenEle = ReedyScreen.getEle()
+		const screenEle = ReedyScreen.getScreenEle()
 
 		const finalX = x + window.scrollX - REEDY_SCREEN_BUFFER_RADIUS
 		const finalY = y + window.scrollY - REEDY_SCREEN_BUFFER_RADIUS
@@ -55,13 +55,13 @@ export class ReedyScreen {
 	}
 
 	static turnOn(): void {
-		const screenEle = ReedyScreen.getEle()
+		const screenEle = ReedyScreen.getScreenEle()
 		screenEle.style.display = REEDY_SCREEN_DISPLAY
 		console.log(`Reedy screen turned on!`)
 	}
 
 	static turnOff(): void {
-		const screenEle = ReedyScreen.getEle()
+		const screenEle = ReedyScreen.getScreenEle()
 		screenEle.style.display = 'none'
 		console.log(`Reedy screen turned off!`)
 	}
@@ -71,7 +71,7 @@ export class ReedyScreen {
 	* else return false
 	*/
 	static isOn(): boolean {
-		const screenEle = ReedyScreen.getEle()
+		const screenEle = ReedyScreen.getScreenEle()
 		return !(screenEle.style.display === 'none')
 	}
 
