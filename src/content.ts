@@ -1,11 +1,13 @@
 import { DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "./site-handlers/index.js"
 import { eleArray2Ranges } from "./line-by-line.js"
-import { visorScreenMove, visorScreenInject, visorScreenStatus, visorScreenToggle } from "./visor-screen.js"
+import { ReedyScreen } from "./reedy-screen.js"
 
 const HANDLER_ACTIVATION = true
 const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 const RESIZE_DEBOUNCE_MILLIS = 500
 
+// TODO refactor all line by line code into a class
+// TODO move RANGES and RANGE_IDX into line-by-line.js in own class
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
@@ -25,7 +27,7 @@ function getMaxHeight(range: Range): number {
 	return res
 }
 
-// TODO refactor all line by line code into a class
+//TODO make it so you can click on lines to highlight them
 function setRange(idx: number): void {
 	if (RANGES === null) {
 		throw new Error(`setRange: RANGES is null`)
@@ -41,7 +43,7 @@ function setRange(idx: number): void {
 	// we do the above because sometimes the "extraneous" rects from the range
 	// creation process don't remain with the range
 
-	visorScreenMove(rect.left, rect.top, rect.width, rectHeight)
+	ReedyScreen.moveViewingWindow(rect.left, rect.top, rect.width, rectHeight)
 	console.log(`setRange: done`)
 }
 
@@ -90,15 +92,15 @@ function decRange(): void {
 document.addEventListener('keyup', (event) => {
 	switch (event.key) {
 		case "l":
-			event.altKey && visorScreenToggle()
+			event.altKey && ReedyScreen.toggle()
 			break;
 		case "ArrowDown":
 		case "j":
-			visorScreenStatus() && event.altKey && incRange()
+			ReedyScreen.isOn() && event.altKey && incRange()
 			break;
 		case "ArrowUp":
 		case "k":
-			visorScreenStatus() && event.altKey && decRange()
+			ReedyScreen.isOn() && event.altKey && decRange()
 			break;
 		default:
 			break;
@@ -153,7 +155,7 @@ if (HANDLER_ACTIVATION) {
 		// TODO make this able to discriminate by subdomain
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const eleArray = handler()
-		visorScreenInject()
+		ReedyScreen.inject()
 		RANGES = eleArray2Ranges(eleArray)
 		setRange(RANGE_IDX)
 		incRange() // this ensures the first range that is set is visible
