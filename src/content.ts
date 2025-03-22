@@ -15,7 +15,6 @@ function getCurrentTopLevelHost(): string {
 // TODO refactor so supported domains are in the manifest
 // TODO alt+click+drag creates a highlight box
 // TODO make it so you can click on lines to highlight them
-// TODO shift + arrow increases/decreases highlit ranges
 document.addEventListener('keyup', (event) => {
 	switch (event.key) {
 		case "l":
@@ -23,12 +22,38 @@ document.addEventListener('keyup', (event) => {
 			break;
 		case "ArrowDown":
 		case "j":
-			ReedyScreen.isOn() && event.altKey && RangeManager.incRange()
+			if (ReedyScreen.isOn() && event.altKey) {
+				// event.shiftKey only works in the case of arrow keys
+				// shift + alt + j is handled as capital "J" case below
+				if (event.shiftKey) {
+					RangeManager.shiftRangeDown()
+					break
+				}
+				RangeManager.incRange()
+			}
 			break;
 		case "ArrowUp":
 		case "k":
-			ReedyScreen.isOn() && event.altKey && RangeManager.decRange()
+			if (ReedyScreen.isOn() && event.altKey) {
+				// event.shiftKey only works in the case of arrow keys
+				// shift + alt + k is handled as capital "K" case below
+				if (event.shiftKey) {
+					RangeManager.shiftRangeUp()
+					break
+				}
+				RangeManager.decRange()
+			}
 			break;
+		case "J":
+			if (ReedyScreen.isOn() && event.altKey) {
+				RangeManager.shiftRangeDown()
+			}
+			break
+		case "K":
+			if (ReedyScreen.isOn() && event.altKey) {
+				RangeManager.shiftRangeUp()
+			}
+			break
 		default:
 			break;
 	}

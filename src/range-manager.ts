@@ -234,4 +234,12 @@ export class RangeManager {
 		}
 	}
 
+	static shiftRangeDown(): void {
+		console.log('shift range down!')
+	}
+
+	static shiftRangeUp(): void {
+		console.log('shift range up!')
+	}
+
 }
