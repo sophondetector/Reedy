@@ -37,7 +37,6 @@ document.addEventListener('keyup', (event) => {
 if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
-		// TODO make this able to discriminate by subdomain
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const eleArray = handler()
 		ReedyScreen.inject()
