@@ -1,8 +1,8 @@
-export function substackHandler(): Element {
+import { genericHandler } from "./generic-handler"
+
+export function substackHandler(): Array<Element> {
 	const mainContent = document.querySelector('article')
-	if (!mainContent) {
-		throw new Error('substackHandler: could not find main content!')
-	}
-	return mainContent
+	const eleArray = genericHandler(mainContent)
+	return eleArray
 }
 

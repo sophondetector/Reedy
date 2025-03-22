@@ -1,8 +1,8 @@
-export function vaticanHandler(): Element {
+import { genericHandler } from "./generic-handler"
+
+export function vaticanHandler(): Array<Element> {
 	const mainContent = document.querySelector('.testo')
-	if (!mainContent) {
-		throw new Error('vaticanHandler: could not find main content!')
-	}
-	return mainContent
+	const eleArray = genericHandler(mainContent)
+	return eleArray
 }
 
