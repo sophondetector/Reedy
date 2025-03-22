@@ -1,5 +1,5 @@
 import { DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "./site-handlers/index.js"
-import { RangeManager } from "./line-by-line.js"
+import { RangeManager } from "./range-manager.js"
 import { ReedyScreen } from "./reedy-screen.js"
 
 const HANDLER_ACTIVATION = true
