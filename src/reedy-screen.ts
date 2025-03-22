@@ -27,11 +27,11 @@ export class ReedyScreen {
 	}
 
 	static getEle(): HTMLDivElement {
-		const screenEle = document.getElementById(REEDY_SCREEN_ID) as HTMLDivElement
+		const screenEle = document.getElementById(REEDY_SCREEN_ID)
 		if (!screenEle) {
 			throw new Error(`ReedyScreen.getEle: could not find element with id ${REEDY_SCREEN_ID}`)
 		}
-		return screenEle
+		return screenEle as HTMLDivElement
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
