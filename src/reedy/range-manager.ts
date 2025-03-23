@@ -1,36 +1,40 @@
 const TEXT_NODE_NAME = '#text'
 
-let RANGES: Range[] | null = null
-let RANGE_IDX: number = 0
 
 export class RangeManager {
+	RANGES: Range[] | null = null
+	RANGE_IDX: number = 0
 
-	static getRangeIdx(): number {
-		return RANGE_IDX
+	constructor(eleArray: Array<Element>) {
+		this.initRanges(eleArray)
 	}
 
-	static assignRanges(ranges: Array<Range>): void {
-		RANGES = ranges
+	initRanges(eleArray: Array<Element>): void {
+		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
 
-	static getCurrentRange(): Range {
-		return RANGES![RANGE_IDX]
+	getRangeIdx(): number {
+		return this.RANGE_IDX
 	}
 
-	static rangeIdx2Range(rangeIdx: number): Range {
-		return RANGES![rangeIdx]
+	assignRanges(ranges: Array<Range>): void {
+		this.RANGES = ranges
 	}
 
-	static setRangeIdx(rangeIdx: number): void {
-		RANGE_IDX = rangeIdx
+	getCurrentRange(): Range {
+		return this.RANGES![this.RANGE_IDX]
 	}
 
-	static getRangesLength(): number {
-		return RANGES!.length
+	rangeIdx2Range(rangeIdx: number): Range {
+		return this.RANGES![rangeIdx]
 	}
 
-	static init(eleArray: Array<Element>): void {
-		RANGES = RangeManager.eleArray2Ranges(eleArray)
+	setRangeIdx(rangeIdx: number): void {
+		this.RANGE_IDX = rangeIdx
+	}
+
+	getRangesLength(): number {
+		return this.RANGES!.length
 	}
 
 	static getMaxHeight(range: Range): number {
@@ -50,37 +54,37 @@ export class RangeManager {
 		return isVisible
 	}
 
-	static getNextRange(): Range | undefined {
-		if (RANGES === null) {
+	getNextRange(): Range | undefined {
+		if (this.RANGES === null) {
 			throw new Error(`RangeManager.getNextRange: RANGES is null`)
 		}
 		// find the next visible range
-		for (let newIdx = RANGE_IDX + 1; newIdx < RANGES.length; newIdx++) {
-			const iterRange = RANGES[newIdx]
+		for (let newIdx = this.RANGE_IDX + 1; newIdx < this.RANGES.length; newIdx++) {
+			const iterRange = this.RANGES[newIdx]
 			if (RangeManager.rangeIsVisible(iterRange)) {
 				// RangeManager.setRange(newIdx)
-				RANGE_IDX = newIdx
-				console.log(`RangeManager.getNextRange: range set to range at index ${RANGE_IDX}`)
+				this.RANGE_IDX = newIdx
+				console.log(`RangeManager.getNextRange: range set to range at index ${this.RANGE_IDX}`)
 				return iterRange
 			}
 		}
-		console.log(`RangeManger.getNextRange: no visible ranges after RANGE_IDX ${RANGE_IDX}`)
+		console.log(`RangeManger.getNextRange: no visible ranges after RANGE_IDX ${this.RANGE_IDX}`)
 	}
 
-	static getPrevRange(): Range | undefined {
-		if (RANGES === null) {
-			throw new Error(`RangeManager.getPrevRange: RANGES is null`)
+	getPrevRange(): Range | undefined {
+		if (this.RANGES === null) {
+			throw new Error(`RangeManager.getPrevRange: this.RANGES is null`)
 		}
 		// find the next visible range
-		for (let newIdx = RANGE_IDX - 1; newIdx >= 0; newIdx--) {
-			const iterRange = RANGES[newIdx]
+		for (let newIdx = this.RANGE_IDX - 1; newIdx >= 0; newIdx--) {
+			const iterRange = this.RANGES[newIdx]
 			if (RangeManager.rangeIsVisible(iterRange)) {
-				RANGE_IDX = newIdx
-				console.log(`RangeManager.getPrevRange: range set to range at index ${RANGE_IDX}`)
+				this.RANGE_IDX = newIdx
+				console.log(`RangeManager.getPrevRange: range set to range at index ${this.RANGE_IDX}`)
 				return iterRange
 			}
 		}
-		console.log(`RangeManager.getPrevRange: no visible ranges before RANGE_IDX ${RANGE_IDX}`)
+		console.log(`RangeManager.getPrevRange: no visible ranges before this.RANGE_IDX ${this.RANGE_IDX}`)
 	}
 
 	// TODO refactor eleArray2Ranges to async generator to work with very large texts
@@ -88,7 +92,7 @@ export class RangeManager {
 		const res: Array<Range> = []
 		for (let idx = 0; idx < eleArray.length; idx++) {
 			const ele = eleArray[idx]
-			const iterRes = RangeManager.ele2Ranges(ele)
+			const iterRes = RangeManager.#ele2Ranges(ele)
 			res.push(...iterRes)
 		}
 		return res
@@ -98,27 +102,27 @@ export class RangeManager {
 		return textNode.textContent!.trim().length > 0
 	}
 
-	static ele2Ranges(ele: Element): Array<Range> {
-		const textNodesWithText = RangeManager.getAllTextNodes(ele)
+	static #ele2Ranges(ele: Element): Array<Range> {
+		const textNodesWithText = RangeManager.#getAllTextNodes(ele)
 			.filter(RangeManager.nodeHasRealText)
 		const ranges = RangeManager.textNodes2Ranges(textNodesWithText)
 		return ranges
 	}
 
-	static getAllTextNodes(node: Node): Array<Node> {
+	static #getAllTextNodes(node: Node): Array<Node> {
 		const res = []
 		if (node.nodeName === TEXT_NODE_NAME) {
 			res.push(node)
 			return res
 		}
 		for (const cn of node.childNodes) {
-			const iterRes = RangeManager.getAllTextNodes(cn)
+			const iterRes = RangeManager.#getAllTextNodes(cn)
 			res.push(...iterRes)
 		}
 		return res
 	}
 
-	static getEndIdxs(lens: Array<number>) {
+	static #getEndIdxs(lens: Array<number>) {
 		const ends = []
 		let acc = 0
 		for (let idx = 0; idx < lens.length; idx++) {
@@ -129,7 +133,7 @@ export class RangeManager {
 		return res
 	}
 
-	static getFinalTextIdx(textNodes: Array<Node>): number {
+	static #getFinalTextIdx(textNodes: Array<Node>): number {
 		let res = 0
 		for (const tn of textNodes) {
 			res += tn.textContent!.length
@@ -143,9 +147,9 @@ export class RangeManager {
 
 		const incrementThresh = 5
 		const res = []
-		const finalIdx = RangeManager.getFinalTextIdx(textNodes)
+		const finalIdx = RangeManager.#getFinalTextIdx(textNodes)
 		const lens = textNodes.map(tn => tn.textContent!.length)
-		const endIdxs = RangeManager.getEndIdxs(lens)
+		const endIdxs = RangeManager.#getEndIdxs(lens)
 
 		res.push(new Range())
 
@@ -191,13 +195,4 @@ export class RangeManager {
 
 		return res
 	}
-
-	static shiftRangeDown(): void {
-		console.log('shift range down!')
-	}
-
-	static shiftRangeUp(): void {
-		console.log('shift range up!')
-	}
-
 }

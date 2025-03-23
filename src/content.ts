@@ -1,13 +1,12 @@
 import { DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "./site-handlers/index.js"
 import { ReedyDirector } from "./reedy/index.js"
 
-
-
 const HANDLER_ACTIVATION = true
 const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 const RESIZE_DEBOUNCE_MILLIS = 500
 
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
+let DIRECTOR: ReedyDirector | null = null
 
 function getCurrentTopLevelHost(): string {
 	return window.location.host.match(/\w+\.\w+$/g)![0]
@@ -17,42 +16,43 @@ function getCurrentTopLevelHost(): string {
 // TODO alt+click+drag creates a highlight box
 // TODO make it so you can click on lines to highlight them
 document.addEventListener('keyup', (event) => {
+	if (DIRECTOR === null) return
 	switch (event.key) {
 		case "l":
-			event.altKey && ReedyDirector.toggle()
+			event.altKey && DIRECTOR.toggle()
 			break;
 		case "ArrowDown":
 		case "j":
-			if (ReedyDirector.isOn() && event.altKey) {
+			if (DIRECTOR.isOn() && event.altKey) {
 				// event.shiftKey only works in the case of arrow keys
 				// shift + alt + j is handled as capital "J" case below
 				if (event.shiftKey) {
-					ReedyDirector.shiftRangeDown()
+					DIRECTOR.shiftRangeDown()
 					break
 				}
-				ReedyDirector.incRange()
+				DIRECTOR.incRange()
 			}
 			break;
 		case "ArrowUp":
 		case "k":
-			if (ReedyDirector.isOn() && event.altKey) {
+			if (DIRECTOR.isOn() && event.altKey) {
 				// event.shiftKey only works in the case of arrow keys
 				// shift + alt + k is handled as capital "K" case below
 				if (event.shiftKey) {
-					ReedyDirector.shiftRangeUp()
+					DIRECTOR.shiftRangeUp()
 					break
 				}
-				ReedyDirector.decRange()
+				DIRECTOR.decRange()
 			}
 			break;
 		case "J":
-			if (ReedyDirector.isOn() && event.altKey) {
-				ReedyDirector.shiftRangeDown()
+			if (DIRECTOR.isOn() && event.altKey) {
+				DIRECTOR.shiftRangeDown()
 			}
 			break
 		case "K":
-			if (ReedyDirector.isOn() && event.altKey) {
-				ReedyDirector.shiftRangeUp()
+			if (DIRECTOR.isOn() && event.altKey) {
+				DIRECTOR.shiftRangeUp()
 			}
 			break
 		default:
@@ -64,13 +64,12 @@ if (HANDLER_ACTIVATION) {
 	if (SUPPORTED_DOMAINS.includes(TOP_LEVEL_HOST)) {
 
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
-		const eleArray = handler()
-		ReedyDirector.init(eleArray)
+		DIRECTOR = new ReedyDirector(handler)
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
 			DEBOUNCE_TIMEOUT_ID = setTimeout(
-				() => ReedyDirector.onResizeCallback(eleArray),
+				() => DIRECTOR!.onResizeCallback(),
 				RESIZE_DEBOUNCE_MILLIS) as unknown as number
 		}
 

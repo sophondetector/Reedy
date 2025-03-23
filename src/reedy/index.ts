@@ -4,54 +4,62 @@ import { ReedyScreen } from "./reedy-screen";
 let WIN_WIDTH = window.innerWidth
 
 export class ReedyDirector {
+	RANGE_MANAGER: RangeManager | null = null
+	ELEMENT_ARRAY: Array<Element> | null = null
+	HANDLER: (() => Array<Element>) | null = null
 
-	static init(eleArray: Array<Element>): void {
+	constructor(handler: () => Array<Element>) {
+		this.HANDLER = handler
+		this.ELEMENT_ARRAY = this.HANDLER()
+		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
-		RangeManager.init(eleArray)
-		RangeManager.getNextRange()
-		const range = RangeManager.getPrevRange()
+
+		// we do this to make sure we land on the first VISIBLE range
+		this.RANGE_MANAGER.getNextRange()
+		const range = this.RANGE_MANAGER.getPrevRange()
 		if (range === undefined) {
 			console.log('ReedyDirector.init: could not get first visible range!')
 			return
 		}
-		ReedyDirector.setWindowAroundRange(range)
+
+		this.setWindowAroundRange(range)
 	}
 
-	static toggle(): void {
+	toggle(): void {
 		ReedyScreen.toggle()
 	}
 
-	static isOn(): boolean {
+	isOn(): boolean {
 		return ReedyScreen.isOn()
 	}
 
-	static incRange(): void {
-		const nextRange = RangeManager.getNextRange()
+	incRange(): void {
+		const nextRange = this.RANGE_MANAGER!.getNextRange()
 		if (nextRange === undefined) {
 			console.log('ReedyDirector.incRange: could not find next range')
 			return
 		}
-		ReedyDirector.setWindowAroundRange(nextRange)
+		this.setWindowAroundRange(nextRange)
 	}
 
-	static decRange(): void {
-		const prevRange = RangeManager.getPrevRange()
+	decRange(): void {
+		const prevRange = this.RANGE_MANAGER!.getPrevRange()
 		if (prevRange === undefined) {
-			console.log('ReedyDirector.incRange: could not find next range')
+			console.log('ReedyDirector.decRange: could not find previous range')
 			return
 		}
-		ReedyDirector.setWindowAroundRange(prevRange)
+		this.setWindowAroundRange(prevRange)
 	}
 
-	static shiftRangeUp(): void {
-		RangeManager.shiftRangeUp()
+	shiftRangeUp(): void {
+		console.log('shift up!')
 	}
 
-	static shiftRangeDown(): void {
-		RangeManager.shiftRangeDown()
+	shiftRangeDown(): void {
+		console.log('shift down!')
 	}
 
-	static setWindowAroundRange(range: Range): void {
+	setWindowAroundRange(range: Range): void {
 		const rect = range.getBoundingClientRect()
 		const rectHeight = RangeManager.getMaxHeight(range)
 		// we do the above because sometimes the "extraneous" rects from the range
@@ -61,42 +69,42 @@ export class ReedyDirector {
 
 	// TODO this crashes sometimes; WHY!?!?!
 	// TODO on sizing down this will go to the range BEFORE rather than the range we want
-	static onResizeCallback(eleArray: Array<Element>): void {
+	onResizeCallback(): void {
 		// if same size -> return
 		if (window.innerWidth === WIN_WIDTH) return
 
 		// if bigger window -> go backwards
 		// if smaller window -> go forwards
 
-		const prevRange = RangeManager.getCurrentRange()
+		const prevRange = this.RANGE_MANAGER!.getCurrentRange()
 		const prevNode = prevRange.startContainer
 		const prevOffset = prevRange.startOffset
 
-		RangeManager.init(eleArray)
+		this.RANGE_MANAGER!.initRanges(this.ELEMENT_ARRAY!)
 		const newWidth = window.innerWidth
 		const delta = WIN_WIDTH - newWidth
 		WIN_WIDTH = newWidth
 
-		let rangeIdx = RangeManager.getRangeIdx()
+		let rangeIdx = this.RANGE_MANAGER!.getRangeIdx()
 		// case bigger
 		if (delta < 0) {
 			for (rangeIdx; rangeIdx > 0; rangeIdx--) {
-				const iterRange = RangeManager.rangeIdx2Range(rangeIdx)
+				const iterRange = this.RANGE_MANAGER!.rangeIdx2Range(rangeIdx)
 				if (iterRange.isPointInRange(prevNode, prevOffset)) {
-					ReedyDirector.setWindowAroundRange(iterRange)
-					RangeManager.setRangeIdx(rangeIdx)
+					this.setWindowAroundRange(iterRange)
+					this.RANGE_MANAGER!.setRangeIdx(rangeIdx)
 					return
 				}
 			}
 		}
 
 		// case smaller
-		const rangeLen = RangeManager.getRangesLength()
+		const rangeLen = this.RANGE_MANAGER!.getRangesLength()
 		for (rangeIdx; rangeIdx < rangeLen; rangeIdx++) {
-			const iterRange = RangeManager.rangeIdx2Range(rangeIdx)
+			const iterRange = this.RANGE_MANAGER!.rangeIdx2Range(rangeIdx)
 			if (iterRange.isPointInRange(prevNode, prevOffset)) {
-				ReedyDirector.setWindowAroundRange(iterRange)
-				RangeManager.setRangeIdx(rangeIdx)
+				this.setWindowAroundRange(iterRange)
+				this.RANGE_MANAGER!.setRangeIdx(rangeIdx)
 				return
 			}
 		}
