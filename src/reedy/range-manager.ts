@@ -2,17 +2,8 @@ const TEXT_NODE_NAME = '#text'
 
 let RANGES: Range[] | null = null
 let RANGE_IDX: number = 0
-let WIN_WIDTH = window.innerWidth
 
 export class RangeManager {
-
-	static getWinWidth(): number {
-		return WIN_WIDTH
-	}
-
-	static setWinWidth(newWidth: number): void {
-		WIN_WIDTH = newWidth
-	}
 
 	static getRangeIdx(): number {
 		return RANGE_IDX
@@ -40,10 +31,6 @@ export class RangeManager {
 
 	static init(eleArray: Array<Element>): void {
 		RANGES = RangeManager.eleArray2Ranges(eleArray)
-		// RangeManager.setRange(RANGE_IDX)
-		// this ensures the first range that is set is visible
-		// RangeManager.incRange()
-		// RangeManager.decRange()
 	}
 
 	static getMaxHeight(range: Range): number {
@@ -55,17 +42,6 @@ export class RangeManager {
 		}
 		return res
 	}
-
-	// static setRange(idx: number): void {
-	// 	if (RANGES === null) {
-	// 		throw new Error(`setRange: RANGES is null`)
-	// 	}
-	// 	const range = RANGES[idx]
-	// 	if (range === undefined) {
-	// 		throw new Error(`setRange: RANGES[${idx}] is undefined!`)
-	// 	}
-	// 	console.log(`setRange: done`)
-	// }
 
 	static rangeIsVisible(rng: Range): boolean {
 		const textNode = rng.startContainer

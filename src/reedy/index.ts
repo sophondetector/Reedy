@@ -1,6 +1,7 @@
 import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
+let WIN_WIDTH = window.innerWidth
 
 export class ReedyDirector {
 
@@ -59,10 +60,10 @@ export class ReedyDirector {
 	}
 
 	// TODO this crashes sometimes; WHY!?!?!
+	// TODO on sizing down this will go to the range BEFORE rather than the range we want
 	static onResizeCallback(eleArray: Array<Element>): void {
 		// if same size -> return
-		const prevWidth = RangeManager.getWinWidth()
-		if (window.innerWidth === prevWidth) return
+		if (window.innerWidth === WIN_WIDTH) return
 
 		// if bigger window -> go backwards
 		// if smaller window -> go forwards
@@ -73,8 +74,8 @@ export class ReedyDirector {
 
 		RangeManager.init(eleArray)
 		const newWidth = window.innerWidth
-		const delta = prevWidth - newWidth
-		RangeManager.setWinWidth(newWidth)
+		const delta = WIN_WIDTH - newWidth
+		WIN_WIDTH = newWidth
 
 		let rangeIdx = RangeManager.getRangeIdx()
 		// case bigger
@@ -100,5 +101,4 @@ export class ReedyDirector {
 			}
 		}
 	}
-
 }
