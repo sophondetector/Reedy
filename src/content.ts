@@ -1,6 +1,7 @@
 import { DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "./site-handlers/index.js"
-import { RangeManager } from "./range-manager.js"
-import { ReedyScreen } from "./reedy-screen.js"
+import { ReedyDirector } from "./reedy/index.js"
+
+
 
 const HANDLER_ACTIVATION = true
 const TOP_LEVEL_HOST = getCurrentTopLevelHost()
@@ -18,40 +19,40 @@ function getCurrentTopLevelHost(): string {
 document.addEventListener('keyup', (event) => {
 	switch (event.key) {
 		case "l":
-			event.altKey && ReedyScreen.toggle()
+			event.altKey && ReedyDirector.toggle()
 			break;
 		case "ArrowDown":
 		case "j":
-			if (ReedyScreen.isOn() && event.altKey) {
+			if (ReedyDirector.isOn() && event.altKey) {
 				// event.shiftKey only works in the case of arrow keys
 				// shift + alt + j is handled as capital "J" case below
 				if (event.shiftKey) {
-					RangeManager.shiftRangeDown()
+					ReedyDirector.shiftRangeDown()
 					break
 				}
-				RangeManager.incRange()
+				ReedyDirector.incRange()
 			}
 			break;
 		case "ArrowUp":
 		case "k":
-			if (ReedyScreen.isOn() && event.altKey) {
+			if (ReedyDirector.isOn() && event.altKey) {
 				// event.shiftKey only works in the case of arrow keys
 				// shift + alt + k is handled as capital "K" case below
 				if (event.shiftKey) {
-					RangeManager.shiftRangeUp()
+					ReedyDirector.shiftRangeUp()
 					break
 				}
-				RangeManager.decRange()
+				ReedyDirector.decRange()
 			}
 			break;
 		case "J":
-			if (ReedyScreen.isOn() && event.altKey) {
-				RangeManager.shiftRangeDown()
+			if (ReedyDirector.isOn() && event.altKey) {
+				ReedyDirector.shiftRangeDown()
 			}
 			break
 		case "K":
-			if (ReedyScreen.isOn() && event.altKey) {
-				RangeManager.shiftRangeUp()
+			if (ReedyDirector.isOn() && event.altKey) {
+				ReedyDirector.shiftRangeUp()
 			}
 			break
 		default:
@@ -64,13 +65,12 @@ if (HANDLER_ACTIVATION) {
 
 		const handler = DOMAIN_HANDLER_MAP.get(TOP_LEVEL_HOST)
 		const eleArray = handler()
-		ReedyScreen.inject()
-		RangeManager.init(eleArray)
+		ReedyDirector.init(eleArray)
 
 		window.onresize = () => {
 			clearTimeout(DEBOUNCE_TIMEOUT_ID)
 			DEBOUNCE_TIMEOUT_ID = setTimeout(
-				() => RangeManager.onResizeCallback(eleArray),
+				() => ReedyDirector.onResizeCallback(eleArray),
 				RESIZE_DEBOUNCE_MILLIS) as unknown as number
 		}
 

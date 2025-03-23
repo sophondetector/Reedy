@@ -1,5 +1,3 @@
-import { ReedyScreen } from "./reedy-screen"
-
 const TEXT_NODE_NAME = '#text'
 
 let RANGES: Range[] | null = null
@@ -8,12 +6,44 @@ let WIN_WIDTH = window.innerWidth
 
 export class RangeManager {
 
+	static getWinWidth(): number {
+		return WIN_WIDTH
+	}
+
+	static setWinWidth(newWidth: number): void {
+		WIN_WIDTH = newWidth
+	}
+
+	static getRangeIdx(): number {
+		return RANGE_IDX
+	}
+
+	static assignRanges(ranges: Array<Range>): void {
+		RANGES = ranges
+	}
+
+	static getCurrentRange(): Range {
+		return RANGES![RANGE_IDX]
+	}
+
+	static rangeIdx2Range(rangeIdx: number): Range {
+		return RANGES![rangeIdx]
+	}
+
+	static setRangeIdx(rangeIdx: number): void {
+		RANGE_IDX = rangeIdx
+	}
+
+	static getRangesLength(): number {
+		return RANGES!.length
+	}
+
 	static init(eleArray: Array<Element>): void {
 		RANGES = RangeManager.eleArray2Ranges(eleArray)
-		RangeManager.setRange(RANGE_IDX)
+		// RangeManager.setRange(RANGE_IDX)
 		// this ensures the first range that is set is visible
-		RangeManager.incRange()
-		RangeManager.decRange()
+		// RangeManager.incRange()
+		// RangeManager.decRange()
 	}
 
 	static getMaxHeight(range: Range): number {
@@ -26,24 +56,16 @@ export class RangeManager {
 		return res
 	}
 
-	static setRange(idx: number): void {
-		if (RANGES === null) {
-			throw new Error(`setRange: RANGES is null`)
-		}
-
-		const range = RANGES[idx]
-		if (range === undefined) {
-			throw new Error(`setRange: RANGES[${idx}] is undefined!`)
-		}
-
-		const rect = range.getBoundingClientRect()
-		const rectHeight = RangeManager.getMaxHeight(range)
-		// we do the above because sometimes the "extraneous" rects from the range
-		// creation process don't remain with the range
-
-		ReedyScreen.moveViewingWindow(rect.left, rect.top, rect.width, rectHeight)
-		console.log(`setRange: done`)
-	}
+	// static setRange(idx: number): void {
+	// 	if (RANGES === null) {
+	// 		throw new Error(`setRange: RANGES is null`)
+	// 	}
+	// 	const range = RANGES[idx]
+	// 	if (range === undefined) {
+	// 		throw new Error(`setRange: RANGES[${idx}] is undefined!`)
+	// 	}
+	// 	console.log(`setRange: done`)
+	// }
 
 	static rangeIsVisible(rng: Range): boolean {
 		const textNode = rng.startContainer
@@ -52,38 +74,37 @@ export class RangeManager {
 		return isVisible
 	}
 
-	static incRange(): void {
+	static getNextRange(): Range | undefined {
 		if (RANGES === null) {
-			throw new Error(`incRange: RANGES is null`)
+			throw new Error(`RangeManager.getNextRange: RANGES is null`)
 		}
 		// find the next visible range
 		for (let newIdx = RANGE_IDX + 1; newIdx < RANGES.length; newIdx++) {
 			const iterRange = RANGES[newIdx]
 			if (RangeManager.rangeIsVisible(iterRange)) {
-				RangeManager.setRange(newIdx)
+				// RangeManager.setRange(newIdx)
 				RANGE_IDX = newIdx
-				console.log(`RangeManager.incRange: range set to range at index ${RANGE_IDX}`)
-				return
+				console.log(`RangeManager.getNextRange: range set to range at index ${RANGE_IDX}`)
+				return iterRange
 			}
 		}
-		console.log(`RangeManger.incRange: no visible ranges after RANGE_IDX ${RANGE_IDX}`)
+		console.log(`RangeManger.getNextRange: no visible ranges after RANGE_IDX ${RANGE_IDX}`)
 	}
 
-	static decRange(): void {
+	static getPrevRange(): Range | undefined {
 		if (RANGES === null) {
-			throw new Error(`RangeManager.decRange: RANGES is null`)
+			throw new Error(`RangeManager.getPrevRange: RANGES is null`)
 		}
 		// find the next visible range
 		for (let newIdx = RANGE_IDX - 1; newIdx >= 0; newIdx--) {
 			const iterRange = RANGES[newIdx]
 			if (RangeManager.rangeIsVisible(iterRange)) {
-				RangeManager.setRange(newIdx)
 				RANGE_IDX = newIdx
-				console.log(`RangeManager.decRange: range set to range at index ${RANGE_IDX}`)
-				return
+				console.log(`RangeManager.getPrevRange: range set to range at index ${RANGE_IDX}`)
+				return iterRange
 			}
 		}
-		console.log(`RangeManager.decRange: no visible ranges before RANGE_IDX ${RANGE_IDX}`)
+		console.log(`RangeManager.getPrevRange: no visible ranges before RANGE_IDX ${RANGE_IDX}`)
 	}
 
 	// TODO refactor eleArray2Ranges to async generator to work with very large texts
@@ -193,45 +214,6 @@ export class RangeManager {
 		res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
 
 		return res
-	}
-
-
-	// TODO this crashes sometimes; WHY!?!?!
-	static onResizeCallback(eleArray: Array<Element>): void {
-		// if same size -> return
-		if (window.innerWidth === WIN_WIDTH) return
-
-		// if bigger window -> go backwards
-		// if smaller window -> go forwards
-
-		const prevRange = RANGES![RANGE_IDX]
-		const prevNode = prevRange.startContainer
-		const prevOffset = prevRange.startOffset
-
-		RANGES = RangeManager.eleArray2Ranges(eleArray)
-		const newWidth = window.innerWidth
-		const delta = WIN_WIDTH - newWidth
-		WIN_WIDTH = newWidth
-
-		// case bigger
-		if (delta < 0) {
-			for (RANGE_IDX; RANGE_IDX > 0; RANGE_IDX--) {
-				const iterRange = RANGES[RANGE_IDX]
-				if (iterRange.isPointInRange(prevNode, prevOffset)) {
-					RangeManager.setRange(RANGE_IDX)
-					return
-				}
-			}
-		}
-
-		// case smaller
-		for (RANGE_IDX; RANGE_IDX < RANGES.length; RANGE_IDX++) {
-			const iterRange = RANGES[RANGE_IDX]
-			if (iterRange.isPointInRange(prevNode, prevOffset)) {
-				RangeManager.setRange(RANGE_IDX)
-				return
-			}
-		}
 	}
 
 	static shiftRangeDown(): void {
