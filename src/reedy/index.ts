@@ -77,7 +77,6 @@ export class ReedyDirector {
 	}
 
 	// TODO callback for when page changes layout
-
 	// TODO this crashes sometimes; WHY!?!?!
 	// TODO on sizing down this will go to the range BEFORE rather than the range we want
 	onResizeCallback(): void {
