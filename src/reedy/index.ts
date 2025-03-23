@@ -1,3 +1,4 @@
+import { GENERIC_HANDLER_KEY, DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "../site-handlers/index.js"
 import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
@@ -7,10 +8,18 @@ export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
 	ELEMENT_ARRAY: Array<Element> | null = null
 	HANDLER: (() => Array<Element>) | null = null
+	TOP_LEVEL_HOST: string | null = null
 
-	constructor(handler: () => Array<Element>) {
-		this.HANDLER = handler
-		this.ELEMENT_ARRAY = this.HANDLER()
+	constructor(topLevelDomain: string) {
+		this.TOP_LEVEL_HOST = topLevelDomain
+
+		if (SUPPORTED_DOMAINS.includes(this.TOP_LEVEL_HOST)) {
+			this.HANDLER = DOMAIN_HANDLER_MAP.get(this.TOP_LEVEL_HOST)
+		} else {
+			this.HANDLER = DOMAIN_HANDLER_MAP.get(GENERIC_HANDLER_KEY)
+		}
+
+		this.ELEMENT_ARRAY = this.HANDLER!()
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
 
@@ -66,6 +75,8 @@ export class ReedyDirector {
 		// creation process don't remain with the range
 		ReedyScreen.moveViewingWindow(rect.left, rect.top, rect.width, rectHeight)
 	}
+
+	// TODO callback for when page changes layout
 
 	// TODO this crashes sometimes; WHY!?!?!
 	// TODO on sizing down this will go to the range BEFORE rather than the range we want
