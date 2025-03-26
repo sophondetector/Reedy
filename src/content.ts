@@ -5,6 +5,17 @@ const RESIZE_DEBOUNCE_MILLIS = 500
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let DIRECTOR: ReedyDirector | null = null
 
+// get message from options.ts that it's time to turn the screen on or off
+// @ts-ignore
+chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
+	try {
+		DIRECTOR!.toggleScreen()
+	} catch (err) {
+		console.error(`ERROR: Reedy hit an error trying to turn the screen on`)
+		console.log(err)
+	}
+})
+
 // TODO refactor so supported domains are in the manifest
 // TODO alt+click+drag creates a highlight box
 // TODO make it so you can click on lines to highlight them
