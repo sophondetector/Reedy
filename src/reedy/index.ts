@@ -10,8 +10,8 @@ export class ReedyDirector {
 	HANDLER: (() => Array<Element>) | null = null
 	TOP_LEVEL_HOST: string | null = null
 
-	constructor(topLevelDomain: string) {
-		this.TOP_LEVEL_HOST = topLevelDomain
+	constructor() {
+		this.TOP_LEVEL_HOST = ReedyDirector.getCurrentTopLevelHost()
 
 		if (SUPPORTED_DOMAINS.includes(this.TOP_LEVEL_HOST)) {
 			this.HANDLER = DOMAIN_HANDLER_MAP.get(this.TOP_LEVEL_HOST)
@@ -34,8 +34,16 @@ export class ReedyDirector {
 		this.setWindowAroundRange(range)
 	}
 
-	toggle(): void {
+	toggleScreen(): void {
 		ReedyScreen.toggle()
+	}
+
+	toggleScreenOn(): void {
+		ReedyScreen.turnOn()
+	}
+
+	toggleScreenOff(): void {
+		ReedyScreen.turnOff()
 	}
 
 	isOn(): boolean {
@@ -118,5 +126,9 @@ export class ReedyDirector {
 				return
 			}
 		}
+	}
+
+	static getCurrentTopLevelHost(): string {
+		return window.location.host.match(/\w+\.\w+$/g)![0]
 	}
 }

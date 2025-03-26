@@ -1,14 +1,9 @@
 import { ReedyDirector } from "./reedy/index.js"
 
-const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 const RESIZE_DEBOUNCE_MILLIS = 500
 
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let DIRECTOR: ReedyDirector | null = null
-
-function getCurrentTopLevelHost(): string {
-	return window.location.host.match(/\w+\.\w+$/g)![0]
-}
 
 // TODO refactor so supported domains are in the manifest
 // TODO alt+click+drag creates a highlight box
@@ -17,7 +12,7 @@ document.addEventListener('keyup', (event) => {
 	if (DIRECTOR === null) return
 	switch (event.key) {
 		case "l":
-			event.altKey && DIRECTOR.toggle()
+			event.altKey && DIRECTOR.toggleScreen()
 			break;
 		case "ArrowDown":
 		case "j":
@@ -59,8 +54,8 @@ document.addEventListener('keyup', (event) => {
 })
 
 
-DIRECTOR = new ReedyDirector(TOP_LEVEL_HOST)
-DIRECTOR.toggle()
+DIRECTOR = new ReedyDirector()
+DIRECTOR.toggleScreenOff()
 
 window.onresize = () => {
 	clearTimeout(DEBOUNCE_TIMEOUT_ID)
