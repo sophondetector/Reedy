@@ -1,6 +1,5 @@
 import { ReedyDirector } from "./reedy/index.js"
 
-const HANDLER_ACTIVATION = true
 const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 const RESIZE_DEBOUNCE_MILLIS = 500
 
@@ -59,19 +58,16 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
-if (HANDLER_ACTIVATION) {
 
-	DIRECTOR = new ReedyDirector(TOP_LEVEL_HOST)
+DIRECTOR = new ReedyDirector(TOP_LEVEL_HOST)
+DIRECTOR.toggle()
 
-	window.onresize = () => {
-		clearTimeout(DEBOUNCE_TIMEOUT_ID)
-		DEBOUNCE_TIMEOUT_ID = setTimeout(
-			() => DIRECTOR!.onResizeCallback(),
-			RESIZE_DEBOUNCE_MILLIS) as unknown as number
-	}
-
-	console.log(`Reedy init complete`)
-
-} else {
-	console.log(`Reedy site handlers deactivated`)
+window.onresize = () => {
+	clearTimeout(DEBOUNCE_TIMEOUT_ID)
+	DEBOUNCE_TIMEOUT_ID = setTimeout(
+		() => DIRECTOR!.onResizeCallback(),
+		RESIZE_DEBOUNCE_MILLIS) as unknown as number
 }
+
+console.log(`Reedy init complete`)
+
