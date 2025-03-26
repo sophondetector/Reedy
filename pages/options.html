@@ -11,17 +11,31 @@
 			background: whitesmoke
 		}
 
-		button {
-			borderwidth: .2px;
-			border-style: solid;
-			border-color: grey;
-			border-radius: 15%;
-			margin: auto;
-			width: 100%;
+		body {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			width: 500px;
+			margin: 10px;
 		}
 
-		body {
-			margin: 20px;
+		h1 {
+			margin-bottom: 5px;
+		}
+
+		button {
+			font-size: large;
+			border-style: solid;
+			border-color: grey;
+			border-radius: 5%;
+			margin: 5px;
+			width: 50%;
+		}
+
+		#help {
+			display: flex;
+			align-items: center;
+			font-size: large;
 		}
 	</style>
 </head>
@@ -29,7 +43,16 @@
 <body>
 
 	<h1>Reedy</h1>
-	<button id="reeder-button">Turn Reedy On/Off</button>
+	<button id="reedy-toggle">Reedy On/Off</button>
+
+	<div id="help">
+		<ul>
+			<li> Press <b>alt-l</b> to turn the Reedy-screen on and off.</li>
+			<li> <b>alt + up arrow</b> to move the highlighted range up.</li>
+			<li> <b>alt + down arrow</b> to move the highlighted range down.</li>
+			<li> You can also use <b>alt + j</b> and <b>alt + k</b>.</li>
+		</ul>
+	</div>
 
 </body>
 
