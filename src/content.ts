@@ -1,15 +1,20 @@
 import { ReedyDirector } from "./reedy/index.js"
 
-const HANDLER_ACTIVATION = true
-const TOP_LEVEL_HOST = getCurrentTopLevelHost()
 const RESIZE_DEBOUNCE_MILLIS = 500
 
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let DIRECTOR: ReedyDirector | null = null
 
-function getCurrentTopLevelHost(): string {
-	return window.location.host.match(/\w+\.\w+$/g)![0]
-}
+// get message from options.ts that it's time to turn the screen on or off
+// @ts-ignore
+chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
+	try {
+		DIRECTOR!.toggleScreen()
+	} catch (err) {
+		console.error(`ERROR: Reedy hit an error trying to turn the screen on`)
+		console.log(err)
+	}
+})
 
 // TODO refactor so supported domains are in the manifest
 // TODO alt+click+drag creates a highlight box
@@ -18,7 +23,7 @@ document.addEventListener('keyup', (event) => {
 	if (DIRECTOR === null) return
 	switch (event.key) {
 		case "l":
-			event.altKey && DIRECTOR.toggle()
+			event.altKey && DIRECTOR.toggleScreen()
 			break;
 		case "ArrowDown":
 		case "j":
@@ -59,19 +64,16 @@ document.addEventListener('keyup', (event) => {
 	}
 })
 
-if (HANDLER_ACTIVATION) {
 
-	DIRECTOR = new ReedyDirector(TOP_LEVEL_HOST)
+DIRECTOR = new ReedyDirector()
+DIRECTOR.toggleScreenOff()
 
-	window.onresize = () => {
-		clearTimeout(DEBOUNCE_TIMEOUT_ID)
-		DEBOUNCE_TIMEOUT_ID = setTimeout(
-			() => DIRECTOR!.onResizeCallback(),
-			RESIZE_DEBOUNCE_MILLIS) as unknown as number
-	}
-
-	console.log(`Reedy init complete`)
-
-} else {
-	console.log(`Reedy site handlers deactivated`)
+window.onresize = () => {
+	clearTimeout(DEBOUNCE_TIMEOUT_ID)
+	DEBOUNCE_TIMEOUT_ID = setTimeout(
+		() => DIRECTOR!.onResizeCallback(),
+		RESIZE_DEBOUNCE_MILLIS) as unknown as number
 }
+
+console.log(`Reedy init complete`)
+

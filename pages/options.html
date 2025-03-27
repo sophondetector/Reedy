@@ -11,17 +11,44 @@
 			background: whitesmoke
 		}
 
-		button {
-			borderwidth: .2px;
-			border-style: solid;
-			border-color: grey;
-			border-radius: 15%;
-			margin: auto;
-			width: 100%;
+		body {
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			width: 500px;
+			margin: 10px;
 		}
 
-		body {
-			margin: 20px;
+		h1 {
+			margin-bottom: 5px;
+		}
+
+		#control-panel {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 10px;
+		}
+
+		#control-panel>h4 {
+			margin: 2px;
+		}
+
+		button {
+			font-size: large;
+			border-style: solid;
+			border-color: grey;
+			border-radius: 5%;
+			margin: 5px;
+			width: 50%;
+		}
+
+		#help {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-size: large;
 		}
 	</style>
 </head>
@@ -29,7 +56,21 @@
 <body>
 
 	<h1>Reedy</h1>
-	<button id="reeder-button">Open</button>
+
+	<div id="control-panel">
+		<button id="reedy-toggle">Reedy On/Off</button>
+		<h4>Opacity</h4>
+		<input type="range" min="1" max="100" value="50" class="slider" id="opacity-slider">
+	</div>
+
+	<div id="help">
+		<div>
+			<div> Press <b>alt-l</b> to turn the Reedy-screen on and off.</div>
+			<div> <b>alt + up arrow</b> to move the highlighted range up.</div>
+			<div> <b>alt + down arrow</b> to move the highlighted range down.</div>
+			<div> You can also use <b>alt + j</b> and <b>alt + k</b>.</div>
+		</div>
+	</div>
 
 </body>
 
