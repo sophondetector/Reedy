@@ -12,11 +12,15 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 		if (value === "toggle screen") {
 			DIRECTOR!.toggleScreen()
 		} else if (value.match(/\d+/)) {
-			console.log(`opacity value ${value} received!`)
+			if (!DIRECTOR!.isOn()) return
+			const valueNum = Number(value)
+			DIRECTOR!.setScreenOpacity(valueNum)
+		} else {
+			console.log(`Reedy content.ts: Unknown message receieved!!`)
+			console.log(`message value: ${value}`)
+			console.log(`message sender: ${sender}`)
+			console.log(`message sendResp: ${sendResponse}`)
 		}
-		// console.log(`message value: ${value}`)
-		// console.log(`message sender: ${sender}`)
-		// console.log(`message sendResp: ${sendResponse}`)
 	} catch (err) {
 		console.error(`ERROR: Error trying to read input from control panel`)
 		console.log(err)

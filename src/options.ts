@@ -11,6 +11,7 @@ document.querySelector('#reedy-toggle')!.addEventListener('click', async () => {
 	})
 })
 
+// TODO add opacity readout to options.html
 // TODO save the opacity slider value in localStorage
 // and retreive it whenever the page opens
 const slider = document.querySelector("#opacity-slider") as HTMLInputElement
