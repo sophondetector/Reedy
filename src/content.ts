@@ -5,13 +5,32 @@ const RESIZE_DEBOUNCE_MILLIS = 500
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let DIRECTOR: ReedyDirector | null = null
 
-// get message from options.ts that it's time to turn the screen on or off
+// receives messages from options.ts control-panel
 // @ts-ignore
-chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(value: string, sender, sendResponse) {
 	try {
-		DIRECTOR!.toggleScreen()
+
+		if (value === "toggle screen") {
+
+			DIRECTOR!.toggleScreen()
+
+		} else if (value.match(/\d+/)) {
+
+			if (!DIRECTOR!.isOn()) return
+			const valueNum = Number(value)
+			DIRECTOR!.setScreenOpacity(valueNum)
+
+		} else {
+
+			console.log(`Reedy content.ts: Unknown message receieved!!`)
+			console.log(`message value: ${value}`)
+			console.log(`message sender: ${sender}`)
+			console.log(`message sendResp: ${sendResponse}`)
+
+		}
+
 	} catch (err) {
-		console.error(`ERROR: Reedy hit an error trying to turn the screen on`)
+		console.error(`ERROR: Error trying to read input from control panel`)
 		console.log(err)
 	}
 })

@@ -34,6 +34,11 @@ export class ReedyDirector {
 		this.setWindowAroundRange(range)
 	}
 
+	setScreenOpacity(opacity: number) {
+		if (!this.isOn()) return
+		ReedyScreen.setScreenOpacity(opacity)
+	}
+
 	toggleScreen(): void {
 		ReedyScreen.toggle()
 	}

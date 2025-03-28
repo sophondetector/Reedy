@@ -2,6 +2,7 @@ const REEDY_SCREEN_ID = 'reedyScreen'
 const REEDY_SCREEN_DISPLAY = 'flex'
 const REEDY_SCREEN_BUFFER_RADIUS = 3
 
+// TODO turn this into an instance method
 export class ReedyScreen {
 	static create(): HTMLDivElement {
 		// the box itself is transparent
@@ -32,6 +33,12 @@ export class ReedyScreen {
 			throw new Error(`ReedyScreen.getScreenEle: could not find element with id ${REEDY_SCREEN_ID}`)
 		}
 		return screenEle as HTMLDivElement
+	}
+
+	static setScreenOpacity(opacity: number): void {
+		// console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
+		const div = ReedyScreen.getScreenEle()
+		div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, ${opacity / 100})`
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
