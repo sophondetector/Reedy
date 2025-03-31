@@ -40,10 +40,22 @@ export class RangeManager {
 	}
 
 	static rangeIsVisible(rng: Range): boolean {
-		const textNode = rng.startContainer
-		const parent = textNode.parentElement
-		const isVisible = parent!.checkVisibility()
-		return isVisible
+		const parent = rng.startContainer.parentElement
+		if (!parent) {
+			console.warn('range with no parent element!')
+			return false
+		}
+
+		if (!parent.checkVisibility()) {
+			return false
+		}
+
+		const compStyle = window.getComputedStyle(parent)
+		if (compStyle.visibility === 'hidden') {
+			return false
+		}
+
+		return true
 	}
 
 	getFirstVisibleRange(): Range {
