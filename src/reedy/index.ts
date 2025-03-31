@@ -13,6 +13,7 @@ export class ReedyDirector {
 	constructor() {
 		this.TOP_LEVEL_HOST = ReedyDirector.getCurrentTopLevelHost()
 
+		// TODO push this logic down into a HandlerManager object
 		if (SUPPORTED_DOMAINS.includes(this.TOP_LEVEL_HOST)) {
 			this.HANDLER = DOMAIN_HANDLER_MAP.get(this.TOP_LEVEL_HOST)
 		} else {
