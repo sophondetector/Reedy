@@ -101,7 +101,7 @@ export class ReedyDirector {
 		const prevNode = prevRange.startContainer
 		const prevOffset = prevRange.startOffset
 
-		this.RANGE_MANAGER!.initRanges(this.ELEMENT_ARRAY!)
+		this.RANGE_MANAGER!.reInitRanges(this.ELEMENT_ARRAY!)
 		const newWidth = window.innerWidth
 		const delta = WIN_WIDTH - newWidth
 		WIN_WIDTH = newWidth

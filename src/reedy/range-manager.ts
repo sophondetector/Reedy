@@ -9,6 +9,10 @@ export class RangeManager {
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
 
+	reInitRanges(eleArray: Array<Element>): void {
+		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
+	}
+
 	getRangeIdx(): number {
 		return this.RANGE_IDX
 	}
