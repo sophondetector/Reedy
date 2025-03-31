@@ -6,19 +6,11 @@ export class RangeManager {
 	RANGE_IDX: number = 0
 
 	constructor(eleArray: Array<Element>) {
-		this.initRanges(eleArray)
-	}
-
-	initRanges(eleArray: Array<Element>): void {
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
 
 	getRangeIdx(): number {
 		return this.RANGE_IDX
-	}
-
-	assignRanges(ranges: Array<Range>): void {
-		this.RANGES = ranges
 	}
 
 	getCurrentRange(): Range {
