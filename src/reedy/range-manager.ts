@@ -54,6 +54,18 @@ export class RangeManager {
 		return isVisible
 	}
 
+	getFirstVisibleRange(): Range {
+		this.setRangeIdx(0)
+		let range: Range | undefined = this.getCurrentRange()
+		if (!RangeManager.rangeIsVisible(range)) {
+			range = this.getNextRange()
+			if (range === undefined) {
+				throw new Error('RangeManager.getFirstVisibleRange: could not get first visible range!')
+			}
+		}
+		return range
+	}
+
 	getNextRange(): Range | undefined {
 		if (this.RANGES === null) {
 			throw new Error(`RangeManager.getNextRange: RANGES is null`)

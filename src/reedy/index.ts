@@ -19,18 +19,15 @@ export class ReedyDirector {
 			this.HANDLER = DOMAIN_HANDLER_MAP.get(GENERIC_HANDLER_KEY)
 		}
 
-		this.ELEMENT_ARRAY = this.HANDLER!()
+		if (!this.HANDLER) {
+			throw new Error(`ReedyDirector.constructor: could not get handler!`)
+		}
+
+		this.ELEMENT_ARRAY = this.HANDLER()
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
 
-		// we do this to make sure we land on the first VISIBLE range
-		this.RANGE_MANAGER.getNextRange()
-		const range = this.RANGE_MANAGER.getPrevRange()
-		if (range === undefined) {
-			console.log('ReedyDirector.init: could not get first visible range!')
-			return
-		}
-
+		const range = this.RANGE_MANAGER.getFirstVisibleRange()
 		this.setWindowAroundRange(range)
 	}
 
