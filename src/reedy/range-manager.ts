@@ -74,7 +74,6 @@ export class RangeManager {
 		for (let newIdx = this.RANGE_IDX + 1; newIdx < this.RANGES.length; newIdx++) {
 			const iterRange = this.RANGES[newIdx]
 			if (RangeManager.rangeIsVisible(iterRange)) {
-				// RangeManager.setRange(newIdx)
 				this.RANGE_IDX = newIdx
 				console.log(`RangeManager.getNextRange: range set to range at index ${this.RANGE_IDX}`)
 				return iterRange
