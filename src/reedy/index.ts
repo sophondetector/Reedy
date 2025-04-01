@@ -79,6 +79,12 @@ export class ReedyDirector {
 		console.log('shift down!')
 	}
 
+	// TODO substack needs an event listener where the main article element
+	// gets a scrollend eventlistener which resets the window around the 
+	// current range
+	//'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
+	// ^^^ the element which needs the scroll or scrollend listener attached
+	// TODO is there a way I can dynamically determine a "scrollable interior" element?
 	setWindowAroundRange(range: Range): void {
 		const rect = range.getBoundingClientRect()
 		const rectHeight = RangeManager.getMaxHeight(range)
