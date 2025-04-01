@@ -32,6 +32,25 @@ export class ReedyDirector {
 		this.setWindowAroundRange(range)
 	}
 
+	getRangeManager(): RangeManager {
+		const rm = this.RANGE_MANAGER
+		if (!rm) {
+			throw new Error(`ReedyDirector.getRangeManager: this.RANGE_MANAGER is ${rm}!`)
+		}
+		return rm
+	}
+
+	getElementArray(): Array<Element> {
+		const ea = this.ELEMENT_ARRAY
+		if (!ea) {
+			throw new Error(`ReedyDirector.getElementArray: this.ELEMENT_ARRAY is ${ea}`)
+		}
+		if (ea.length < 1) {
+			throw new Error(`ReedyDirector.getElementArray: this.ELEMENT_ARRAY empty!`)
+		}
+		return ea
+	}
+
 	setScreenOpacity(opacity: number) {
 		if (!this.isOn()) return
 		ReedyScreen.setScreenOpacity(opacity)
@@ -54,7 +73,7 @@ export class ReedyDirector {
 	}
 
 	incRange(): void {
-		const nextRange = this.RANGE_MANAGER!.getNextRange()
+		const nextRange = this.getRangeManager().getNextRange()
 		if (nextRange === undefined) {
 			console.log('ReedyDirector.incRange: could not find next range')
 			return
@@ -63,7 +82,7 @@ export class ReedyDirector {
 	}
 
 	decRange(): void {
-		const prevRange = this.RANGE_MANAGER!.getPrevRange()
+		const prevRange = this.getRangeManager().getPrevRange()
 		if (prevRange === undefined) {
 			console.log('ReedyDirector.decRange: could not find previous range')
 			return
@@ -100,38 +119,37 @@ export class ReedyDirector {
 		// if same size -> return
 		if (window.innerWidth === WIN_WIDTH) return
 
-		// if bigger window -> go backwards
-		// if smaller window -> go forwards
+		const rm = this.getRangeManager()
 
-		const prevRange = this.RANGE_MANAGER!.getCurrentRange()
+		const prevRange = rm.getCurrentRange()
 		const prevNode = prevRange.startContainer
 		const prevOffset = prevRange.startOffset
 
-		this.RANGE_MANAGER!.reInitRanges(this.ELEMENT_ARRAY!)
+		rm.initRanges(this.getElementArray())
 		const newWidth = window.innerWidth
 		const delta = WIN_WIDTH - newWidth
 		WIN_WIDTH = newWidth
 
-		let rangeIdx = this.RANGE_MANAGER!.getRangeIdx()
-		// case bigger
+		let rangeIdx = rm.getRangeIdx()
+		// if bigger window -> go backwards
 		if (delta < 0) {
 			for (rangeIdx; rangeIdx > 0; rangeIdx--) {
-				const iterRange = this.RANGE_MANAGER!.rangeIdx2Range(rangeIdx)
+				const iterRange = rm.rangeIdx2Range(rangeIdx)
 				if (iterRange.isPointInRange(prevNode, prevOffset)) {
 					this.setWindowAroundRange(iterRange)
-					this.RANGE_MANAGER!.setRangeIdx(rangeIdx)
+					rm.setRangeIdx(rangeIdx)
 					return
 				}
 			}
 		}
 
-		// case smaller
-		const rangeLen = this.RANGE_MANAGER!.getRangesLength()
+		// if smaller window -> go forwards
+		const rangeLen = rm.getRangesLength()
 		for (rangeIdx; rangeIdx < rangeLen; rangeIdx++) {
-			const iterRange = this.RANGE_MANAGER!.rangeIdx2Range(rangeIdx)
+			const iterRange = rm.rangeIdx2Range(rangeIdx)
 			if (iterRange.isPointInRange(prevNode, prevOffset)) {
 				this.setWindowAroundRange(iterRange)
-				this.RANGE_MANAGER!.setRangeIdx(rangeIdx)
+				rm.setRangeIdx(rangeIdx)
 				return
 			}
 		}

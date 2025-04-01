@@ -6,10 +6,16 @@ export class RangeManager {
 	RANGE_IDX: number = 0
 
 	constructor(eleArray: Array<Element>) {
-		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
+		this.initRanges(eleArray)
 	}
 
-	reInitRanges(eleArray: Array<Element>): void {
+	initRanges(eleArray: Array<Element>): void {
+		if (!eleArray) {
+			throw new Error(`RangeManager.initRanges: eleArray is ${eleArray}!`)
+		}
+		if (eleArray.length < 1) {
+			throw new Error(`RangeManager.initRanges: eleArray.length is zero!`)
+		}
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
 
@@ -18,7 +24,11 @@ export class RangeManager {
 	}
 
 	getCurrentRange(): Range {
-		return this.RANGES![this.RANGE_IDX]
+		const range = this.RANGES![this.RANGE_IDX]
+		if (range === undefined) {
+			throw new Error(`range at index ${this.RANGE_IDX} (the current range) is undefined!`)
+		}
+		return range
 	}
 
 	rangeIdx2Range(rangeIdx: number): Range {
