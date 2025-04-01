@@ -1,4 +1,4 @@
-import { GENERIC_HANDLER_KEY, DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "../site-handlers/index.js"
+import { HandlerManager } from "../site-handlers/index.js"
 import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
@@ -7,27 +7,11 @@ let WIN_WIDTH = window.innerWidth
 export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
 	ELEMENT_ARRAY: Array<Element> | null = null
-	HANDLER: (() => Array<Element>) | null = null
-	TOP_LEVEL_HOST: string | null = null
 
 	constructor() {
-		this.TOP_LEVEL_HOST = ReedyDirector.getCurrentTopLevelHost()
-
-		// TODO push this logic down into a HandlerManager object
-		if (SUPPORTED_DOMAINS.includes(this.TOP_LEVEL_HOST)) {
-			this.HANDLER = DOMAIN_HANDLER_MAP.get(this.TOP_LEVEL_HOST)
-		} else {
-			this.HANDLER = DOMAIN_HANDLER_MAP.get(GENERIC_HANDLER_KEY)
-		}
-
-		if (!this.HANDLER) {
-			throw new Error(`ReedyDirector.constructor: could not get handler!`)
-		}
-
-		this.ELEMENT_ARRAY = this.HANDLER()
+		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
-
 		const range = this.RANGE_MANAGER.getFirstVisibleRange()
 		this.setWindowAroundRange(range)
 	}
@@ -153,9 +137,5 @@ export class ReedyDirector {
 				return
 			}
 		}
-	}
-
-	static getCurrentTopLevelHost(): string {
-		return window.location.host.match(/\w+\.\w+$/g)![0]
 	}
 }
