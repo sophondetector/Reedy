@@ -2,26 +2,28 @@ import { genericHandler } from "./generic-handler"
 import { mdnHandler } from "./mdn-handler"
 import { substackHandler } from "./substack-handler"
 import { vaticanHandler } from "./vatican-handler"
-import { wikiHandler } from "./wiki-handler"
+import { wikipediaHandler } from "./wiki-handler"
+import { ReedyHandler } from "./reedy-handler-type"
 
 // TODO make this able to discriminate by subdomain
 const GENERIC_HANDLER_KEY: string = "GENERIC"
+// TODO give this a proper type!
 const DOMAIN_HANDLER_MAP = new Map()
 
 DOMAIN_HANDLER_MAP.set(GENERIC_HANDLER_KEY, genericHandler)
 DOMAIN_HANDLER_MAP.set("vatican.va", vaticanHandler)
-DOMAIN_HANDLER_MAP.set("wikipedia.org", wikiHandler)
+DOMAIN_HANDLER_MAP.set("wikipedia.org", wikipediaHandler)
 DOMAIN_HANDLER_MAP.set("mozilla.org", mdnHandler)
 DOMAIN_HANDLER_MAP.set("substack.com", substackHandler)
 
 const SUPPORTED_DOMAINS = Array.from(DOMAIN_HANDLER_MAP.keys())
 
 export class HandlerManager {
-	static getHandler(): (() => Array<Element>) {
+	static getHandler(): ReedyHandler {
 
 		const topLevelHost = HandlerManager.getTopLevelHost()
 
-		let handler: (() => Array<Element>) | undefined
+		let handler: ReedyHandler | undefined
 
 		if (SUPPORTED_DOMAINS.includes(topLevelHost)) {
 			handler = DOMAIN_HANDLER_MAP.get(topLevelHost)
@@ -39,7 +41,7 @@ export class HandlerManager {
 
 	static getEleArray(): Array<Element> {
 		const handler = HandlerManager.getHandler()
-		const ea = handler()
+		const ea = handler.getReedyElements()
 		if (!ea) {
 			throw new Error(`HandlerManager.getEleArray: elementArray from handler is ${ea}!`)
 		}
@@ -47,6 +49,11 @@ export class HandlerManager {
 			throw new Error(`HandlerManager.getEleArray: empty element array from handler!`)
 		}
 		return ea
+	}
+
+	static getScrollableElement(): Element | undefined {
+		const handler = HandlerManager.getHandler()
+		return handler.getScrollableElement()
 	}
 
 	static getTopLevelHost(): string {
