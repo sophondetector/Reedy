@@ -5,9 +5,11 @@ const RESIZE_DEBOUNCE_MILLIS = 500
 let DEBOUNCE_TIMEOUT_ID: undefined | number = undefined
 let DIRECTOR: ReedyDirector | null = null
 
+// TODO set control-panel messages as constants
 // receives messages from options.ts control-panel
 // @ts-ignore
 chrome.runtime.onMessage.addListener(function(value: string, sender, sendResponse) {
+	// TODO error out if DIRECTOR is null
 	try {
 
 		if (value === "toggle screen") {

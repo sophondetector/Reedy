@@ -1,4 +1,4 @@
-import { GENERIC_HANDLER_KEY, DOMAIN_HANDLER_MAP, SUPPORTED_DOMAINS } from "../site-handlers/index.js"
+import { HandlerManager } from "../site-handlers/index.js"
 import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
@@ -7,27 +7,12 @@ let WIN_WIDTH = window.innerWidth
 export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
 	ELEMENT_ARRAY: Array<Element> | null = null
-	HANDLER: (() => Array<Element>) | null = null
-	TOP_LEVEL_HOST: string | null = null
 
 	constructor() {
-		this.TOP_LEVEL_HOST = ReedyDirector.getCurrentTopLevelHost()
-
-		// TODO push this logic down into a HandlerManager object
-		if (SUPPORTED_DOMAINS.includes(this.TOP_LEVEL_HOST)) {
-			this.HANDLER = DOMAIN_HANDLER_MAP.get(this.TOP_LEVEL_HOST)
-		} else {
-			this.HANDLER = DOMAIN_HANDLER_MAP.get(GENERIC_HANDLER_KEY)
-		}
-
-		if (!this.HANDLER) {
-			throw new Error(`ReedyDirector.constructor: could not get handler!`)
-		}
-
-		this.ELEMENT_ARRAY = this.HANDLER()
+		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
-
+		this.setScrollableEventListener()
 		const range = this.RANGE_MANAGER.getFirstVisibleRange()
 		this.setWindowAroundRange(range)
 	}
@@ -49,6 +34,20 @@ export class ReedyDirector {
 			throw new Error(`ReedyDirector.getElementArray: this.ELEMENT_ARRAY empty!`)
 		}
 		return ea
+	}
+
+	// TODO is there a way I can dynamically determine a "scrollable interior" element?
+	setScrollableEventListener(): void {
+		const scrollEle = HandlerManager.getScrollableElement()
+		if (scrollEle === undefined) {
+			return
+		}
+		scrollEle.addEventListener('scroll', () => {
+			RangeManager.bind(this) // needed because by default this will refer to the HTMLElement
+			const curr = this.getRangeManager().getCurrentRange()
+			this.setWindowAroundRange(curr)
+		})
+		console.log('ReedyDirector: scrollable element event listener set')
 	}
 
 	setScreenOpacity(opacity: number) {
@@ -98,12 +97,6 @@ export class ReedyDirector {
 		console.log('shift down!')
 	}
 
-	// TODO substack needs an event listener where the main article element
-	// gets a scrollend eventlistener which resets the window around the 
-	// current range
-	//'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
-	// ^^^ the element which needs the scroll or scrollend listener attached
-	// TODO is there a way I can dynamically determine a "scrollable interior" element?
 	setWindowAroundRange(range: Range): void {
 		const rect = range.getBoundingClientRect()
 		const rectHeight = RangeManager.getMaxHeight(range)
@@ -153,9 +146,5 @@ export class ReedyDirector {
 				return
 			}
 		}
-	}
-
-	static getCurrentTopLevelHost(): string {
-		return window.location.host.match(/\w+\.\w+$/g)![0]
 	}
 }
