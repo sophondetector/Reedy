@@ -1,16 +1,28 @@
 import { ReedyHandler } from "./reedy-handler-type"
 import { baseElementGetter } from "./generic-handler"
 
-// TODO write get substack scrollable element
-// TODO substack needs an event listener where the main article element
-// gets a scrollend eventlistener which resets the window around the 
-// current range
-//'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
-// ^^^ the element which needs the scroll or scrollend listener attached
+const SCROLLABLE_ELE_LECS = [
+	'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.post-XKrpvd',
+	'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
+]
+
+// TODO event listener for article fetch
+// TODO dfs for the first element that satisfies this
+function isScrollable(ele: Element): boolean {
+	const map = ele.computedStyleMap()
+	const overflowY = map.get('overflow-y')
+	return (overflowY == 'scroll' || overflowY == 'auto')
+}
 
 function substackScrollableElement(): Element | undefined {
-	const scrollableLec = '#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
-	const scrollableEle = document.querySelector(scrollableLec)
+	let scrollableEle;
+	for (const lec of SCROLLABLE_ELE_LECS) {
+		const ele = document.querySelector(lec)
+		if (ele && isScrollable(ele)) {
+			scrollableEle = ele
+			break
+		}
+	}
 	if (!scrollableEle) {
 		console.log('substackScrollableElement: could not find scrollable element')
 		return undefined
