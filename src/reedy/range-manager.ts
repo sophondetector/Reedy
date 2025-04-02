@@ -16,6 +16,8 @@ export class RangeManager {
 		if (eleArray.length < 1) {
 			throw new Error(`RangeManager.initRanges: eleArray.length is zero!`)
 		}
+		// TODO add check to make sure that no range is contained completely in any other range
+		// or at least any other proximate range
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
 
