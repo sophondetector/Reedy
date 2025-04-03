@@ -7,7 +7,7 @@ import { ReedyHandler } from "./reedy-handler-type"
 
 // TODO handlers should exit rather than throw if mainContent not found
 
-// TODO make this able to discriminate by subdomain
+// TODO make handlers able to discriminate by subdomain
 const GENERIC_HANDLER_KEY: string = "GENERIC"
 // TODO give this a proper type!
 const DOMAIN_HANDLER_MAP = new Map()
