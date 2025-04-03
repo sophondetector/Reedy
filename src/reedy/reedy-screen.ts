@@ -56,7 +56,12 @@ export class ReedyScreen {
 	}
 
 	static inject(): void {
-		const screenEle = ReedyScreen.create()
+		let screenEle = document.getElementById(REEDY_SCREEN_ID)
+		if (screenEle !== null) {
+			console.log(`ReedyScreen.inject: screen element already exists`)
+			return
+		}
+		screenEle = ReedyScreen.create()
 		document.body.appendChild(screenEle)
 		console.log('ReedyScreen.inject: Reedy screen div injected')
 	}
