@@ -9,7 +9,6 @@ import { ReedyHandler } from "./reedy-handler-type"
 
 // TODO make handlers able to discriminate by subdomain
 const GENERIC_HANDLER_KEY: string = "GENERIC"
-// TODO give this a proper type!
 const DOMAIN_HANDLER_MAP: Map<string, ReedyHandler> = new Map()
 
 DOMAIN_HANDLER_MAP.set(GENERIC_HANDLER_KEY, genericHandler)
