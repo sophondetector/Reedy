@@ -3,18 +3,36 @@ import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
 let WIN_WIDTH = window.innerWidth
+let NAV_DEBOUNCE: number | undefined = undefined
 
 export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
 	ELEMENT_ARRAY: Array<Element> | null = null
 
 	constructor() {
+		this.init()
+		this.setOnNav()
+	}
+
+	init() {
 		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
 		this.setScrollableEventListener()
 		const range = this.RANGE_MANAGER.getFirstVisibleRange()
 		this.setWindowAroundRange(range)
+	}
+
+	setOnNav() {
+		//TODO replace this with a "milliseconds since last tree manipulation" debounce
+		//@ts-ignore
+		window.navigation.onnavigatesuccess = () => {
+			clearTimeout(NAV_DEBOUNCE)
+			NAV_DEBOUNCE = setTimeout(() => {
+				console.log('nav succ')
+				this.init()
+			}, 500) as unknown as number
+		}
 	}
 
 	getRangeManager(): RangeManager {
