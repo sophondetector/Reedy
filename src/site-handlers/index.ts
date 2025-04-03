@@ -5,6 +5,8 @@ import { vaticanHandler } from "./vatican-handler"
 import { wikipediaHandler } from "./wiki-handler"
 import { ReedyHandler } from "./reedy-handler-type"
 
+// TODO handlers should exit rather than throw if mainContent not found
+
 // TODO make this able to discriminate by subdomain
 const GENERIC_HANDLER_KEY: string = "GENERIC"
 // TODO give this a proper type!
@@ -39,14 +41,16 @@ export class HandlerManager {
 		return handler
 	}
 
-	static getEleArray(): Array<Element> {
+	static getEleArray(): Array<Element> | null {
 		const handler = HandlerManager.getHandler()
 		const ea = handler.getReedyElements()
 		if (!ea) {
-			throw new Error(`HandlerManager.getEleArray: elementArray from handler is ${ea}!`)
+			console.log(`HandlerManager.getEleArray: elementArray from handler is ${ea}!`)
+			return null
 		}
 		if (ea.length < 1) {
-			throw new Error(`HandlerManager.getEleArray: empty element array from handler!`)
+			console.log(`HandlerManager.getEleArray: empty element array from handler!`)
+			return null
 		}
 		return ea
 	}
