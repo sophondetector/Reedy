@@ -30,8 +30,6 @@ export function baseElementGetter(root: Element | Document): Array<Element> {
 		throw new Error(`baseElementGetter: could not find any reedy elements!`)
 	}
 	const arr = Array.from(qsaResult)
-	// filter out elements which are in other elements
-	// return arr
 	return filterContainedElements(arr)
 }
 
