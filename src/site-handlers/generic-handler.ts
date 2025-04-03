@@ -1,6 +1,6 @@
 import { ReedyHandler } from "./reedy-handler-type"
 
-const GENERIC_REEDY_LEC = 'h1, h2, h3, h4, h5, p, a, ol, ul'
+const GENERIC_REEDY_LEC = 'h1, h2, h3, h4, h5, p, ol, ul'
 
 export function baseElementGetter(root: Element | Document): Array<Element> {
 	const qsaResult = root.querySelectorAll(GENERIC_REEDY_LEC)
