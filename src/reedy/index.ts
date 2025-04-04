@@ -4,6 +4,7 @@ import { ReedyScreen } from "./reedy-screen";
 
 let WIN_WIDTH = window.innerWidth
 let NAV_DEBOUNCE: number | undefined = undefined
+const NAV_DEBOUCE_MILLIS = 300
 
 export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
@@ -37,7 +38,7 @@ export class ReedyDirector {
 				console.log('nav succ')
 				this.toggleScreenOff()
 				this.init()
-			}, 500) as unknown as number
+			}, NAV_DEBOUCE_MILLIS) as unknown as number
 		}
 	}
 
