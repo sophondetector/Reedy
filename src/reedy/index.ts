@@ -11,11 +11,16 @@ export class ReedyDirector {
 
 	constructor() {
 		this.init()
+		this.setClickEventListener()
 		this.setOnNav()
 	}
 
 	init() {
 		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
+		if (this.ELEMENT_ARRAY === null) {
+			console.log('ReedyDirector.init: null element array, exiting early')
+			return
+		}
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
 		ReedyScreen.inject()
 		this.setScrollableEventListener()
@@ -30,6 +35,7 @@ export class ReedyDirector {
 			clearTimeout(NAV_DEBOUNCE)
 			NAV_DEBOUNCE = setTimeout(() => {
 				console.log('nav succ')
+				this.toggleScreenOff()
 				this.init()
 			}, 500) as unknown as number
 		}
@@ -66,6 +72,30 @@ export class ReedyDirector {
 			this.setWindowAroundRange(curr)
 		})
 		console.log('ReedyDirector: scrollable element event listener set')
+	}
+
+	setClickEventListener(): void {
+		window.onclick = (event) => {
+			if (!this.isOn()) return
+
+			const rm = this.getRangeManager()
+			if (rm.RANGES === null) {
+				console.log(`ReedyDirector: RangeManager.RANGES is null!`)
+				return
+			}
+
+			for (let idx = 0; idx < rm.RANGES.length; idx++) {
+				const rng = rm.RANGES[idx]
+				const rect = rng.getBoundingClientRect()
+				if (event.y < rect.bottom && RangeManager.rangeIsVisible(rng)) {
+					rm.setRangeIdx(idx)
+					this.setWindowAroundRange(rng)
+					return
+				}
+			}
+
+			console.log('ReedyDirector.clickListener: could not find clickable range')
+		}
 	}
 
 	setScreenOpacity(opacity: number) {
