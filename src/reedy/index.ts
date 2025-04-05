@@ -75,6 +75,16 @@ export class ReedyDirector {
 		console.log('ReedyDirector: scrollable element event listener set')
 	}
 
+	static clickInRange(event: MouseEvent, range: Range): boolean {
+		const rect = range.getBoundingClientRect()
+		return (
+			event.y <= rect.bottom &&
+			event.y >= rect.top &&
+			event.x >= rect.left &&
+			event.x <= rect.right
+		)
+	}
+
 	setClickEventListener(): void {
 		window.onclick = (event) => {
 			if (!this.isOn()) return
@@ -87,8 +97,7 @@ export class ReedyDirector {
 
 			for (let idx = 0; idx < rm.RANGES.length; idx++) {
 				const rng = rm.RANGES[idx]
-				const rect = rng.getBoundingClientRect()
-				if (event.y < rect.bottom && RangeManager.rangeIsVisible(rng)) {
+				if (ReedyDirector.clickInRange(event, rng) && RangeManager.rangeIsVisible(rng)) {
 					rm.setRangeIdx(idx)
 					this.setWindowAroundRange(rng)
 					return
