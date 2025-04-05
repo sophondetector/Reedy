@@ -2,7 +2,6 @@ const REEDY_SCREEN_ID = 'reedyScreen'
 const REEDY_SCREEN_DISPLAY = 'flex'
 const REEDY_SCREEN_BUFFER_RADIUS = 3
 
-// TODO turn this into an instance method
 export class ReedyScreen {
 	static create(): HTMLDivElement {
 		// the box itself is transparent
