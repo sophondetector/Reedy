@@ -40,7 +40,6 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 	}
 })
 
-// TODO refactor so supported domains are in the manifest
 // TODO alt+click+drag creates a highlight box
 document.addEventListener('keyup', (event) => {
 	if (DIRECTOR === null) return
