@@ -1,5 +1,5 @@
 export interface ReedyHandler {
-	getReedyElements: () => Array<Element>
+	getReedyElements: () => Array<Element> | null
 	getScrollableElement: () => Element | undefined
 }
 

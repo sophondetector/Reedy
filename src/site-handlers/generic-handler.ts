@@ -24,16 +24,17 @@ function filterContainedElements(eleArray: Element[]): Element[] {
 	return res
 }
 
-export function baseElementGetter(root: Element | Document): Array<Element> {
+export function baseElementGetter(root: Element | Document): Array<Element> | null {
 	const qsaResult = root.querySelectorAll(GENERIC_REEDY_LEC)
 	if (qsaResult.length < 1) {
-		throw new Error(`baseElementGetter: could not find any reedy elements!`)
+		console.log(`baseElementGetter: could not find any reedy elements!`)
+		return null
 	}
 	const arr = Array.from(qsaResult)
 	return filterContainedElements(arr)
 }
 
-function genericElementGetter(): Array<Element> {
+function genericElementGetter(): Array<Element> | null {
 	return baseElementGetter(document)
 }
 
