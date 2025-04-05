@@ -9,18 +9,21 @@ let DIRECTOR: ReedyDirector | null = null
 // receives messages from options.ts control-panel
 // @ts-ignore
 chrome.runtime.onMessage.addListener(function(value: string, sender, sendResponse) {
-	// TODO error out if DIRECTOR is null
+	if (DIRECTOR === null) {
+		throw new Error(`content.ts: Director is null!`)
+	}
+
 	try {
 
 		if (value === "toggle screen") {
 
-			DIRECTOR!.toggleScreen()
+			DIRECTOR.toggleScreen()
 
 		} else if (value.match(/\d+/)) {
 
-			if (!DIRECTOR!.isOn()) return
+			if (!DIRECTOR.isOn()) return
 			const valueNum = Number(value)
-			DIRECTOR!.setScreenOpacity(valueNum)
+			DIRECTOR.setScreenOpacity(valueNum)
 
 		} else {
 
