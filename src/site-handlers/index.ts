@@ -5,8 +5,6 @@ import { vaticanHandler } from "./vatican-handler"
 import { wikipediaHandler } from "./wiki-handler"
 import { ReedyHandler } from "./reedy-handler-type"
 
-// TODO handlers should exit rather than throw if mainContent not found
-
 // TODO make handlers able to discriminate by subdomain
 const GENERIC_HANDLER_KEY: string = "GENERIC"
 const DOMAIN_HANDLER_MAP: Map<string, ReedyHandler> = new Map()

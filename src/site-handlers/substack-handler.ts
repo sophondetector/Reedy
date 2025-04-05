@@ -30,10 +30,11 @@ function substackScrollableElement(): Element | undefined {
 	return scrollableEle
 }
 
-function substackElementGetter(): Array<Element> {
+function substackElementGetter(): Array<Element> | null {
 	const mainContent = document.querySelector('article')
 	if (!mainContent) {
-		throw new Error(`substackElementGetter: could not find mainContent`)
+		console.log(`substackElementGetter: could not find mainContent`)
+		return null
 	}
 	const eleArray = baseElementGetter(mainContent)
 	return eleArray
