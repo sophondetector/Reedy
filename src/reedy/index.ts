@@ -17,13 +17,13 @@ export class ReedyDirector {
 	}
 
 	init() {
+		ReedyScreen.inject()
 		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
 		if (this.ELEMENT_ARRAY === null) {
 			console.log('ReedyDirector.init: null element array, exiting early')
 			return
 		}
 		this.RANGE_MANAGER = new RangeManager(this.ELEMENT_ARRAY)
-		ReedyScreen.inject()
 		this.setScrollableEventListener()
 		const range = this.RANGE_MANAGER.getFirstVisibleRange()
 		if (range === undefined) {
