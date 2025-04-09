@@ -26,7 +26,11 @@ export class RangeManager {
 	}
 
 	getCurrentRange(): Range | undefined {
-		const range = this.RANGES![this.RANGE_IDX]
+		if (this.RANGES === null) {
+			console.log('RangeManager.getCurrentRange: this.RANGES is null!')
+			return undefined
+		}
+		const range = this.RANGES[this.RANGE_IDX]
 		if (range === undefined) {
 			console.log(`WARNING - RangeManager.getCurrentRange: range at index ${this.RANGE_IDX} (the current range) is undefined!`)
 			return undefined
