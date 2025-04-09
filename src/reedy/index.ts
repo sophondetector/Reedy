@@ -26,6 +26,10 @@ export class ReedyDirector {
 		ReedyScreen.inject()
 		this.setScrollableEventListener()
 		const range = this.RANGE_MANAGER.getFirstVisibleRange()
+		if (range === undefined) {
+			console.log('ReedyDirector.init: could not get first visible range')
+			return
+		}
 		this.setWindowAroundRange(range)
 	}
 
@@ -166,13 +170,17 @@ export class ReedyDirector {
 	// TODO callback for when page changes layout
 	// TODO this crashes sometimes; WHY!?!?!
 	// TODO on sizing down this will go to the range BEFORE rather than the range we want
+	// TODO how should null ranges here be handled?
 	onResizeCallback(): void {
 		// if same size -> return
 		if (window.innerWidth === WIN_WIDTH) return
 
 		const rm = this.getRangeManager()
-
 		const prevRange = rm.getCurrentRange()
+		if (prevRange === undefined) {
+			console.log('ReedyDirector.onResizeCallback: could not get current range!')
+			return
+		}
 		const prevNode = prevRange.startContainer
 		const prevOffset = prevRange.startOffset
 
@@ -186,6 +194,10 @@ export class ReedyDirector {
 		if (delta < 0) {
 			for (rangeIdx; rangeIdx > 0; rangeIdx--) {
 				const iterRange = rm.rangeIdx2Range(rangeIdx)
+				if (iterRange === undefined) {
+					console.log(`ReedyDirector.onResizeCallback: WARNING - could not get range at index ${rangeIdx}`)
+					continue
+				}
 				if (iterRange.isPointInRange(prevNode, prevOffset)) {
 					this.setWindowAroundRange(iterRange)
 					rm.setRangeIdx(rangeIdx)
@@ -196,8 +208,16 @@ export class ReedyDirector {
 
 		// if smaller window -> go forwards
 		const rangeLen = rm.getRangesLength()
+		if (rangeLen === undefined) {
+			console.log(`ReedyDirector.onResizeCallback: WARNING - could not get range length!`)
+			return
+		}
 		for (rangeIdx; rangeIdx < rangeLen; rangeIdx++) {
 			const iterRange = rm.rangeIdx2Range(rangeIdx)
+			if (iterRange === undefined) {
+				console.log(`ReedyDirector.onResizeCallback: WARNING - could not get range at index ${rangeIdx}`)
+				continue
+			}
 			if (iterRange.isPointInRange(prevNode, prevOffset)) {
 				this.setWindowAroundRange(iterRange)
 				rm.setRangeIdx(rangeIdx)
