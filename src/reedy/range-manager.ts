@@ -11,10 +11,12 @@ export class RangeManager {
 
 	initRanges(eleArray: Array<Element>): void {
 		if (!eleArray) {
-			throw new Error(`RangeManager.initRanges: eleArray is ${eleArray}!`)
+			console.log(`WARNING - RangeManager.initRanges: eleArray is ${eleArray}!`)
+			return
 		}
 		if (eleArray.length < 1) {
-			throw new Error(`RangeManager.initRanges: eleArray.length is zero!`)
+			console.log(`WARNING - RangeManager.initRanges: eleArray.length is zero!`)
+			return
 		}
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
 	}
@@ -23,23 +25,41 @@ export class RangeManager {
 		return this.RANGE_IDX
 	}
 
-	getCurrentRange(): Range {
-		const range = this.RANGES![this.RANGE_IDX]
+	getCurrentRange(): Range | undefined {
+		if (this.RANGES === null) {
+			console.log('RangeManager.getCurrentRange: this.RANGES is null!')
+			return undefined
+		}
+		const range = this.RANGES[this.RANGE_IDX]
 		if (range === undefined) {
-			throw new Error(`range at index ${this.RANGE_IDX} (the current range) is undefined!`)
+			console.log(`WARNING - RangeManager.getCurrentRange: range at index ${this.RANGE_IDX} (the current range) is undefined!`)
+			return undefined
 		}
 		return range
 	}
 
-	rangeIdx2Range(rangeIdx: number): Range {
-		return this.RANGES![rangeIdx]
+	rangeIdx2Range(rangeIdx: number): Range | undefined {
+		if (this.RANGES === null) {
+			console.log(`WARNING - RangeManager.rangeIdx2Range: this.RANGES is null!`)
+			return undefined
+		}
+		const range = this.RANGES[rangeIdx]
+		if (range === undefined) {
+			console.log(`WARNING - RangeManager.rangeIdx2Range: this.RANGES[${rangeIdx}] is undefined!`)
+			return undefined
+		}
+		return range
 	}
 
 	setRangeIdx(rangeIdx: number): void {
 		this.RANGE_IDX = rangeIdx
 	}
 
-	getRangesLength(): number {
+	getRangesLength(): number | undefined {
+		if (this.RANGES === null) {
+			console.log(`WARNING - RangeManager.getRangesLength: this.RANGES is null!`)
+			return undefined
+		}
 		return this.RANGES!.length
 	}
 
@@ -72,13 +92,18 @@ export class RangeManager {
 		return true
 	}
 
-	getFirstVisibleRange(): Range {
+	getFirstVisibleRange(): Range | undefined {
 		this.setRangeIdx(0)
 		let range: Range | undefined = this.getCurrentRange()
+		if (range === undefined) {
+			console.log('RangeManager.getFirstVisibleRange: could not get first visible range')
+			return undefined
+		}
 		if (!RangeManager.rangeIsVisible(range)) {
 			range = this.getNextRange()
 			if (range === undefined) {
-				throw new Error('RangeManager.getFirstVisibleRange: could not get first visible range!')
+				console.log('RangeManager.getFirstVisibleRange: could not get first visible range!')
+				return undefined
 			}
 		}
 		return range
@@ -86,7 +111,8 @@ export class RangeManager {
 
 	getNextRange(): Range | undefined {
 		if (this.RANGES === null) {
-			throw new Error(`RangeManager.getNextRange: RANGES is null`)
+			console.log(`RangeManager.getNextRange: RANGES is null`)
+			return undefined
 		}
 		// find the next visible range
 		for (let newIdx = this.RANGE_IDX + 1; newIdx < this.RANGES.length; newIdx++) {
@@ -102,7 +128,8 @@ export class RangeManager {
 
 	getPrevRange(): Range | undefined {
 		if (this.RANGES === null) {
-			throw new Error(`RangeManager.getPrevRange: this.RANGES is null`)
+			console.log(`RangeManager.getPrevRange: this.RANGES is null`)
+			return undefined
 		}
 		// find the next visible range
 		for (let newIdx = this.RANGE_IDX - 1; newIdx >= 0; newIdx--) {
