@@ -11,11 +11,11 @@ export class RangeManager {
 
 	initRanges(eleArray: Array<Element>): void {
 		if (!eleArray) {
-			console.log(`RangeManager.initRanges: eleArray is ${eleArray}!`)
+			console.log(`WARNING - RangeManager.initRanges: eleArray is ${eleArray}!`)
 			return
 		}
 		if (eleArray.length < 1) {
-			console.log(`RangeManager.initRanges: eleArray.length is zero!`)
+			console.log(`WARNING - RangeManager.initRanges: eleArray.length is zero!`)
 			return
 		}
 		this.RANGES = RangeManager.eleArray2Ranges(eleArray)
