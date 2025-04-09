@@ -1,7 +1,7 @@
 import { ReedyHandler } from "./reedy-handler-type"
 
 // TODO is it possible to eliminate the p > a elements??
-const GENERIC_REEDY_LEC = 'h1, h2, h3, h4, h5, p, a, ol, ul'
+const GENERIC_REEDY_LEC = 'h1, h2, h3, h4, h5, p, a, ol, ul, code'
 
 function filterContainedElements(eleArray: Element[]): Element[] {
 	const backCheckLimit = 5
