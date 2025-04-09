@@ -39,7 +39,7 @@ export class ReedyDirector {
 		window.navigation.onnavigatesuccess = () => {
 			clearTimeout(NAV_DEBOUNCE)
 			NAV_DEBOUNCE = setTimeout(() => {
-				console.log('nav succ')
+				console.log('ReedyDirector.onnavigatesuccess callback running')
 				this.toggleScreenOff()
 				this.init()
 			}, NAV_DEBOUCE_MILLIS) as unknown as number
