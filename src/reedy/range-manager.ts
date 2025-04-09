@@ -39,7 +39,12 @@ export class RangeManager {
 			console.log(`WARNING - RangeManager.rangeIdx2Range: this.RANGES is null!`)
 			return undefined
 		}
-		return this.RANGES[rangeIdx]
+		const range = this.RANGES[rangeIdx]
+		if (range === undefined) {
+			console.log(`WARNING - RangeManager.rangeIdx2Range: this.RANGES[${rangeIdx}] is undefined!`)
+			return undefined
+		}
+		return range
 	}
 
 	setRangeIdx(rangeIdx: number): void {
