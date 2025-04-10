@@ -81,8 +81,7 @@ export class ReedyDirector {
 			RangeManager.bind(this) // needed because by default this will refer to the HTMLElement
 			const curr = this.getRangeManager().getCurrentRange()
 			if (curr === undefined) {
-				console.log('ReedyDirector - scrollEventListener: WARNING could not get current range!')
-				return
+				throw new Error('ReedyDirector.setScrollableEventListener: could not find current range!')
 			}
 			this.setWindowAroundRange(curr)
 		})
