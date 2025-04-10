@@ -9,14 +9,18 @@ const NAV_DEBOUCE_MILLIS = 300
 export class ReedyDirector {
 	RANGE_MANAGER: RangeManager | null = null
 	ELEMENT_ARRAY: Array<Element> | null = null
+	INITTED_ONCE: boolean = false
 
 	constructor() {
 		this.init()
 		this.setClickEventListener()
 		this.setOnNav()
+		setTimeout(() => {
+			this.INITTED_ONCE = true
+		}, NAV_DEBOUCE_MILLIS * 5)
 	}
 
-	init() {
+	init(): void {
 		ReedyScreen.inject()
 		this.ELEMENT_ARRAY = HandlerManager.getEleArray()
 		if (this.ELEMENT_ARRAY === null) {
@@ -40,6 +44,7 @@ export class ReedyDirector {
 		window.navigation.onnavigatesuccess = () => {
 			clearTimeout(NAV_DEBOUNCE)
 			NAV_DEBOUNCE = setTimeout(() => {
+				if (!this.INITTED_ONCE) return
 				console.log('ReedyDirector.onnavigatesuccess callback running')
 				this.toggleScreenOff()
 				this.init()
@@ -75,6 +80,10 @@ export class ReedyDirector {
 		scrollEle.addEventListener('scroll', () => {
 			RangeManager.bind(this) // needed because by default this will refer to the HTMLElement
 			const curr = this.getRangeManager().getCurrentRange()
+			if (curr === undefined) {
+				console.log('ReedyDirector - scrollEventListener: WARNING could not get current range!')
+				return
+			}
 			this.setWindowAroundRange(curr)
 		})
 		console.log('ReedyDirector: scrollable element event listener set')
