@@ -75,6 +75,9 @@ export class ReedyDirector {
 		scrollEle.addEventListener('scroll', () => {
 			RangeManager.bind(this) // needed because by default this will refer to the HTMLElement
 			const curr = this.getRangeManager().getCurrentRange()
+			if (curr === undefined) {
+				throw new Error('ReedyDirector.setScrollableEventListener: could not find current range!')
+			}
 			this.setWindowAroundRange(curr)
 		})
 		console.log('ReedyDirector: scrollable element event listener set')

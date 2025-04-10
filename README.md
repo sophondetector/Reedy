@@ -23,12 +23,18 @@ This will create the source code in the `dist/` folder. You can then install it 
 1. Load the `dist/` folder
 
 ## Usage
-* Press `alt-l` to turn the Reedy-screen on and off.
-* When the Reedy-screen is on, press `alt-upArrow` or `alt-downArrow` to move the highlighted range up or down
-* You can also you `alt-j` and `alt-k` to move the highlighted range up or down
+<div> Press <b>alt-l</b> to turn the Reedy-screen on and off.</div>
+<div> You can also click Reedy icon and then click the <b>Reedy Screen On/Off</b> button.</div>
+<div> <b>alt + up arrow</b> to move the highlighted range up.</div>
+<div> <b>alt + down arrow</b> to move the highlighted range down.</div>
+<div> You can also use <b>alt + j</b> and <b>alt + k</b>.</div>
+<div> When the screen is on, you may <b>click on the line you wish to highlight.</b></div>
 
 ## Plans
 * pdf mode built off of `pdfjs`
+* highlighting an arbitrary range of lines
+* click/drag to create a highlight box
+* click/drag to highlight an arbitrary range of lines
 
 ## Copyright
 Copyright (c) 2025 Nathaniel Taylor
