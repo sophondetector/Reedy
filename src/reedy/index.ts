@@ -1,4 +1,4 @@
-import { HandlerManager } from "../site-handlers/index.js"
+import { HandlerManager } from "./site-handlers/index.js"
 import { RangeManager } from "./range-manager";
 import { ReedyScreen } from "./reedy-screen";
 
