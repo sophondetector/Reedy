@@ -1,14 +1,12 @@
 import { ReedyHandler } from "./reedy-handler-type"
-import { baseElementGetter } from "./generic-handler"
 
 export function vaticanElementGetter(): Array<Element> | null {
-	const mainContent = document.querySelector('.testo')
+	const mainContent = document.querySelector('.documento')
 	if (!mainContent) {
 		console.log(`vaticanElementGetter: could not find mainContent`)
 		return null
 	}
-	const eleArray = baseElementGetter(mainContent)
-	return eleArray
+	return [mainContent]
 }
 
 export const vaticanHandler: ReedyHandler = {
