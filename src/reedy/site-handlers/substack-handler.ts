@@ -1,5 +1,4 @@
 import { ReedyHandler } from "./reedy-handler-type"
-import { baseElementGetter } from "./generic-handler"
 
 const SCROLLABLE_ELE_LECS = [
 	'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.post-XKrpvd',
@@ -31,13 +30,15 @@ function substackScrollableElement(): Element | undefined {
 }
 
 function substackElementGetter(): Array<Element> | null {
-	const mainContent = document.querySelector('article')
-	if (!mainContent) {
-		console.log(`substackElementGetter: could not find mainContent`)
-		return null
-	}
-	const eleArray = baseElementGetter(mainContent)
-	return eleArray
+	let mainContent;
+
+	mainContent = document.querySelector('article')
+	if (mainContent) return [mainContent]
+
+	mainContent = document.querySelector('#entry > div.reader-nav-root.reader2-font-base > div.reader-nav-page')
+	if (mainContent) return [mainContent]
+
+	return null
 }
 
 export const substackHandler: ReedyHandler = {

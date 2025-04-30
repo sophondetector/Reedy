@@ -1,14 +1,14 @@
 import { ReedyHandler } from "./reedy-handler-type"
-import { baseElementGetter } from "./generic-handler"
 
 function wikipediaElementGetter(): Array<Element> | null {
-	const mainContent = document.querySelector('#mw-content-text')
-	if (!mainContent) {
-		console.log(`vaticanElementGetter: could not find mainContent`)
-		return null
-	}
-	const eleArray = baseElementGetter(mainContent)
-	return eleArray
+	let mainContent
+	mainContent = document.querySelector('#mw-content-text')
+	if (mainContent) return [mainContent]
+
+	mainContent = document.querySelector('#bodyContent')
+	if (mainContent) return [mainContent]
+
+	return null
 }
 
 export const wikipediaHandler: ReedyHandler = {
