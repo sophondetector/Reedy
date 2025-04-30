@@ -36,9 +36,6 @@ function substackScrollableElement(): Element | undefined {
 function substackElementGetter(): Array<Element> | null {
 	let mainContent;
 
-	// mainContent = document.querySelector('article')
-	// if (mainContent) return [mainContent]
-
 	mainContent = document.querySelectorAll('h1, h3, p, .captioned-image-container')
 	if (mainContent.length > 0) {
 		return Array(...mainContent)
