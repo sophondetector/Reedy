@@ -1,15 +1,5 @@
 import { ReedyHandler } from "./reedy-handler-type"
 
-function getParaAndHeaderEles(): Array<Element> | null {
-	const lec = 'p h1 h2 h3 h4 h5'
-	const res = document.querySelectorAll(lec)
-	if (res.length > 0) {
-		console.log("getParaAndHeaderEles: found!")
-		return Array.from(res)
-	}
-	return null
-}
-
 function getArticleEle(): HTMLElement | null {
 	const article = document.querySelector('article')
 	if (article) {
@@ -53,9 +43,6 @@ function getBodyChildWithMostText(): Element | null {
 
 export function genericElementGetter(): Array<Element> | null {
 	let res: Element | Array<Element> | null = null;
-
-	res = getParaAndHeaderEles()
-	if (res) return res
 
 	res = getArticleEle()
 	if (res) return [res]
