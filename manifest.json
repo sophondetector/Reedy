@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Reedy",
 	"description": "A Chrome extension to help you read stuff by highlighting text line by line or sentence by sentence.",
-	"version": "0.7",
+	"version": "1.0",
 	"action": {
 		"default_icon": "images/icon-16.png",
 		"default_popup": "pages/options.html"
@@ -21,10 +21,6 @@
 		"storage",
 		"downloads"
 	],
-	"background": {
-		"service_worker": "src/background.ts",
-		"type": "module"
-	},
 	"content_scripts": [
 		{
 			"matches": [
