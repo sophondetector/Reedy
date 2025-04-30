@@ -19,13 +19,23 @@ function getArticleEle(): HTMLElement | null {
 	return null
 }
 
+function getGenericTextEles(): Array<Element> | null {
+	const genericLec = 'h1, h2, h3, p, ol, ul'
+	const res = document.querySelectorAll(genericLec)
+	if (res.length > 0) {
+		console.log('getGenericTextEles: success!')
+		return Array(...res)
+	}
+	return null
+}
+
 function getBodyChildWithMostText(): Element | null {
 	const candidates = document.querySelectorAll('body > *')
 	let winner;
 	let maxLen = 0;
 	for (const cand of candidates) {
 		//@ts-ignore
-		if (cand.innerText && cand.innerText.length > maxLen) {
+		if (cand.checkVisibility() && cand.innerText && cand.innerText.length > maxLen) {
 			winner = cand
 			//@ts-ignore
 			maxLen = cand.innerText.length
@@ -34,6 +44,7 @@ function getBodyChildWithMostText(): Element | null {
 
 	if (winner) {
 		console.log("getBodyChildWithMostText: found!")
+		console.log(winner)
 		return winner
 	}
 
@@ -48,6 +59,9 @@ export function genericElementGetter(): Array<Element> | null {
 
 	res = getArticleEle()
 	if (res) return [res]
+
+	res = getGenericTextEles()
+	if (res) return res
 
 	res = getBodyChildWithMostText()
 	if (res) return [res]
