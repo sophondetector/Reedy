@@ -75,8 +75,10 @@ export class ReedyDirector {
 	setScrollableEventListener(): void {
 		const scrollEle = HandlerManager.getScrollableElement()
 		if (scrollEle === undefined) {
+			console.log('setScrollableEventListener: no scroll ele found, so not adding event listener')
 			return
 		}
+
 		scrollEle.addEventListener('scroll', () => {
 			RangeManager.bind(this) // needed because by default this will refer to the HTMLElement
 			const curr = this.getRangeManager().getCurrentRange()
