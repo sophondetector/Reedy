@@ -24,12 +24,6 @@ export class HandlerManager {
 
 		const topLevelHost = HandlerManager.getTopLevelHost()
 
-		if (isActuallySubstack()) {
-			console.log(`HandlerManager.getHandler: ${topLevelHost} found to be actually substack...`)
-			console.log(`HandlerManager.getHandler: using substack handler`)
-			return substackHandler
-		}
-
 		let handler: ReedyHandler | undefined
 
 		if (SUPPORTED_DOMAINS.includes(topLevelHost)) {
@@ -37,6 +31,12 @@ export class HandlerManager {
 		} else {
 			console.log(`HandlerManager.getHandler: ${topLevelHost} not supported; using generic handler`)
 			handler = DOMAIN_HANDLER_MAP.get(GENERIC_HANDLER_KEY)
+		}
+
+		if (isActuallySubstack()) {
+			console.log(`HandlerManager.getHandler: ${topLevelHost} found to be actually substack...`)
+			console.log(`HandlerManager.getHandler: using substack handler`)
+			return substackHandler
 		}
 
 		if (!handler) {
