@@ -1,7 +1,7 @@
 import { genericHandler } from "./generic-handler"
 import { mdnHandler } from "./mdn-handler"
 import { redditHandler } from "./reddit-handler"
-import { substackHandler } from "./substack-handler"
+import { substackHandler, isActuallySubstack } from "./substack-handler"
 import { vaticanHandler } from "./vatican-handler"
 import { wikipediaHandler } from "./wiki-handler"
 import { ReedyHandler } from "./reedy-handler-type"
@@ -23,6 +23,12 @@ export class HandlerManager {
 	static getHandler(): ReedyHandler {
 
 		const topLevelHost = HandlerManager.getTopLevelHost()
+
+		if (isActuallySubstack()) {
+			console.log(`HandlerManager.getHandler: ${topLevelHost} found to be actually substack...`)
+			console.log(`HandlerManager.getHandler: using substack handler`)
+			return substackHandler
+		}
 
 		let handler: ReedyHandler | undefined
 

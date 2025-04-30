@@ -5,6 +5,10 @@ const SCROLLABLE_ELE_LECS = [
 	'#post-viewer > div > div > div.pencraft.pc-display-flex.pc-flexDirection-column.flexGrow-tjePuI.pc-reset.content-cFaSRD > div'
 ]
 
+export function isActuallySubstack(): boolean {
+	return document.querySelector('link[href="https://substackcdn.com"]') ? true : false
+}
+
 // TODO event listener for article fetch
 // TODO dfs for the first element that satisfies this
 function isScrollable(ele: Element): boolean {
@@ -32,8 +36,13 @@ function substackScrollableElement(): Element | undefined {
 function substackElementGetter(): Array<Element> | null {
 	let mainContent;
 
-	mainContent = document.querySelector('article')
-	if (mainContent) return [mainContent]
+	// mainContent = document.querySelector('article')
+	// if (mainContent) return [mainContent]
+
+	mainContent = document.querySelectorAll('h1, h3, p, .captioned-image-container')
+	if (mainContent.length > 0) {
+		return Array(...mainContent)
+	}
 
 	mainContent = document.querySelector('#entry > div.reader-nav-root.reader2-font-base > div.reader-nav-page')
 	if (mainContent) return [mainContent]

@@ -1,10 +1,5 @@
 import { ReedyHandler } from "./reedy-handler-type"
 
-//@ts-ignore
-function isSubstack(): boolean {
-	return document.querySelector('link[href="https://substackcdn.com"]') ? true : false
-}
-
 function getParaAndHeaderEles(): Array<Element> | null {
 	const lec = 'p h1 h2 h3 h4 h5'
 	const res = document.querySelectorAll(lec)
