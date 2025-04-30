@@ -1,5 +1,6 @@
 import { genericHandler } from "./generic-handler"
 import { mdnHandler } from "./mdn-handler"
+import { redditHandler } from "./reddit-handler"
 import { substackHandler } from "./substack-handler"
 import { vaticanHandler } from "./vatican-handler"
 import { wikipediaHandler } from "./wiki-handler"
@@ -14,6 +15,7 @@ DOMAIN_HANDLER_MAP.set("vatican.va", vaticanHandler)
 DOMAIN_HANDLER_MAP.set("wikipedia.org", wikipediaHandler)
 DOMAIN_HANDLER_MAP.set("mozilla.org", mdnHandler)
 DOMAIN_HANDLER_MAP.set("substack.com", substackHandler)
+DOMAIN_HANDLER_MAP.set("reddit.com", redditHandler)
 
 const SUPPORTED_DOMAINS = Array.from(DOMAIN_HANDLER_MAP.keys())
 
