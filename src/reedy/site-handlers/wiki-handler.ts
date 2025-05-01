@@ -21,6 +21,11 @@ function wikipediaElementGetter(): Array<Element> | null {
 		return null
 	}
 
+	const headline = document.querySelector('#firstHeading')
+	if (headline) {
+		paras = [headline].concat(paras)
+	}
+
 	return paras
 }
 
