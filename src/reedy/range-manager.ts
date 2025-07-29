@@ -1,4 +1,5 @@
 const TEXT_NODE_NAME = '#text'
+const UPPER_BOUND = 10000
 
 
 export class RangeManager {
@@ -220,6 +221,8 @@ export class RangeManager {
 		res[res.length - 1].setStart(textNodes[textNodeIdx], begOffset)
 		let prevBottom = res[res.length - 1].getBoundingClientRect().bottom
 
+		let iterNum = 0
+
 		while (mainIdx < finalIdx) {
 			// Q how do we increment the textNodeIdx??
 			// A everytime the mainIdx crosses an end, increment textNodeIdx
@@ -245,6 +248,11 @@ export class RangeManager {
 
 			mainIdx++
 			endOffset++
+
+			if (++iterNum > UPPER_BOUND) {
+				console.error('textNodes2Ranges: upper bound reached')
+				break
+			}
 		}
 
 		res[res.length - 1].setEnd(textNodes[textNodes.length - 1], lens[lens.length - 1])
