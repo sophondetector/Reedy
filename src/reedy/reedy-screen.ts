@@ -44,6 +44,8 @@ export class ReedyScreen {
 		const canvas = ReedyScreen.getScreenEle()
 		const ctx = ReedyScreen.getContext()
 
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
