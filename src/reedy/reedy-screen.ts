@@ -2,42 +2,64 @@ const REEDY_SCREEN_ID = 'reedyScreen'
 const REEDY_SCREEN_DISPLAY = 'flex'
 const REEDY_SCREEN_BUFFER_RADIUS = 3
 
+let OPACITY = .5
+
 export class ReedyScreen {
-	static create(): HTMLDivElement {
+
+	static create(): HTMLCanvasElement {
 		// the box itself is transparent
 		// and all around it is colored with the "shadow"
 
-		const div = document.createElement('div')
+		const canvas = document.createElement('canvas')
 
-		div.style.display = REEDY_SCREEN_DISPLAY
-		div.style.position = `absolute`
-		div.style.overflow = `auto`
-		div.style.pointerEvents = `none`
-		div.style.zIndex = `99999`
+		canvas.style.display = REEDY_SCREEN_DISPLAY
+		canvas.style.position = `absolute`
+		canvas.style.overflow = `auto`
+		canvas.style.pointerEvents = `none` // this ensures mouse clicks "fall through" to the main content
+		canvas.style.zIndex = `99999`
 
-		div.style.top = `0px`
-		div.style.left = `0px`
-		div.style.width = `0px`
-		div.style.height = `0px`
-		div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, .8)`
+		canvas.style.top = `0px`
+		canvas.style.left = `0px`
+		canvas.width = window.innerWidth
+		canvas.height = window.innerHeight
 
-		div.id = REEDY_SCREEN_ID
+		canvas.id = REEDY_SCREEN_ID
 
-		return div
+		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
+
+		return canvas
 	}
 
-	static getScreenEle(): HTMLDivElement {
+	static drawScreen() {
+		const canvas = ReedyScreen.getScreenEle()
+		const ctx = ReedyScreen.getContext()
+		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+	}
+
+	static animate() {
+		ReedyScreen.drawScreen()
+		requestAnimationFrame(ReedyScreen.animate)
+	}
+
+	static getScreenEle(): HTMLCanvasElement {
 		const screenEle = document.getElementById(REEDY_SCREEN_ID)
 		if (!screenEle) {
 			throw new Error(`ReedyScreen.getScreenEle: could not find element with id ${REEDY_SCREEN_ID}`)
 		}
-		return screenEle as HTMLDivElement
+		return screenEle as HTMLCanvasElement
+	}
+
+	static getContext(): CanvasRenderingContext2D {
+		const canvas = ReedyScreen.getScreenEle()
+		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+		return ctx
 	}
 
 	static setScreenOpacity(opacity: number): void {
-		// console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
-		const div = ReedyScreen.getScreenEle()
-		div.style.boxShadow = `0 0 0 99999px rgba(0, 0, 0, ${opacity / 100})`
+		console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
+		OPACITY = opacity / 100
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
@@ -63,6 +85,7 @@ export class ReedyScreen {
 		screenEle = ReedyScreen.create()
 		document.body.appendChild(screenEle)
 		console.log('ReedyScreen.inject: Reedy screen div injected')
+		ReedyScreen.animate()
 	}
 
 	static turnOn(): void {
@@ -94,3 +117,4 @@ export class ReedyScreen {
 		ReedyScreen.turnOn()
 	}
 }
+
