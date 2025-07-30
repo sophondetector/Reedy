@@ -1,6 +1,15 @@
 const REEDY_SCREEN_ID = 'reedyScreen'
 const REEDY_SCREEN_DISPLAY = 'flex'
-const REEDY_SCREEN_BUFFER_RADIUS = 3
+const REEDY_SCREEN_BUFFER_RADIUS = 5
+
+interface ReedyRect {
+	x: number,
+	y: number,
+	width: number,
+	height: number
+}
+
+const RECTANGLES: ReedyRect[] = []
 
 let OPACITY = .5
 
@@ -34,8 +43,29 @@ export class ReedyScreen {
 	static drawScreen() {
 		const canvas = ReedyScreen.getScreenEle()
 		const ctx = ReedyScreen.getContext()
+
 		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		// Draw saved rectangles as holes
+		RECTANGLES.forEach(rect => {
+			ctx.save();
+			ctx.beginPath();
+			ctx.rect(
+				rect.x - REEDY_SCREEN_BUFFER_RADIUS,
+				rect.y - REEDY_SCREEN_BUFFER_RADIUS,
+				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
+				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
+			);
+			ctx.clip();
+			ctx.clearRect(
+				rect.x - REEDY_SCREEN_BUFFER_RADIUS,
+				rect.y - REEDY_SCREEN_BUFFER_RADIUS,
+				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
+				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
+			);
+			ctx.restore();
+		});
 	}
 
 	static animate() {
@@ -63,29 +93,36 @@ export class ReedyScreen {
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
-		const screenEle = ReedyScreen.getScreenEle()
-
-		const finalX = x + window.scrollX - REEDY_SCREEN_BUFFER_RADIUS
-		const finalY = y + window.scrollY - REEDY_SCREEN_BUFFER_RADIUS
-		const finalWidth = width + (REEDY_SCREEN_BUFFER_RADIUS * 2)
-		const finalHeight = height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
-
-		screenEle.style.left = `${finalX}px`
-		screenEle.style.top = `${finalY}px`
-		screenEle.style.width = `${finalWidth}px`
-		screenEle.style.height = `${finalHeight}px`
+		RECTANGLES[0] = { x, y, width, height }
 	}
 
 	static inject(): void {
-		let screenEle = document.getElementById(REEDY_SCREEN_ID)
+		let screenEle = document.getElementById(REEDY_SCREEN_ID) as HTMLCanvasElement
 		if (screenEle !== null) {
 			console.log(`ReedyScreen.inject: screen element already exists`)
 			return
+		} else {
+			console.log(`ReedyScreen.inject: canvas element injected`)
 		}
+
 		screenEle = ReedyScreen.create()
 		document.body.appendChild(screenEle)
 		console.log('ReedyScreen.inject: Reedy screen div injected')
+
+		window.addEventListener('resize', () => {
+			screenEle.width = window.innerWidth;
+			screenEle.height = window.innerHeight;
+		});
+		console.log('ReedyScreen.inject: Added resize event listener')
+
+		window.addEventListener('scroll', () => {
+			screenEle.style.top = `${window.scrollY}px`;
+			screenEle.style.left = `${window.scrollX}px`;
+		});
+		console.log('ReedyScreen.inject: Added scroll event listener')
+
 		ReedyScreen.animate()
+		console.log('ReedyScreen.inject: ReedyScreen animation started')
 	}
 
 	static turnOn(): void {
