@@ -98,9 +98,6 @@
 		// Reset function
 		resetButton.addEventListener('click', () => {
 			rectangles.length = 0; // Clear all rectangles
-			opacity = 0.3; // Reset opacity to 30%
-			opacitySlider.value = 30; // Reset slider position
-			opacityLabel.textContent = `Opacity: 30%`; // Reset label
 			drawOverlay();
 		});
 
@@ -171,12 +168,6 @@
 				ctx.clearRect(x, y, Math.abs(width), Math.abs(height));
 				ctx.restore();
 			}
-
-			// Add example text
-			ctx.fillStyle = 'white';
-			ctx.font = '30px Arial';
-			ctx.textAlign = 'center';
-			ctx.fillText('Click and drag to create rectangular holes', canvas.width / 2, canvas.height / 2);
 		}
 
 		// Animation loop
