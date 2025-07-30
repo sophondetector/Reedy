@@ -49,20 +49,23 @@ export class ReedyScreen {
 		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		// Draw saved rectangles as holes
 		RECTANGLES.forEach(rect => {
 			ctx.save();
 			ctx.beginPath();
+
+			const adjustedX = rect.x - window.scrollX
+			const adjustedY = rect.y - window.scrollY
+
 			ctx.rect(
-				rect.x - REEDY_SCREEN_BUFFER_RADIUS,
-				rect.y - REEDY_SCREEN_BUFFER_RADIUS,
+				adjustedX - REEDY_SCREEN_BUFFER_RADIUS,
+				adjustedY - REEDY_SCREEN_BUFFER_RADIUS,
 				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
 				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
 			);
 			ctx.clip();
 			ctx.clearRect(
-				rect.x - REEDY_SCREEN_BUFFER_RADIUS,
-				rect.y - REEDY_SCREEN_BUFFER_RADIUS,
+				adjustedX - REEDY_SCREEN_BUFFER_RADIUS,
+				adjustedY - REEDY_SCREEN_BUFFER_RADIUS,
 				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
 				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
 			);
@@ -120,6 +123,7 @@ export class ReedyScreen {
 		window.addEventListener('scroll', () => {
 			screenEle.style.top = `${window.scrollY}px`;
 			screenEle.style.left = `${window.scrollX}px`;
+			ReedyScreen.drawScreen()
 		});
 		console.log('ReedyScreen.inject: Added scroll event listener')
 
