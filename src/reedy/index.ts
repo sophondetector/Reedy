@@ -175,7 +175,12 @@ export class ReedyDirector {
 		const rectHeight = RangeManager.getMaxHeight(range)
 		// we do the above because sometimes the "extraneous" rects from the range
 		// creation process don't remain with the range
-		ReedyScreen.moveViewingWindow(rect.left, rect.top, rect.width, rectHeight)
+
+		// switching to the canvas api necessitated adding the window.scroll[XY]
+		const finalX = rect.left + window.scrollX
+		const finalY = rect.top + window.scrollY
+
+		ReedyScreen.moveViewingWindow(finalX, finalY, rect.width, rectHeight)
 	}
 
 	// TODO callback for when page changes layout
