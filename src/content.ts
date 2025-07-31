@@ -13,17 +13,24 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 		throw new Error(`content.ts: Director is null!`)
 	}
 
+	// console.log('content.ts: value received: ', value)
+
 	try {
 
 		if (value === "toggle screen") {
 
 			DIRECTOR.toggleScreen()
 
-		} else if (value.match(/\d+/)) {
+		} else if (value.match(/^\d+$/)) {
 
 			if (!DIRECTOR.isOn()) return
 			const valueNum = Number(value)
 			DIRECTOR.setScreenOpacity(valueNum)
+
+		} else if (value.match(/^#[0-9a-f]{6}$/)) {
+
+			if (!DIRECTOR.isOn()) return
+			DIRECTOR.setScreenColor(value)
 
 		} else {
 

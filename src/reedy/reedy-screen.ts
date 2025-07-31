@@ -12,6 +12,22 @@ interface ReedyRect {
 const RECTANGLES: ReedyRect[] = []
 
 let OPACITY = .5
+let COLOR_HEX = '#0000ff'
+const COLOR_RGB = {
+	r: 0,
+	g: 0,
+	b: 255
+}
+
+function setColorRGB(): void {
+	COLOR_RGB.r = Number('0x' + COLOR_HEX.slice(1, 3))
+	COLOR_RGB.g = Number('0x' + COLOR_HEX.slice(3, 5))
+	COLOR_RGB.b = Number('0x' + COLOR_HEX.slice(5, 7))
+}
+
+function getFillStyle(): string {
+	return `rgba(${COLOR_RGB.r}, ${COLOR_RGB.g}, ${COLOR_RGB.b}, ${OPACITY})`
+}
 
 export class ReedyScreen {
 
@@ -32,7 +48,7 @@ export class ReedyScreen {
 		canvas.id = REEDY_SCREEN_ID
 
 		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
+		ctx.fillStyle = getFillStyle()
 
 		return canvas
 	}
@@ -41,7 +57,7 @@ export class ReedyScreen {
 		const canvas = ReedyScreen.getScreenEle()
 		const ctx = ReedyScreen.getContext()
 
-		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
+		ctx.fillStyle = getFillStyle()
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -79,6 +95,12 @@ export class ReedyScreen {
 	static setScreenOpacity(opacity: number): void {
 		console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
 		OPACITY = opacity / 100
+	}
+
+	static setScreenColor(color: string): void {
+		console.log(`ReedyScreen.setScreenColor: color value ${color} received!`)
+		COLOR_HEX = color
+		setColorRGB()
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {

@@ -123,6 +123,11 @@ export class ReedyDirector {
 		}
 	}
 
+	setScreenColor(color: string) {
+		if (!this.isOn()) return
+		ReedyScreen.setScreenColor(color)
+	}
+
 	setScreenOpacity(opacity: number) {
 		if (!this.isOn()) return
 		ReedyScreen.setScreenOpacity(opacity)
