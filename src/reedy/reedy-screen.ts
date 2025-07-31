@@ -16,9 +16,6 @@ let OPACITY = .5
 export class ReedyScreen {
 
 	static create(): HTMLCanvasElement {
-		// the box itself is transparent
-		// and all around it is colored with the "shadow"
-
 		const canvas = document.createElement('canvas')
 
 		canvas.style.display = REEDY_SCREEN_DISPLAY
