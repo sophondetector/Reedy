@@ -11,22 +11,15 @@ interface ReedyRect {
 
 const RECTANGLES: ReedyRect[] = []
 
-let OPACITY = .5
-let COLOR_HEX = '#0000ff'
-const COLOR_RGB = {
+const COLOR_RGBA = {
 	r: 0,
 	g: 0,
-	b: 255
-}
-
-function setColorRGB(): void {
-	COLOR_RGB.r = Number('0x' + COLOR_HEX.slice(1, 3))
-	COLOR_RGB.g = Number('0x' + COLOR_HEX.slice(3, 5))
-	COLOR_RGB.b = Number('0x' + COLOR_HEX.slice(5, 7))
+	b: 255,
+	a: .5
 }
 
 function getFillStyle(): string {
-	return `rgba(${COLOR_RGB.r}, ${COLOR_RGB.g}, ${COLOR_RGB.b}, ${OPACITY})`
+	return `rgba(${COLOR_RGBA.r}, ${COLOR_RGBA.g}, ${COLOR_RGBA.b}, ${COLOR_RGBA.a})`
 }
 
 export class ReedyScreen {
@@ -94,13 +87,14 @@ export class ReedyScreen {
 
 	static setScreenOpacity(opacity: number): void {
 		console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
-		OPACITY = opacity / 100
+		COLOR_RGBA.a = opacity / 100
 	}
 
 	static setScreenColor(color: string): void {
 		console.log(`ReedyScreen.setScreenColor: color value ${color} received!`)
-		COLOR_HEX = color
-		setColorRGB()
+		COLOR_RGBA.r = Number('0x' + color.slice(1, 3))
+		COLOR_RGBA.g = Number('0x' + color.slice(3, 5))
+		COLOR_RGBA.b = Number('0x' + color.slice(5, 7))
 	}
 
 	static moveViewingWindow(x: number, y: number, width: number, height: number): void {
