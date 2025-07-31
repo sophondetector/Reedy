@@ -16,7 +16,7 @@ document.getElementById('reedy-toggle')!.addEventListener('click', async () => {
 // TODO save the opacity slider value in localStorage
 // and retreive it whenever the page opens
 const slider = document.getElementById("opacity-slider") as HTMLInputElement
-slider.addEventListener("change", async (event) => {
+slider.addEventListener("input", async (event) => {
 	//@ts-ignore
 	const value = event.target.value
 	const tab = await getCurrentTab()
@@ -26,7 +26,7 @@ slider.addEventListener("change", async (event) => {
 })
 
 const colorPicker = document.getElementById("color-picker") as HTMLInputElement
-colorPicker.addEventListener("change", async (event) => {
+colorPicker.addEventListener("input", async (event) => {
 	//@ts-ignore
 	const value = event.target.value
 	const tab = await getCurrentTab()
