@@ -44,32 +44,19 @@ export class ReedyScreen {
 		const canvas = ReedyScreen.getScreenEle()
 		const ctx = ReedyScreen.getContext()
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 		ctx.fillStyle = `rgba(0, 0, 255, ${OPACITY})`;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		RECTANGLES.forEach(rect => {
-			ctx.save();
-			ctx.beginPath();
-
 			const adjustedX = rect.x - window.scrollX
 			const adjustedY = rect.y - window.scrollY
-
-			ctx.rect(
-				adjustedX - REEDY_SCREEN_BUFFER_RADIUS,
-				adjustedY - REEDY_SCREEN_BUFFER_RADIUS,
-				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
-				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
-			);
-			ctx.clip();
 			ctx.clearRect(
 				adjustedX - REEDY_SCREEN_BUFFER_RADIUS,
 				adjustedY - REEDY_SCREEN_BUFFER_RADIUS,
 				rect.width + (REEDY_SCREEN_BUFFER_RADIUS * 2),
 				rect.height + (REEDY_SCREEN_BUFFER_RADIUS * 2)
 			);
-			ctx.restore();
 		});
 	}
 
