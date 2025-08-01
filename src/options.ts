@@ -1,3 +1,5 @@
+import { ReedyScreenState } from "./types";
+
 async function getCurrentTab() {
 	let queryOptions = { active: true, lastFocusedWindow: true };
 	let [tab] = await chrome.tabs.query(queryOptions);
@@ -39,7 +41,7 @@ colorPicker.addEventListener("input", async (event) => {
 
 getCurrentTab()
 	.then(tab => {
-		chrome.tabs.sendMessage(tab.id!, "get state", function(state) {
+		chrome.tabs.sendMessage(tab.id!, "get state", function(state: ReedyScreenState) {
 			slider.value = String(state.opacity * 100)
 			colorPicker.value = state.hexColor
 		})
