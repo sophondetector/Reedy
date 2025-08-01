@@ -9,8 +9,10 @@ interface ReedyRect {
 	height: number
 }
 
-const RECTANGLES: ReedyRect[] = []
+// Reedy Screen State Variables
 
+const RECTANGLES: ReedyRect[] = []
+let COLOR_HEX = '#0000ff'
 const COLOR_RGBA = {
 	r: 0,
 	g: 0,
@@ -85,6 +87,13 @@ export class ReedyScreen {
 		return ctx
 	}
 
+	static getScreenState() {
+		return {
+			opacity: COLOR_RGBA.a,
+			hexColor: COLOR_HEX
+		}
+	}
+
 	static setScreenOpacity(opacity: number): void {
 		console.log(`ReedyScreen.setScreenOpacity: opacity value ${opacity} received!`)
 		COLOR_RGBA.a = opacity / 100
@@ -92,6 +101,7 @@ export class ReedyScreen {
 
 	static setScreenColor(color: string): void {
 		console.log(`ReedyScreen.setScreenColor: color value ${color} received!`)
+		COLOR_HEX = color
 		COLOR_RGBA.r = Number('0x' + color.slice(1, 3))
 		COLOR_RGBA.g = Number('0x' + color.slice(3, 5))
 		COLOR_RGBA.b = Number('0x' + color.slice(5, 7))

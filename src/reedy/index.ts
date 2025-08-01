@@ -71,6 +71,10 @@ export class ReedyDirector {
 		return ea
 	}
 
+	getScreenState() {
+		return ReedyScreen.getScreenState()
+	}
+
 	// TODO is there a way I can dynamically determine a "scrollable interior" element?
 	setScrollableEventListener(): void {
 		const scrollEle = HandlerManager.getScrollableElement()

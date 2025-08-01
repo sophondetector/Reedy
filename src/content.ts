@@ -21,6 +21,11 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 
 			DIRECTOR.toggleScreen()
 
+		} else if (value === "get state") {
+
+			const stateResponse = DIRECTOR.getScreenState()
+			sendResponse(stateResponse)
+
 		} else if (value.match(/^\d+$/)) {
 
 			if (!DIRECTOR.isOn()) return
@@ -43,7 +48,7 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 
 	} catch (err) {
 		console.error(`ERROR: Error trying to read input from control panel`)
-		console.log(err)
+		console.error(err)
 	}
 })
 
