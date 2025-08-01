@@ -19,8 +19,6 @@ toggle.addEventListener('click', async () => {
 
 // TODO FIXME fix "message port was closed before response was sent" error
 // TODO add opacity readout to options.html
-// TODO save the opacity slider value in localStorage
-// and retreive it whenever the page opens
 slider.addEventListener("input", async (event) => {
 	//@ts-ignore
 	const value = event.target.value
