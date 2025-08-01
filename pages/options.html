@@ -29,9 +29,10 @@
 			flex-direction: column;
 			align-items: center;
 			margin: 10px;
+			margin-bottom: 20px;
 		}
 
-		#control-panel>h4 {
+		#control-panel>h3 {
 			margin: 2px;
 		}
 
@@ -41,7 +42,7 @@
 			border-color: grey;
 			border-radius: 5%;
 			margin: 5px;
-			width: 50%;
+			width: 30%;
 		}
 
 		#help {
@@ -49,6 +50,7 @@
 			flex-direction: column;
 			align-items: center;
 			font-size: large;
+			margin-bottom: 20px;
 		}
 	</style>
 </head>
@@ -58,17 +60,17 @@
 	<h1>Reedy</h1>
 
 	<div id="control-panel">
-		<button id="reedy-toggle">Reedy On/Off</button>
-		<h4>Opacity</h4>
+		<button id="reedy-toggle">Screen On/Off</button>
+		<h3>Opacity <span id="slider-readout" style="font-size: larger">40%</span></h3>
 		<input type="range" min="1" max="100" value="50" class="slider" id="opacity-slider">
-		<h4>Color</h4>
+		<h3>Color</h3>
 		<input type="color" id="color-picker" value="#0000ff">
 	</div>
 
 	<div id="help">
 		<div>
 			<div> Press <b>alt-l</b> to turn the Reedy-screen on and off.</div>
-			<div> You can also click Reedy icon and then click the <b>Reedy Screen On/Off</b> button.</div>
+			<div> You can also click Reedy icon and then click the <b>Screen On/Off</b> button.</div>
 			<div> <b>alt + up arrow</b> to move the highlighted range up.</div>
 			<div> <b>alt + down arrow</b> to move the highlighted range down.</div>
 			<div> You can also use <b>alt + j</b> and <b>alt + k</b>.</div>

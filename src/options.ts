@@ -8,6 +8,7 @@ async function getCurrentTab() {
 
 const toggle = document.getElementById('reedy-toggle') as HTMLButtonElement
 const slider = document.getElementById('opacity-slider') as HTMLInputElement
+const sliderReadout = document.getElementById('slider-readout') as HTMLInputElement
 const colorPicker = document.getElementById('color-picker') as HTMLInputElement
 
 toggle.addEventListener('click', async () => {
@@ -18,13 +19,13 @@ toggle.addEventListener('click', async () => {
 })
 
 // TODO FIXME fix "message port was closed before response was sent" error
-// TODO add opacity readout to options.html
 slider.addEventListener("input", async (event) => {
 	//@ts-ignore
 	const value = event.target.value
 	const tab = await getCurrentTab()
 	chrome.tabs.sendMessage(tab.id!, `${value}`, function() {
-		console.log(`sent screen value ${value} to content.ts in open tab`)
+		sliderReadout.textContent = `${value}%`
+		console.log(`sent screen opacity value ${value} to content.ts in open tab`)
 	})
 })
 
@@ -40,7 +41,9 @@ colorPicker.addEventListener("input", async (event) => {
 getCurrentTab()
 	.then(tab => {
 		chrome.tabs.sendMessage(tab.id!, "get state", function(state: ReedyScreenState) {
-			slider.value = String(state.opacity * 100)
+			const opacityPercent = String(state.opacity * 100)
+			slider.value = opacityPercent
+			sliderReadout.textContent = `${opacityPercent}%`
 			colorPicker.value = state.hexColor
 		})
 	})
