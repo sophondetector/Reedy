@@ -42,7 +42,6 @@ chrome.runtime.onMessage.addListener(function(value: string, sender, sendRespons
 			console.log(`Reedy content.ts: Unknown message receieved!!`)
 			console.log(`message value: ${value}`)
 			console.log(`message sender: ${sender}`)
-			console.log(`message sendResp: ${sendResponse}`)
 
 		}
 
